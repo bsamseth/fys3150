@@ -1,5 +1,13 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
+report.pdf
+*.aux
+*.log
+*.out
+*.prv
+prv_*
+*_region_*
+auto/
 *.x
 *~
 *.autosave
