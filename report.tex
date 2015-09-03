@@ -27,11 +27,11 @@
 \usepackage{comment}
 
 % Denne setter navnet på abstract til Sammendrag
-\renewenvironment{abstract}{\global\setbox\absbox=\vbox\bgroup
-\hsize=\textwidth\def\baselinestretch{1}%
-\noindent\unskip\textbf{Sammendrag}
-\par\medskip\noindent\unskip\ignorespaces}
-{\egroup}
+% \renewenvironment{abstract}{\global\setbox\absbox=\vbox\bgroup
+% \hsize=\textwidth\def\baselinestretch{1}%
+% \noindent\unskip\textbf{Sammendrag}
+% \par\medskip\noindent\unskip\ignorespaces}
+% {\egroup}
 
 % Disse kommandoene definerer hvor stor andel av siden som kan være dekket av figurer. Kan gjøre det enklere å plassere figurer.
 \setcounter{totalnumber}{15}
@@ -44,7 +44,7 @@
 %\renewcommand{\theequation}{(\thesubsection.hei\arabic{equation})}
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
 \renewcommand{\thesection}{\arabic{section}}
-\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsection}{\alph{subsection})}
 %\renewcommand{\thesubsection}{\thesection.\alph{subsection})} % subsection is now 1.a), 1.b)... 2.a)...
 
 %\allsectionsfont{\centering \normalfont} % Make all sections centered, the default font
@@ -59,7 +59,7 @@
 \renewcommand{\footrulewidth}{0pt} % Remove footer underlines
 \setlength{\headheight}{21pt} % Customize the height of the header
 
-\numberwithin{equation}{subsection} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+% \numberwithin{equation}{subsection} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
 \numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
 \numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
 
@@ -111,10 +111,78 @@
 { \huge \bfseries Prosjekt 1 }\\[0.4cm] % Title of your document
 \HRule \\[1.5cm]
 \Large \emph{Skrevet av:}\\
-Lyder \textsc{??} og Bendik \textsc{Samseth}\\[3cm]
+Lyder \textsc{Rumohr Blingsmo} og Bendik \textsc{Samseth}\\[3cm]
 {\large \today}\\[3cm]
 \vfill
 \end{titlepage}
+
+
+\begin{abstract}
+I dette prosjektet skal vi kjent med ulike vektor- og
+matriseoperasjoner. Vi skal benytte C++ for størsteparten av
+beregningene i et forsøk på å bli bedre kjent med språket. Vi ser på
+andreordens lineære differensialligninger, spesielt ser vi på den
+generelle endimensjonelle Poisson ligningen med Dirichlet
+randbetingelser. Vi ser på flere måter å løse slike systemer, og
+analyserer forskjellene med tanke på kjøretid og nøyaktighet.
+\end{abstract}
+
+
+Vi har gitt den generelle formen til den endimensjonelle
+Possionsligningen:
+\begin{align}
+  -u''(x) = f(x)\label{eq:poisson}
+\end{align}
+med $x \in (0,1)$ og $u(0) = u(1) = 0$.
+
+\subsection{}
+
+For å komme frem til en numerisk løsning til \eqref{eq:poisson}
+definerer vi den diskretiserte tilnærmingen til $u(x)$ som $v_i$ med
+x-verdier $x_i = ih$ på intervallet $x_0 = 0$ og $x_{n+1} =
+1$. Avstanden mellom hver $x_i$ defineres som $h =
+1/(n+1)$. Randbetingelsene blir da $v_0 = v_{n+1} = 0$.
+
+Ligning \eqref{eq:poisson} viser at vi trenger den dobbeltderiverte av
+$u(x)$. For $v_i$ kan vi tilnærme dette som 
+
+\begin{align}
+  - \frac{ v_{i+1} + v_{i-1} - 2v_i }{ h^2 } =
+  f_i\hspace{1cm}\text{for } i = 1,\dots,n.
+\end{align}
+der $f_i = f(x_i)$. Vi setter 
+\begin{align*}
+      {\bf A} = \left(\begin{array}{cccccc}
+                           2& -1& 0 &\dots   & \dots &0 \\
+                           -1 & 2 & -1 &0 &\dots &\dots \\
+                           0&-1 &2 & -1 & 0 & \dots \\
+                           & \dots   & \dots &\dots   &\dots & \dots \\
+                           0&\dots   &  &-1 &2& -1 \\
+                           0&\dots    &  & 0  &-1 & 2 \\
+                      \end{array} \right)
+\end{align*}
+Da ser vi at $\vec A \vec v$ blir lik 
+\begin{align*}
+  \vec A \vec v = -v_{i+1} - v_{i-1} + 2v_i\hspace{1cm}\text{for } i = 1,\dots,n
+\end{align*}
+når vi har at $v_0 = v_{n+1} = 0$ fra Dirichlet-randbetingelsene. Hvis
+vi definerer $\vec d$ ved $d_i = h^2f_i$ kan vi skrive
+\eqref{eq:poisson} som 
+\begin{align}
+  \vec A \vec v = \vec d.
+\end{align}
+ 
+
+Vi skal videre anta at $f(x) = 100 e^{-10x}$. Da har
+\eqref{eq:poisson} en eksakt løsning gitt som $u(x) = 1 -
+\left(1-e^{-10}\right) - e^{-10x}$. Vi skal bruke denne til å
+sammenlikne med vår numeriske lønning i senere oppgaver.
+
+\subsection{}
+
+
+
+
 
 
 
@@ -124,3 +192,21 @@ Lyder \textsc{??} og Bendik \textsc{Samseth}\\[3cm]
 %%% mode: latex
 %%% TeX-master: t
 %%% End: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
