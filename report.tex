@@ -70,6 +70,7 @@
 \definecolor{green}{rgb}{0,0.3,0}
 \lstloadlanguages{Python} 
 \lstloadlanguages{MATLAB}
+\lstloadlanguages{C}
 \lstset{%frame=single, % Single frame around code
 		otherkeywords={self},
         keywordstyle=\color{blue},
@@ -169,7 +170,7 @@ når vi har at $v_0 = v_{n+1} = 0$ fra Dirichlet-randbetingelsene. Hvis
 vi definerer $\vec d$ ved $d_i = h^2f_i$ kan vi skrive
 \eqref{eq:poisson} som 
 \begin{align}
-  \vec A \vec v = \vec d.
+  \vec A \vec v = \vec d.\label{Av=d}
 \end{align}
  
 
@@ -179,9 +180,132 @@ Vi skal videre anta at $f(x) = 100 e^{-10x}$. Da har
 sammenlikne med vår numeriske lønning i senere oppgaver.
 
 \subsection{}
+For å løse \eqref{Av=d} skal vi benytte en noen modifisert version av
+Thomas algoritmen\footnote{Se
+  \url{https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm}}. Denne
+algoritmen kan beskrives som følger: 
 
+Gitt 
+\begin{align*}
+  \begin{bmatrix}
+   {b_1} & {c_1} &  &  & \text{\huge0} \\
+   {a_2} & {b_2} & {c_2} &  &  \\
+    & {a_3} & {b_3} & \ddots &  \\
+    &  & \ddots & \ddots & {c_{n-1}}\\
+     \text{\huge0}&  &  & {a_n} & {b_n}\\
+\end{bmatrix}
+\begin{bmatrix}
+   {x_1 }  \\
+   {x_2 }  \\
+   {x_3 }  \\
+   \vdots   \\
+   {x_n }  \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+   {d_1 }  \\
+   {d_2 }  \\
+   {d_3 }  \\
+   \vdots   \\
+   {d_n }  \\
+\end{bmatrix}.
+\end{align*}
+Vi kan løse systemet ved å utføre en forward-substitution bestående av
+å bytte ut matrise elementene med $c_i'$ og $d_i'$ på følgende måte.
+\begin{align*}
+  c_i' &= \begin{cases}
+\begin{array}{lcl}
+  \cfrac{c_i}{b_i}                  & ; & i = 1 \\
+  \cfrac{c_i}{b_i - a_i c'_{i - 1}} & ; & i = 2, 3, \dots, n-1 \\
+\end{array}
+\end{cases}\\
+d_i' &= \begin{cases}
+\begin{array}{lcl}
+  \cfrac{d_i}{b_i}                  & ; & i = 1 \\
+  \cfrac{d_i - a_i d'_{i - 1}}{b_i - a_i c'_{i - 1}} & ; & i = 2, 3, \dots, n. \\
+\end{array}
+\end{cases}
+\end{align*}
+Deretter finner vi løsningen ved backward-substitution.
+\begin{align*}
+  x_n &= d'_n\\
+  x_i &= d'_i - c'_i x_{i + 1} \qquad ; \ i = n - 1, n - 2, \ldots, 1.
+\end{align*}
 
+Dette teller vi til å tilsvare $\mathcal{O}(10n)$ FLOPS. Siden vi i
+vårt tilfellet har like elementer på diagonalene, kan vi trimme dette
+ned litt. 
 
+Siden $a_i = -1\ \forall\  i$ og  $b_i - a_ic_{i-1}'$ er felles nevner
+for både $c_i'$ og $d_i'$ kan vi gjøre om forward-substitution til det følgende:
+
+\begin{align*}
+  c_i' &= \begin{cases}
+\begin{array}{lcl}
+  \cfrac{c}{b}                  & ; & i = 1 \\
+  \cfrac{c}{b + c'_{i - 1}} & ; & i = 2, 3, \dots, n-1 \\
+\end{array}
+\end{cases}\\
+d_i' &= \begin{cases}
+\begin{array}{lcl}
+  \cfrac{d_i}{b}                  & ; & i = 1 \\
+  \cfrac{d_i + d'_{i - 1}}{b + c'_{i - 1}} & ; & i = 2, 3, \dots, n. \\
+\end{array}
+\end{cases}
+\end{align*}
+Her kan vi spare operasjoner ved å bare beregne $b+c'_{i-1}$ en gang
+(for alle $i$) og bruke resultatet både for beregningen av $c_{i}'$ og
+$d_{i}'$.
+
+Med disse endringene teller vi antall operasjoner til å gå som
+$\mathcal{O}(6n)$. Dette er en betydelig raskere algoritme sammenliket
+med standard Gauss eliminasjon. I følge forelesningsnotatene går
+vanlig Gauss eliminasjon som $\mathcal{O}(\frac{ 2 }{ 3 }n^3)$. I
+tillegg krever ikke algoritmen vi bruker at vi lagrer en full
+matrise. Tridiagonale matriser med stor $n$ inneholder veldig mange
+nuller, så det er smart å ikke trenge å lagre all den unødvendige
+informasjonen. Dette gjør oss i stand til å løse matriser av mye
+større dimensjon sammenliknet med når vi er nødt til å lagre den fulle matrisen.
+
+Vi har implementert dette i C++ slik\footnote{Hele programfilen er å
+  finne på Github-siden \url{https://github.com/bsamseth/fys3150-project1.git}}:
+\begin{lstlisting}[language=C]
+void tridiagonal( double b, double c, double * d, double * v ) {
+    /* Function for solving the eq. Av=d in the case 
+       that A is tridiagonal, with a constant value on the diagonals.
+       Specialy the subdiagonal must be equal to -1.
+
+       b - value for the main diagonal
+       c - value for the superdiagonal
+       d - a vector with the function values
+       v - souluiton vector. Will be filled when function returns
+       N - dimension of the matrix/vectors
+
+       Using the Thomas Algorithm, with modifications.
+    */
+    int i;
+    double * c_prime = new double[N];
+
+    /* The loop below will depend on c_prime[i-1] and 
+       d[i-1] to be already changed, so c_prime[0] and 
+       d[0] will be set manually at first */
+    
+    c_prime[0] = c / b;
+    d[0] = d[0] / b;
+
+    double m;
+    for (i = 1; i < N; i++) {
+	m = 1.0 / (b + c_prime[i-1]);
+	c_prime[i] = c * m;
+	d[i] = (d[i] + d[i-1]) * m;
+    }
+
+    v[N-1] = d[N-1];
+    for (i = N - 1; i-- > 0; ) {
+	v[i] = d[i] - c_prime[i] * v[i+1];
+    }
+}
+\end{lstlisting}
 
 
 
