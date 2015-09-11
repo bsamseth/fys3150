@@ -1,9 +1,12 @@
 #! /usr/bin/python
 from subprocess import call
-from scitools.std import *
-
+from numpy import *
+import matplotlib.pyplot as plt
 call(["make"])  # compile cpp program
 
+fig = plt.figure()
+ax = fig.gca()
+ax.hold('on')
 for N in [10, 100, 1000]:  # loop over the values of N we want to test
 
     call(["./main.x", "%d" % N])  # compute and write data
@@ -20,13 +23,15 @@ for N in [10, 100, 1000]:  # loop over the values of N we want to test
 
     # now plot the computed data
     x = linspace(0, 1, N)
-    plot(x, v, legend="$v_i (N=%d)$" % N, hold='on')
+    ax.plot(x, v, label="$v_i (N=%d)$" % N)
 
 # add closed-form solution to plot for reference
 x_exact = linspace(0, 1, 101)
 u_exact = x_exact * (exp(-10) - 1) - exp(-10*x_exact) + 1
-plot(x_exact, u_exact, legend="$u(x)$",
-     xlabel="$x$", ylabel="$u(x)$",
-     title="Solution of the 1-D Poisson's equation")
-savefig("fig/b.png")
-raw_input()
+ax.plot(x_exact, u_exact, label="$u(x)$")
+ax.set_xlabel("$x$")
+ax.set_ylabel("$u(x)$")
+ax.legend()
+ax.set_title("Solution of the 1-D Poisson's equation")
+plt.savefig("fig/b.png")
+plt.show()
