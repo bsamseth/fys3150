@@ -3,9 +3,9 @@
 #include <cstdlib>
 #include <string>
 #include <fstream>
-#include <sstream>
 #include <chrono>
 #include <armadillo>
+#include <sstream>
 using namespace std;
 using namespace std::chrono;
 using namespace arma;
@@ -58,13 +58,12 @@ void tridiagonal( double b, double c, double * d, double * v ) {
 
 
 
-void writeToFile(string filename, double * v) {
+void writeToFile(string algoType, double time) {
+    stringstream name;
+    name << "data/time_data_N_" << algoType << "_" << N << ".dat";
     ofstream outFile;
-    outFile.open(filename);
-    outFile << N << endl;
-    for (int i = 0; i < N; i++) {
-        outFile << v[i] << endl;
-    }
+    outFile.open(name.str());
+    outFile << time;
     outFile.close();
 }
 
@@ -127,7 +126,9 @@ int main(int argc, char ** argv) {
     double elapsed_time_tridiag = double (duration_tridiag)/1e9;
     double elapsed_time_armaLU = double (duration_armaLU)/1e9;
 
-    cout << N << "   " << elapsed_time_tridiag << "   " << elapsed_time_armaLU <<  endl;
+    writeToFile("tridiag", elapsed_time_tridiag);
+    writeToFile("armaLU", elapsed_time_armaLU);
+    cout << N << "   Tridiagonal: " << elapsed_time_tridiag << "   Armadillo LU: " << elapsed_time_armaLU <<  endl;
     
     return 0;
 }

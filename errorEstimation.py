@@ -4,9 +4,9 @@ import numpy as np
 from subprocess import call
 import matplotlib.pyplot as plt
 
-try:
+if len(sys.argv) > 1:
     N = np.asarray([int(i) for i in sys.argv[1:]])
-except IndexError:
+else:
     print "Usage: %s list of N" % sys.argv[0]
     sys.exit(1)
 
@@ -39,5 +39,5 @@ plt.semilogx(h_, eps); #label=r'$\epsilon$');
 plt.title('Error estimation')
 plt.xlabel(r'$ \log_{10} h$');
 plt.ylabel(r'Max value of $\epsilon_i$')
-#plt.legend()
+plt.savefig("fig/c.png")
 plt.show()

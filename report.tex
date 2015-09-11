@@ -1,37 +1,14 @@
 \documentclass[11pt]{article}
 \usepackage[norsk]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage{alltt}
-\usepackage{listings}
 \usepackage{hyperref}
-\usepackage{color}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{wasysym}
-\usepackage{lipsum}
 \usepackage{sectsty}
-\usepackage{fullpage}
+%\usepackage{fullpage}
 \usepackage{graphicx}
-\usepackage{import}
-\usepackage{cancel}
-\usepackage{pdfpages}
-\usepackage{siunitx}
-        \DeclareSIUnit\gauss{G}
-	\sisetup{exponent-product = \cdot}	% Prikk som multiplikasjonstegn (i stedet for kryss).
- 	\sisetup{output-decimal-marker  =  {.}}	% Punktum som desimalskilletegn (i stedet for komma).
- 	\sisetup{separate-uncertainty = true} 	% Pluss-minus-form på
-                                % usikkerhet (i stedet for parentes). 
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.9}
-\usepackage{comment}
-
-% Denne setter navnet på abstract til Sammendrag
-% \renewenvironment{abstract}{\global\setbox\absbox=\vbox\bgroup
-% \hsize=\textwidth\def\baselinestretch{1}%
-% \noindent\unskip\textbf{Sammendrag}
-% \par\medskip\noindent\unskip\ignorespaces}
-% {\egroup}
 
 % Disse kommandoene definerer hvor stor andel av siden som kan være dekket av figurer. Kan gjøre det enklere å plassere figurer.
 \setcounter{totalnumber}{15}
@@ -41,17 +18,13 @@
 \renewcommand{\floatpagefraction}{0.35}
 
 
-%\renewcommand{\theequation}{(\thesubsection.hei\arabic{equation})}
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
-\renewcommand{\thesection}{\arabic{section}}
-\renewcommand{\thesubsection}{\alph{subsection})}
-%\renewcommand{\thesubsection}{\thesection.\alph{subsection})} % subsection is now 1.a), 1.b)... 2.a)...
-
-%\allsectionsfont{\centering \normalfont} % Make all sections centered, the default font
+\renewcommand{\thesection}{}
+\renewcommand{\thesubsection}{}
 
 \usepackage{fancyhdr} % Custom headers and footers
 \pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
-\fancyhead[C]{\footnotesize \textit{FYS3150 Prosjekt 1\\ $ \,$}} % No page header - if you want one, create it in the same way as the footers below
+\fancyhead[C]{\footnotesize \textit{FYS3150 Prosjekt 1\\ $ \,$}} % header
 \fancyhead[R]{} \fancyhead[L]{} \fancyfoot[L]{} % Empty left footer
 \fancyfoot[C]{} % Empty center footer
 \fancyfoot[R]{\thepage} % Page numbering for right footer
@@ -59,37 +32,11 @@
 \renewcommand{\footrulewidth}{0pt} % Remove footer underlines
 \setlength{\headheight}{21pt} % Customize the height of the header
 
-% \numberwithin{equation}{subsection} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
-% \numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
-% \numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
-
-
-\definecolor{yellow}{rgb}{0.7,0.8,0}
-%\definecolor{blue}{rgb}{0,0,0.8}
-\definecolor{blue}{rgb}{0.3,0.3,0.9}
-\definecolor{green}{rgb}{0,0.3,0}
-\lstloadlanguages{Python} 
-\lstloadlanguages{MATLAB}
-\lstloadlanguages{C}
-\lstset{%frame=single, % Single frame around code
-		otherkeywords={self},
-        keywordstyle=\color{blue},
-        commentstyle=\color{green},
-        stringstyle=\color{green}, % Strings are green
-        showstringspaces=false, % Don't put marks in string spaces
-        tabsize=5, % 5 spaces per tab        
-        numbers=none, % Line numbers on left
-        %firstnumber=1, % Line numbers start with line 1
-        stepnumber=1 % Line numbers go in steps of 5
-}
-
-
 \newcommand{\horline}{
 \begin{center}
 \line(1,0){350}
 \end{center}
 }
-
 
 % common commands
 \newcommand{\pd}[2] {\frac{\partial #1}{\partial #2}}
@@ -98,7 +45,6 @@
 \renewcommand{\vec}{\mathbf} % bold face for vectors
 \newcommand{\e}[1] {\times 10^{#1}}
 \newcommand{\mean}[1] {\langle #1 \rangle}
-
 
 \begin{document}
 % make title page
@@ -125,7 +71,11 @@ beregningene i et forsøk på å bli bedre kjent med språket. Vi ser på
 andreordens lineære differensialligninger, spesielt ser vi på den
 generelle endimensjonelle Poisson ligningen med Dirichlet
 randbetingelser. Vi ser på flere måter å løse slike systemer, og
-analyserer forskjellene med tanke på kjøretid og nøyaktighet.
+analyserer forskjellene med tanke på kjøretid og nøyaktighet. All
+programkode brukt til å finne resultatene presentert her er
+tilgjengelig på
+\href{https://github.com/bsamseth/fys3150-project1}{GitHub}\footnote{\label{GitHub-link}Dersom
+  linken ikke er tilgjenngelig er eksplisitt adresse: \url{https://github.com/bsamseth/fys3150-project1}}
 \end{abstract}
 
 
@@ -136,7 +86,7 @@ Possionsligningen:
 \end{align}
 med $x \in (0,1)$ og $u(0) = u(1) = 0$.
 
-\subsection{}
+\subsection{Diskretisering av problemet}
 
 For å komme frem til en numerisk løsning til \eqref{eq:poisson}
 definerer vi den diskretiserte tilnærmingen til $u(x)$ som $v_i$ med
@@ -182,8 +132,8 @@ u(x) = 1 -\left(1-e^{-10}\right) - e^{-10x}.\label{eq:exact}
 Vi skal bruke denne til å
 sammenlikne med vår numeriske lønning i senere oppgaver.
 
-\subsection{}
-For å løse \eqref{Av=d} skal vi benytte en noen modifisert version av
+\subsection{Metode for løsning}
+For å løse \eqref{Av=d} skal vi benytte en noe modifisert version av
 Thomas algoritmen\footnote{Se
   \url{https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm}}. Denne
 algoritmen kan beskrives som følger: 
@@ -214,7 +164,7 @@ Gitt
 \end{bmatrix}.
 \end{align*}
 Vi kan løse systemet ved å utføre en forward-substitution bestående av
-å bytte ut matrise elementene med $c_i'$ og $d_i'$ på følgende måte.
+å bytte ut matrise elementene $c_i$ og $d_i$ med $c_i'$ og $d_i'$ på følgende måte.
 \begin{align*}
   c_i' &= \begin{cases}
 \begin{array}{lcl}
@@ -239,7 +189,7 @@ Dette teller vi til å tilsvare $\mathcal{O}(10n)$ FLOPS. Siden vi i
 vårt tilfellet har like elementer på diagonalene, kan vi trimme dette
 ned litt. 
 
-Siden $a_i = -1\ \forall\  i$ og  $b_i - a_ic_{i-1}'$ er felles nevner
+Siden $a_i = -1\ \forall\  i$ og  $b_i - a_ic_{i-1}'$ er fellesnevner
 for både $c_i'$ og $d_i'$ kan vi gjøre om forward-substitution til det følgende:
 
 \begin{align*}
@@ -260,60 +210,26 @@ Her kan vi spare operasjoner ved å bare beregne $b+c'_{i-1}$ en gang
 (for alle $i$) og bruke resultatet både for beregningen av $c_{i}'$ og
 $d_{i}'$.
 
+Et viktig poeng her er at vi kun bruker algoritmen på de indre
+punktene. Vi har Dirichlet-grensebetingelser, så vi skal bare fiksere
+$v_1 = v_n = 0$.
+
 Med disse endringene teller vi antall operasjoner til å gå som
 $\mathcal{O}(6n)$. Dette er en betydelig raskere algoritme sammenliket
 med standard Gauss eliminasjon. I følge forelesningsnotatene går
-vanlig Gauss eliminasjon som $\mathcal{O}(\frac{ 2 }{ 3 }n^3)$. I
-tillegg krever ikke algoritmen vi bruker at vi lagrer en full
+vanlig Gauss eliminasjon som $\mathcal{O}(\frac{ 2 }{ 3 }n^3)$. I tillegg krever ikke algoritmen vi bruker at vi lagrer en full
 matrise. Tridiagonale matriser med stor $n$ inneholder veldig mange
 nuller, så det er smart å ikke trenge å lagre all den unødvendige
 informasjonen. Dette gjør oss i stand til å løse matriser av mye
 større dimensjon sammenliknet med når vi er nødt til å lagre den fulle matrisen.
 
-Vi har implementert dette i C++ slik\footnote{Hele programfilen er å
-  finne på Github-siden \url{https://github.com/bsamseth/fys3150-project1.git}}:
-\begin{lstlisting}[language=C]
-void tridiagonal( double b, double c, double * d, double * v ) {
-    /* Function for solving the eq. Av=d in the case 
-       that A is tridiagonal, with a constant value on the diagonals.
-       Specialy the subdiagonal must be equal to -1.
-
-       b - value for the main diagonal
-       c - value for the superdiagonal
-       d - a vector with the function values
-       v - souluiton vector. Will be filled when function returns
-       N - dimension of the matrix/vectors
-
-       Using the Thomas Algorithm, with modifications.
-    */
-    int i;
-    double * c_prime = new double[N];
-
-    /* The loop below will depend on c_prime[i-1] and 
-       d[i-1] to be already changed, so c_prime[0] and 
-       d[0] will be set manually at first */
-    
-    c_prime[0] = c / b;
-    d[0] = d[0] / b;
-
-    double m;
-    for (i = 1; i < N; i++) {
-	m = 1.0 / (b + c_prime[i-1]);
-	c_prime[i] = c * m;
-	d[i] = (d[i] + d[i-1]) * m;
-    }
-
-    v[N-1] = d[N-1];
-    for (i = N - 1; i-- > 0; ) {
-	v[i] = d[i] - c_prime[i] * v[i+1];
-    }
-}
-\end{lstlisting}
+Vi har implementert dette i C++ ved bruk av standard biblioteket. Full
+kildekode finnes i filen \texttt{main.cpp} som er tilgjenngelig på
+Github-repoet vårt\footnotemark[1]:
 
 Figur \ref{fig:b} viser resultatet av å bruke denne algoritmen med
 $N = \{10,100,1000\}$. Vi ser at $v_i$ konvergerer raskt mot $u(x)$
-når vi øker verdien av N. For $N=1000$, (som forøvrig ikke virker å ta
-merkbart mer tid å lage sammenliket med lavere N) er det vanskelig å
+når vi øker verdien av N. For $N=100$ og $N=1000$ er det vanskelig å
 skille den eksakte fra tilnærmingen. Det virker med dette som
 algoritmen vi har skrevet fungerer som ønsket.
 
@@ -324,7 +240,84 @@ algoritmen vi har skrevet fungerer som ønsket.
     forskjelige verider av N. $u(x)$ viser kurven til den eksakte løsningen.}
 \end{figure}
 
+\subsection{Feilanalyse}
+Det kan likevel være interessant å se litt mer kvantitativt på hvor
+god tilnærmingen vår er. For å gjøre dette har vi skrevet ett program,
+\texttt{errorEstimation.py}, som lager et plot av den maksimale
+relative differansen mellom $u(x)$ og $v_i$ som funksjon av
+steglengden $h = \frac{ 1 }{ n-1 }$. Grafen er vist i figur
+\ref{fig:c}. Vi ser en raskt avtagende feil mellom $10^{-1}$ og ned
+til $10^{-4}$. Der ser det derimot ut som om vi ikke får mer presisjon
+ved å øke verdien av $n$ ytterligere. Vi har latt $n$ gå helt til
+$n=10^7$, og ser at presisjonen faktisk minker noe når vi øker $n$
+forbi $10^4$. Dette er typisk for denne typen beregninger og kommer av
+at vi på et tidspunkt får problemer med presisjonen av hvordan vi
+representerer tallene på datamaskinen. Dessuten tar det mye mer tid,
+så det virker mye smartere å velge en mer passende verdi for $n$. 
 
+Resultatet er at vi med nokså billig minne- og tidsbruk kan oppnå en
+approksimert løsning som har på det minste 5 desimalers
+nøyaktighet. 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.7]{fig/c.png}
+  \caption{\label{fig:c} Maksimal relativ feil mellom eksakt-
+    og numerisk approksimert løsning som funksjon av steglengden $h =
+    \frac{ 1 }{ n-1 }$. Begge akser er logaritmiske.}
+\end{figure}
+
+
+\subsection{Kjøretid sett i forhold til standardfunksjoner}
+Vi ønsker nå å se hvordan vår spesialalgoritme fungerer sammenliknet
+med standardfunksjoner tilgjengelig for bruk i C++. Vi har (av
+praktiske årsaker) valgt å sammenlikne med Armadillo, der vi benytter
+LU-dekomposisjon for å løse \eqref{Av=d}. 
+
+Til dette har vi skrevet et program, \texttt{d.cpp}, som beregner
+løsningen først ved hjelp av vår algoritme og deretter ved hjelp av
+Armadillo. Vi registrerer tiden det tar fra vi kaller løser-metodene
+til vi har fått en ferdig løsning. Vi har altså valgt å ikke inkludere
+tiden det tar å sette opp variablene som fôres inn til metodene. 
+
+Før vi går videre må vi bemerke at det er et viktig poeng å komme med
+i forhold til allokering av variable. Siden matrisen $A$ er
+tridiagonal inneholder den mange nuller, særlig for store $n$. Vår
+algoritme krever ikke at vi lagrer mer enn diagonalene og løsningen,
+begge som kolonnevektorer. Armadillos funksjoner krever derimot at vi
+lagrer den fulle matrisen. Dette gjør at vi må lagre $n\times n$ tall
+i matrisen $A$. Hvis vi kjører standardfunksjonene med $n=10^5$ ender
+vi opp med en matrise som må lagre $10^{10}$ tall. Dette er mer enn
+hva de fleste datamaskiner har mulighet til å lagre i arbeidsminnet,
+noe som fører til at vi ikke kan kjøre programmet. Dette setter en
+betydelig begrensning på hvor mange punkter vi kan benytte, og dermed
+ofte hvor nøyaktig vi kan beregne resultatet.
+
+Vi har valgt å se på kjøretid for $N = \{10, 100, 1000\}$. Resultatet
+er gitt i tabell \ref{tab:1}.
+\begin{table}[h]
+\centering
+\caption{Kjøretid for forskjellige verdier av $n$}
+\label{tab:1}
+\vspace{0.1cm}
+\begin{tabular}{rll}
+n & Thomas & Armadillo \\
+\hline
+10 & \input{data/time_data_N_tridiag_10.dat} & \input{data/time_data_N_armaLU_10.dat} \\
+100 & \input{data/time_data_N_tridiag_1000.dat} & \input{data/time_data_N_armaLU_100.dat} \\
+1000 & \input{data/time_data_N_tridiag_1000.dat} & \input{data/time_data_N_armaLU_1000.dat} \\
+\end{tabular}
+\end{table}
+
+Vi ser at kjøretiden er dramatisk større når vi bruker Armadillo. Det
+er ikke overraskende da vi vet at LU-dekomposisjon bruker noe rundt
+$\mathcal{O}(n^3)$ FLOPS, og i tillegg må vi til slutt også løse selve
+matriselikningen. Dette gjør at det raskt tar mer tid hvis matrisene
+blir større.
+
+
+\subsection{Konklusjoner}
+??? 
 
 \end{document}
 %%% Local Variables: 
