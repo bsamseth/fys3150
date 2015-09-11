@@ -6,6 +6,7 @@ call(["make"])  # compile cpp program
 
 fig = plt.figure()
 ax = fig.gca()
+plt.rc("text", usetex=True)
 ax.hold('on')
 for N in [10, 100, 1000]:  # loop over the values of N we want to test
 
@@ -29,8 +30,8 @@ for N in [10, 100, 1000]:  # loop over the values of N we want to test
 x_exact = linspace(0, 1, 101)
 u_exact = x_exact * (exp(-10) - 1) - exp(-10*x_exact) + 1
 ax.plot(x_exact, u_exact, label="$u(x)$")
-ax.set_xlabel("$x$")
-ax.set_ylabel("$u(x)$")
+ax.set_xlabel(r"$x$")
+ax.set_ylabel(r"$u(x)$")
 ax.legend()
 ax.set_title("Solution of the 1-D Poisson's equation")
 plt.savefig("fig/b.png")
