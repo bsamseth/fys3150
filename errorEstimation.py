@@ -29,11 +29,11 @@ for N_ in N:
     x = np.linspace(0,1,N_)
     x_exact = np.linspace(0,1,N_)
     u_exact = x_exact * (np.exp(-10) - 1) - np.exp(-10*x_exact)  + 1
-    eps[s] = max(np.log10(v-u_exact+1e-16)-np.log(u_exact+1e-16))
+    
+    eps[s] =max(np.log10(np.abs((v[1:-1]-u_exact[1:-1])/(u_exact[1:-1]))))
     s+=1
 
 h_ = 1.0/(N-1)
-print h_, eps
 plt.rc('text', usetex=True)
 plt.semilogx(h_, eps); #label=r'$\epsilon$');
 plt.title('Error estimation')

@@ -4,13 +4,19 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <chrono>
+#include <armadillo>
 using namespace std;
+using namespace std::chrono;
+using namespace arma;
 
 int N;
 
 inline double f(double x) {
     return 100 * exp(-10*x);
 }
+
+
 
 
 void tridiagonal( double b, double c, double * d, double * v ) {
@@ -51,6 +57,7 @@ void tridiagonal( double b, double c, double * d, double * v ) {
 
 
 
+
 void writeToFile(string filename, double * v) {
     ofstream outFile;
     outFile.open(filename);
@@ -88,12 +95,40 @@ int main(int argc, char ** argv) {
     }
 
     double * v = new double[N]; // init. solution array
-    tridiagonal(b,c,d,v);
     
-    stringstream outputname;
-    outputname << "data/v_solve_N_" << N << ".dat";
-    writeToFile(outputname.str(), v);
-    cout << "Data writen to " << outputname.str() << endl;
+
+    
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+    tridiagonal(b,c,d,v);
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    auto duration_tridiag = std::chrono::duration_cast<std::chrono::nanoseconds>( t2 - t1 ).count();
+
+    mat A (N-2,N-2);
+    A.fill(0);
+    vec mid_diag = ones<vec>(N-2)*2;
+    vec sub_diag = ones<vec>(N-3)*(-1);
+    A.diag() = mid_diag;
+    A.diag(1) = sub_diag;
+    A.diag(-1) = sub_diag;
+    mat L, U, P, y;
+    lu(L, U , P, A);
+    vec v1;
+    vec d_copy(N-2);
+    for(int i = 0; i<N-2; i++){
+      d_copy[i] = f(x[i+1])*h*h;
+    }
+    t1 = high_resolution_clock::now();
+    solve(y, P*L, d_copy);
+    solve(v1, U, y);
+    t2 = high_resolution_clock::now();
+    
+    auto duration_armaLU = std::chrono::duration_cast<std::chrono::nanoseconds>( t2 - t1 ).count();
+    
+    double elapsed_time_tridiag = double (duration_tridiag)/1e9;
+    double elapsed_time_armaLU = double (duration_armaLU)/1e9;
+
+    cout << N << "   " << elapsed_time_tridiag << "   " << elapsed_time_armaLU <<  endl;
+    
     return 0;
 }
 
