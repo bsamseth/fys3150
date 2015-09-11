@@ -1,16 +1,14 @@
 #! /usr/bin/python
-import sys
-import numpy as np
 from subprocess import call
 from scitools.std import *
 
-call(["make"]) # compile cpp program
+call(["make"])  # compile cpp program
 
-for N in [10, 100, 1000]: # loop over the values of N we want to test
-    
-    call(["./main.x", "%d" % N]) # compute and write data
+for N in [10, 100, 1000]:  # loop over the values of N we want to test
 
-    data = open("data/v_solve_N_%d.dat" % N, 'r') # read data back in
+    call(["./main.x", "%d" % N])  # compute and write data
+
+    data = open("data/v_solve_N_%d.dat" % N, 'r')  # read data back in
     data = data.read()
     data = data.split("\n")
     N = int(data[0])
@@ -21,16 +19,14 @@ for N in [10, 100, 1000]: # loop over the values of N we want to test
         v[i] = float(line)
 
     # now plot the computed data
-    x = linspace(0,1,N)
+    x = linspace(0, 1, N)
     plot(x, v, legend="$v_i (N=%d)$" % N, hold='on')
 
 # add closed-form solution to plot for reference
-x_exact = linspace(0,1,101)
-u_exact = x_exact * (exp(-10) - 1) - exp(-10*x_exact)  + 1
+x_exact = linspace(0, 1, 101)
+u_exact = x_exact * (exp(-10) - 1) - exp(-10*x_exact) + 1
 plot(x_exact, u_exact, legend="$u(x)$",
      xlabel="$x$", ylabel="$u(x)$",
      title="Solution of the 1-D Poisson's equation")
 savefig("fig/b.png")
 raw_input()
-
-
