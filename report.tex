@@ -60,8 +60,8 @@
 \setlength{\headheight}{21pt} % Customize the height of the header
 
 % \numberwithin{equation}{subsection} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
-\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
-\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+% \numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+% \numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
 
 
 \definecolor{yellow}{rgb}{0.7,0.8,0}
@@ -175,8 +175,11 @@ vi definerer $\vec d$ ved $d_i = h^2f_i$ kan vi skrive
  
 
 Vi skal videre anta at $f(x) = 100 e^{-10x}$. Da har
-\eqref{eq:poisson} en eksakt løsning gitt som $u(x) = 1 -
-\left(1-e^{-10}\right) - e^{-10x}$. Vi skal bruke denne til å
+\eqref{eq:poisson} en eksakt løsning gitt som
+ \begin{align}
+u(x) = 1 -\left(1-e^{-10}\right) - e^{-10x}.\label{eq:exact}
+\end{align} 
+Vi skal bruke denne til å
 sammenlikne med vår numeriske lønning i senere oppgaver.
 
 \subsection{}
@@ -307,7 +310,19 @@ void tridiagonal( double b, double c, double * d, double * v ) {
 }
 \end{lstlisting}
 
+Figur \ref{fig:b} viser resultatet av å bruke denne algoritmen med
+$N = \{10,100,1000\}$. Vi ser at $v_i$ konvergerer raskt mot $u(x)$
+når vi øker verdien av N. For $N=1000$, (som forøvrig ikke virker å ta
+merkbart mer tid å lage sammenliket med lavere N) er det vanskelig å
+skille den eksakte fra tilnærmingen. Det virker med dette som
+algoritmen vi har skrevet fungerer som ønsket.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.7]{fig/b.png}
+  \caption{\label{fig:b} Løsninger av \eqref{eq:poisson} for
+    forskjelige verider av N. $u(x)$ viser kurven til den eksakte løsningen.}
+\end{figure}
 
 
 
