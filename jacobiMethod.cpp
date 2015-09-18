@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
@@ -13,12 +14,12 @@ double off_diagonal_sum(double** A, int n){
   double sum = 0;
   for(int i = 0; i < n; i++){
     for(int j = 0; j < n; j++){
-      sum += pow(A[i][j],2);
+      if(i!=j){
+      sum += A[i][j]*A[i][j];
+      }
     }
   }
-  for(int i = 0; i < n; i++){
-    sum -= pow(A[i][i],2);
-  }
+  assert(sum >= 0);
   return sqrt(sum);
 }
 
@@ -34,6 +35,12 @@ void find_indexes_of_max(double** A, int n, int* l, int* k){
 	  tmp = abs(A[i][j]);
       }
     }
+  }
+  if(k>l){
+    int tmp_l;
+    tmp_l = *l;
+    *l = *k;
+    *k = tmp_l;
   }
 }
 
@@ -83,7 +90,7 @@ int main(int argc, char ** argv){
   A[1][1] = -1;  
   double* lambda = new double[2];
   double eps = 1e-13;
+  int l,k;
   jacobiMethod(A, 2, lambda, eps);
   cout << lambda[0] << "  " << lambda[1] << endl;
-    
 }
