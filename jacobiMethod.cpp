@@ -82,7 +82,6 @@ void jacobiMethod(double** A, int n, double* lambda, double eps){
 	A[i][l] = A[l][i] = tmp_Ail*c + tmp_Aik*s;
       }
     }
-    counter++;  
   }
   for(int i = 0; i < n; i++){
     lambda[i] = A[i][i];
@@ -110,7 +109,6 @@ int main(int argc, char ** argv){
   
   double* lambda = new double[n];
   double eps = 1e-15;
-  int l,k;
   jacobiMethod(A, n, lambda, eps);
   for(int i = 0; i < n; i++){
     cout << lambda[i] << "  " << endl;
