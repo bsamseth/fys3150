@@ -1,14 +1,17 @@
 CC = c++
 CFLAGS = -g -Wall
 
-OBJS = jacobiMethod.o
+OBJS = jacobiMethod.o 
+LIBS = /usr/lib/libgtest.a /usr/lib/libgtest_main.a -lpthread
 
+unitTest: unitTest.cpp $(OBJS) unitTest.o
+	$(CC) $(CFLAGS) $(OBJS) unitTest.o -o unitTest.x ${LIBS}
 
-jacobiMethod: jacobiMethod.cpp
-	$(CC) $(CFLAGS) jacobiMethod.cpp -o jacobiMethod.x 
+unitTest.o: unitTest.cpp 
+	$(CC) $(CFLAGS) -c unitTest.cpp 
 
-unitTest: unitTest.cpp $(OBJS)
-	$(CC) $(CFLAGS) unitTest.cpp -o unitTest.x 
+jacobiMethod.o: jacobiMethod.cpp
+	$(CC) $(CFLAGS) -c jacobiMethod.cpp
 
 clean :
-	rm -f *~ \#*# $(OBJS)
+	rm -f *~ \#*# *.o
