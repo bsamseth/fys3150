@@ -1,0 +1,64 @@
+\documentclass[11pt]{article}
+\usepackage{preamble}
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead[C]{\footnotesize \textit{FYs3150 Prosjekt
+    2 $ \, $}} % No page header - if you want one, create it in the same way as the footers below 
+\fancyhead[R]{}
+\fancyhead[L]{}
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{21pt} % Customize the height of the header
+\begin{document}
+  % make title page
+\begin{titlepage}
+  \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+  \center
+  \textsc{\LARGE Universitetet i Oslo}\\[1.5cm] % Name of your university/college
+  \textsc{\Large }\\[0.5cm] % Major heading such as course name
+  \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
+  \HRule \\[0.4cm]
+  { \huge \bfseries Prosjekt 2 }\\[0.4cm] % Title of your document
+  \HRule \\[1.5cm]
+  \Large \emph{Skrevet av:}\\
+  Lyder \textsc{Rumohr Blingsmo} og Bendik \textsc{Samseth}\\[3cm]
+  {\large \today}\\[3cm]
+  \vfill
+\end{titlepage}
+
+
+\section*{Schödingers likning for to elektroner i en tredimensjonal
+  harmonisk oscillator brønn}
+\begin{abstract}
+  Denne oppgaven skal løse Schödingers likning for to elektroner i en tredimensjonal
+  harmonisk oscillator brønn med og uten en
+  Coulomb-vekselvirkning. For å gjøre dette blir likningen skrevet om
+  til diskret form som en eigenverdilikning. Denne blir så løst ved
+  hjelp av en implementasjon av Jacobis metode. 
+\end{abstract}
+
+
+Vi antar at to elektroner befinner seg i et tredimensjonalt harmonisk
+oscillator (HO) brønnpotensial, og at de vekselvirker gjennom
+Coulombpotensialet mellom dem. Vi antar sfærisk symmetri. 
+
+Vi er først interessert i løsningen på den radielle delen av
+Schödingers likning (SL) for et elektron. Denne likningen kan skrives
+som 
+\begin{align}
+  -\frac{ \hbar^2 }{ 2m }\left( \frac{ 1 }{ r^2 }\frac{ d }{ dr }r^2
+  \frac{ d }{ dr } - \frac{ l(l+1) }{ r^2 }   \right) R(r) + V(r)R(r)
+  = ER(r).\label{eq:radiell-SL}
+\end{align}
+
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
