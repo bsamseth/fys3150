@@ -5,13 +5,14 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <gtest/gtest.h>
+#include <unittest++/UnitTest++.h>
+
 
 #include "jacobiMethod.h"
 
 using namespace std;
 
-TEST (JacobiMethod, threeByThreeMatrix) {
+TEST (JacobiMethod_threeByThreeMatrix) {
   // init a test matrix
   int n = 3;
   double** A = new double*[n];
@@ -52,29 +53,19 @@ TEST (JacobiMethod, threeByThreeMatrix) {
       s3 = s3 or ( abs( lambda[i] - lambda_exact[3]) < eps);
   }
   // asserting one by one for added clarity
-  ASSERT_TRUE(s1);
-  ASSERT_TRUE(s2);
-  ASSERT_TRUE(s3);
+  CHECK(s1);
+  CHECK(s2);
+  CHECK(s3);
 }
 
 int main(int argc, char **argv)
 {
-    // gtest need the following line to be run before any test are run
-    testing::InitGoogleTest(&argc, argv); 
-    return RUN_ALL_TESTS();
+    return UnitTest::RunAllTests();
 }
 
 /* Result of running the unitTest.x executable:
    
-bendik@Samseth project2 (unitTest)* $ ./unitTest.x 
-[==========] Running 1 test from 1 test case.
-[----------] Global test environment set-up.
-[----------] 1 test from JacobiMethod
-[ RUN      ] JacobiMethod.threeByThreeMatrix
-[       OK ] JacobiMethod.threeByThreeMatrix (0 ms)
-[----------] 1 test from JacobiMethod (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test case ran. (1 ms total)
-[  PASSED  ] 1 test.
+bendik@Samseth project2 (unitTest-std)* $ ./unitTest.x 
+Success: 1 tests passed.
+Test time: 0.00 seconds.
 */

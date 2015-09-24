@@ -2,7 +2,7 @@ CC = c++
 CFLAGS = -g -Wall
 
 OBJS = jacobiMethod.o 
-LIBS = /usr/lib/libgtest.a /usr/lib/libgtest_main.a -lpthread
+LIBS = -lunittest++
 
 unitTest: unitTest.cpp $(OBJS) unitTest.o
 	$(CC) $(CFLAGS) $(OBJS) unitTest.o -o unitTest.x ${LIBS}
