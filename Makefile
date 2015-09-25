@@ -4,6 +4,13 @@ CFLAGS = -g -Wall
 OBJS = jacobiMethod.o 
 LIBS = -lunittest++
 
+
+findnstep: findnstep.o
+	$(CC) $(CFLAGS) $(OBJS) findnstep.o -o findnstep.x 
+
+findnstep.o: jacobiMethod.o
+	$(CC) $(CFLAGS) -c findnstep.cpp
+
 unitTest: unitTest.cpp $(OBJS) unitTest.o
 	$(CC) $(CFLAGS) $(OBJS) unitTest.o -o unitTest.x ${LIBS}
 
