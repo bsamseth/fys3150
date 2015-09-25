@@ -5,8 +5,10 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-using namespace std;
 
+#include "jacobiMethod.h"
+
+using namespace std;
 
 
 
@@ -58,7 +60,7 @@ void jacobiMethod(double** A, int n, double* lambda, double eps){
   double tmp_Akk, tmp_All, tmp_Akl, tmp_Ail, tmp_Aik;
   while(off_diagonal_sum(A, n) > eps){
     find_indexes_of_max(A, n, &l, &k);
-    tau = (A[l][l]-A[k][k]) / (2*A[k][l]); //hva hvis A[k][l] = 0?
+    tau = (A[l][l]-A[k][k]) / (2*A[k][l]);
     if(tau > 0) {  //slik de gjorde det i lecture-notes
       t = 1.0/(tau + sqrt(1.0 + tau*tau)); 
     } else { //ekvivalent med det vi hadde?
@@ -85,32 +87,5 @@ void jacobiMethod(double** A, int n, double* lambda, double eps){
   }
   for(int i = 0; i < n; i++){
     lambda[i] = A[i][i];
-  }
-}
-
-int main(int argc, char ** argv){
-
-  //some code for generating a matrix
-  int n = 4;
-  double** A = new double*[n];
-  for(int i=0; i<n; i++){
-    A[i] = new double[n];
-  }
-
-  //filling matrix with 'arbitrary' values
-  int counter = 1;
-  for(int i=0; i<n; i++){
-    for(int j=0; j<n; j++){
-      A[i][j] = counter;
-      counter += 2;
-    }
-  }
-  
-  
-  double* lambda = new double[n];
-  double eps = 1e-15;
-  jacobiMethod(A, n, lambda, eps);
-  for(int i = 0; i < n; i++){
-    cout << lambda[i] << "  " << endl;
   }
 }
