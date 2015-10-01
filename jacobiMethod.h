@@ -4,6 +4,6 @@
 double off_diagonal_sum(double** A, int n);
 void find_indexes_of_max(double** A, int n, int* l, int* k);
 double max_Aij(double** A, int n);
-void jacobiMethod(double** A, int n, double* lambda, double eps);
+int jacobiMethod(double** A, int n, double* lambda, double eps);
 
 #endif
