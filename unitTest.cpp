@@ -12,6 +12,51 @@
 
 using namespace std;
 
+TEST (JacobiMethod_twoByTwoMatrix) {
+      // init a test matrix
+  int n = 2;
+  double** A = new double*[n];
+  for(int i=0; i<n; i++){
+    A[i] = new double[n];
+  }
+  /* setting a "random" symetric matrix
+     A =
+     
+     3  7
+     7  5
+
+     
+     lambda = 4 \pm 5 * sqrt(2) 
+  */
+  A[0][0] = 3; A[0][1] = 7;
+  A[1][0] = 7; A[1][1] = 5;
+  
+  double * lambda_exact = new double[n];
+  lambda_exact[0] = 4 + 5 * sqrt(2); 
+  lambda_exact[1] = 4 - 5 * sqrt(2);
+      
+  double* lambda = new double[n];  // array for computed lambdas
+  double eps = 1e-14;             
+  int number_of_transformations = jacobiMethod(A, n, lambda, eps); // fill lambda with solution
+
+
+  // test that values are correct
+  // we don't know the order of the computed lambdas
+  // so some clever (or not so clever) boolean expressions are needed
+  bool s1, s2;
+  s1 = s2 = false;
+  for(int i = 0; i < n; i++){
+      s1 = s1 or ( abs( lambda[i] - lambda_exact[0]) < eps);
+      s2 = s2 or ( abs( lambda[i] - lambda_exact[1]) < eps);
+  }
+  // asserting one by one for added clarity
+  CHECK(s1);
+  CHECK(s2);
+  // for the 2x2 case, number_of_transformations should be 1
+  CHECK(number_of_transformations == 1);
+}
+
+
 TEST (JacobiMethod_threeByThreeMatrix) {
   // init a test matrix
   int n = 3;
