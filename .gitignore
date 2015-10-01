@@ -14,6 +14,8 @@ prv_*
 auto/
 *.x
 *~
+*.bcf
+*.run.xml
 *.autosave
 *.a
 *.core
