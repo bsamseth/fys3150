@@ -54,7 +54,8 @@ double max_Aij(double** A, int n){
   return max_;
 }
 
-void jacobiMethod(double** A, int n, double* lambda, double eps){
+int jacobiMethod(double** A, int n, double* lambda, double eps){
+  int number_of_transformations = 0;
   int l,k;
   double tau,t,c,s;
   double tmp_Akk, tmp_All, tmp_Akl, tmp_Ail, tmp_Aik;
@@ -84,8 +85,12 @@ void jacobiMethod(double** A, int n, double* lambda, double eps){
 	A[i][l] = A[l][i] = tmp_Ail*c + tmp_Aik*s;
       }
     }
+    number_of_transformations++;
   }
   for(int i = 0; i < n; i++){
     lambda[i] = A[i][i];
   }
+  return number_of_transformations;
 }
+
+
