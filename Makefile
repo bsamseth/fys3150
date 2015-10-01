@@ -5,6 +5,12 @@ OBJS = jacobiMethod.o
 LIBS = -lunittest++
 
 
+interactingElectrons: interactingElectrons.o
+	$(CC) $(CFLAGS) $(OBJS) interactingElectrons.o -o interactingElectrons.x
+
+interactingElectrons.o: interactingElectrons.cpp
+	$(CC) $(CFLAGS) -c interactingElectrons.cpp
+
 findnstep: findnstep.o
 	$(CC) $(CFLAGS) $(OBJS) findnstep.o -o findnstep.x 
 
