@@ -3,6 +3,7 @@
 report.pdf
 fig/
 data/
+*.jpg
 #*#
 *.aux
 *.log
