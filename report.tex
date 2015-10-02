@@ -168,9 +168,14 @@ en eigenverdilikning,
       \end{array}\right)\label{eq:SL-matrix}.
 \end{align}
 
+\section{Implementasjon av Jacobis rotasjons-algoritme}
+For å løse egenverdiligningen har vi brukt Jacobis rotasjons-algoritme. 
+Hovedideen er å gjøre gjentatte similærtransformasjoner av 
+matrisen inntil matrisen er tilstrekkelig diagonal. Vi sier at den er diagonal nok, når største 
+ikke-diagonale matriseelement er under en gitt toleranse,  $ max(A_{ij}) < \epsilon$. Algoritmen er gitt
+i forelesningsnotatene~\cite{Lecture-notes}. Vår implementasjon kan sees på github-repo \footnote{\url{https://github.com/bsamseth/fys3150-project2.git}}
 
-
-
+\printbibliography
 \end{document}
 %%% Local Variables:
 %%% mode: latex
