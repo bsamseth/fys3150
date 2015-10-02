@@ -49,15 +49,31 @@ int main(int argc, char** argv) {
 
   
     double* lambdas = new double[nstep-1];
-    jacobiMethod(A, make_identity_matrix(nstep - 1), nstep-1, lambdas, 1e-10);
+    double** R = make_identity_matrix(nstep - 1);
+    jacobiMethod(A, R, nstep-1, lambdas, 1e-10);
   
     vector<double> myvec (lambdas, lambdas + nstep-1);
     sort(myvec.begin(), myvec.end());
-    for(int i = 0; i < 1; i++){
-      cout << myvec[i] << "  " << endl;
+    int * columns = new int[3];
+    for(int i = 0; i < 3; i++){
+	cout << "eigenvalue " << i << " = " << myvec[i] << endl;
+      for (int j = 0; j < nstep -1; j++) {
+	  if (lambdas[j] == myvec[i]) {
+	      columns[i] = j;
+	  }
+      }
     }
-  }
 
+    for (int k = 0; k < 3; k++ ){
+	cout << "Eigenvector " << k << " = (";
+	for (int i = 0; i < nstep-1; i++) {
+	    cout << R[i][columns[k]] << ", ";
+	}
+	cout << ")" << endl;
+    }
+    
+  }
+  
   
   
 
