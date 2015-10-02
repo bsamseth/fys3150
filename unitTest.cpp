@@ -12,6 +12,47 @@
 
 using namespace std;
 
+
+TEST (JacobiMethod_eigenvector) {
+  // init a test matrix
+  int n = 3;
+  double** A = new double*[n];
+  for(int i=0; i<n; i++){
+    A[i] = new double[n];
+  }
+  /* setting a "random" symetric matrix
+     A =
+     
+     1   2   3
+     2   4   6
+     3   6   3
+     
+     lambda = 4 \pm sqrt(46) and lambda = 0
+  */
+  A[0][0] = 1; A[0][1] = 2; A[0][2] = 3;
+  A[1][0] = 2; A[1][1] = 4; A[1][2] = 6;
+  A[2][0] = 3; A[2][1] = 6; A[2][2] = 3;
+
+  double * lambda_exact = new double[n];
+  lambda_exact[0] = 0.0; 
+  lambda_exact[1] = 4 + sqrt(46);
+  lambda_exact[2] = 4 - sqrt(46);
+      
+  double* lambda = new double[n];  // array for computed lambdas
+  double eps = 1e-14;
+  double ** R = make_identity_matrix(n);
+  jacobiMethod(A, R, n, lambda, eps); // fill lambda with solution
+
+  for (int j = 0; j < n; j++ ){
+      cout << "Eigenvector " << j << ": (";
+      for (int i = 0; i < n; i++ ){
+	  cout << R[i][j] << ", ";
+      }
+      cout << ")" << endl;
+  }
+
+}
+
 TEST (JacobiMethod_twoByTwoMatrix) {
       // init a test matrix
   int n = 2;
@@ -37,7 +78,7 @@ TEST (JacobiMethod_twoByTwoMatrix) {
       
   double* lambda = new double[n];  // array for computed lambdas
   double eps = 1e-14;             
-  int number_of_transformations = jacobiMethod(A, n, lambda, eps); // fill lambda with solution
+  int number_of_transformations = jacobiMethod(A, make_identity_matrix(n), n, lambda, eps); // fill lambda with solution
 
 
   // test that values are correct
@@ -84,7 +125,7 @@ TEST (JacobiMethod_threeByThreeMatrix) {
       
   double* lambda = new double[n];  // array for computed lambdas
   double eps = 1e-14;             
-  jacobiMethod(A, n, lambda, eps); // fill lambda with solution
+  jacobiMethod(A, make_identity_matrix(n), n, lambda, eps); // fill lambda with solution
 
 
   // test that values are correct

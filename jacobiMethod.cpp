@@ -103,11 +103,11 @@ int jacobiMethod(double** A, double** R, int n, double* lambda, double eps){
 	A[i][k] = A[k][i] = tmp_Aik*c - tmp_Ail*s;
 	A[i][l] = A[l][i] = tmp_Ail*c + tmp_Aik*s;
       }
+      tmp_Rik = R[i][k];
+      tmp_Ril = R[i][l];
+      R[i][k] = c*tmp_Rik - s*tmp_Ril;
+      R[i][l] = c*tmp_Ril + s*tmp_Rik;
     }
-    tmp_Rik = R[i][k];
-    tmp_Ril = R[i][l];
-    R[i][k] = c*tmp_Rik - s*tmp_Ril;
-    R[i][l] = c*tmp_Ril + s*tmp_Rik;
     number_of_transformations++;
   }
   //normalizing
