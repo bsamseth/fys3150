@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 
   
     double* lambdas = new double[nstep-1];
-    jacobiMethod(A, nstep-1, lambdas, 1e-10);
+    jacobiMethod(A, make_identity_matrix(nstep - 1), nstep-1, lambdas, 1e-10);
   
     vector<double> myvec (lambdas, lambdas + nstep-1);
     sort(myvec.begin(), myvec.end());

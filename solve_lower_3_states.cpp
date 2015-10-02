@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     A[nstep-2][nstep-2] = const_diag + pow(rho_min + ((nstep-2)+1)*h, 2);
 
     double * lambdas = new double[nstep-1];
-    int number_of_transformations = jacobiMethod(A, nstep-1, lambdas, tolerance);
+    int number_of_transformations = jacobiMethod(A, make_identity_matrix(nstep-1), nstep-1, lambdas, tolerance);
     vector<double> myvec (lambdas, lambdas + nstep-1);
     sort(myvec.begin(), myvec.end());
     for (int i = 0; i < 3; i++)
