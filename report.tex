@@ -173,7 +173,39 @@ For å løse egenverdiligningen har vi brukt Jacobis rotasjons-algoritme.
 Hovedideen er å gjøre gjentatte similærtransformasjoner av 
 matrisen inntil matrisen er tilstrekkelig diagonal. Vi sier at den er diagonal nok, når største 
 ikke-diagonale matriseelement er under en gitt toleranse,  $ max(A_{ij}) < \epsilon$. Algoritmen er gitt
-i forelesningsnotatene~\cite{Lecture-notes}. Vår implementasjon kan sees på github-repo \footnote{\url{https://github.com/bsamseth/fys3150-project2.git}}
+i forelesningsnotatene~\cite[seksjon 7.4, side 215]{Lecture-notes}. Vår implementasjon kan sees på github-repo \footnote{\url{https://github.com/bsamseth/fys3150-project2.git}}
+
+Vi definerer $\tan\theta = t= s/c$, med $s=\sin\theta$ og $c=\cos\theta$ og
+\[\cot 2\theta=\tau = \frac{a_{ll}-a_{kk}}{2a_{kl}}.
+\]
+Videre kan vi definere vinkelen $\theta$ slik at de ikke-diagonale elementene i matrisa 
+$a_{kl}$ blir null.
+ Vi får andregradsligningen(bruker $\cot 2\theta=1/2(\cot \theta-\tan\theta)$
+\[
+t^2+2\tau t-1= 0,
+\]
+som gir 
+\[
+  t = -\tau \pm \sqrt{1+\tau^2},
+\]
+og $c$ og $s$ får vi lett fra
+\[
+   c = \frac{1}{\sqrt{1+t^2}},
+\]
+og $s=tc$.  
+Vi velger
+$t$ til å være den minste av røttene. Dette forsikrer oss om at $|\theta| \le \pi/4$) og minimerer derfor differansen mellom${\bf B}$ og ${\bf A}$ siden
+\[
+||{\bf B}-{\bf A}||_F^2=4(1-c)\sum_{i=1,i\ne k,l}^n(a_{ik}^2+a_{il}^2) +\frac{2a_{kl}^2}{c^2}.
+\]
+
+
+
+
+(use the last equation to convince yourself that it ensures that $|\theta| \le \pi/4$ is indeed satisfied).
+
+
+
 
 \printbibliography
 \end{document}
