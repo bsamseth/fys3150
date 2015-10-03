@@ -22,18 +22,27 @@
 \section*{Schödingers likning for to elektroner i en tredimensjonal
   harmonisk oscillator brønn}
 \begin{abstract}
-  Denne oppgaven skal løse Schödingers likning for to elektroner i en tredimensjonal
-  harmonisk oscillator brønn med og uten en
-  Coulomb-vekselvirkning. For å gjøre dette blir likningen skrevet om
-  til diskret form som en eigenverdilikning. Denne blir så løst ved
-  hjelp av en implementasjon av Jacobis metode. 
+  I denne rapporten har vi løst Schödingers likning for to elektroner
+  i en tredimensjonal harmonisk oscillator brønn med og uten en
+  Coulomb-vekselvirkning. For å gjøre dette har vi skrevet om
+  likningen til diskret form som en eigenverdilikning, som deretter blir
+  løst ved hjelp av en implementasjon av Jacobis metode. Vi har også
+  sett at denne metoden er lite effektiv og ganske treg. Vi har til
+  slutt sett på løsninger for flere forskjellige styrker av
+  potensialet, både med å uten vekselvirkning mellom elektronene. Vi
+  har også implementert flere (enhets)tester av koden som er
+  utviklet. Alt materiale som refereres er tilgjengelig på
+  \href{https://github.com/bsamseth/fys3150-project2.git}{Github}\footnote{Dersom
+    linken ikke er tilgjengelig, eller du besitter et utskrevet
+    eksemplar av rapporten, er den eksplisitte 
+    adressen: \url{https://github.com/bsamseth/fys3150-project2.git}} .
 \end{abstract}
 
-\section{Omskrivning av problemet}
 Vi antar at to elektroner befinner seg i et tredimensjonalt harmonisk
 oscillator (HO) brønnpotensial, og at de vekselvirker gjennom
 Coulombpotensialet mellom dem. Vi antar sfærisk symmetri. 
 
+\section{Omskrivning av problemet}
 Vi er først interessert i løsningen på den radielle delen av
 Schödingers likning (SL) for et elektron. Denne likningen kan skrives
 som 
