@@ -30,6 +30,8 @@
 \end{abstract}
 
 \section{Omskrivning av problemet}
+
+\subsection{Static Coulomb interaction}
 Vi antar at to elektroner befinner seg i et tredimensjonalt harmonisk
 oscillator (HO) brønnpotensial, og at de vekselvirker gjennom
 Coulombpotensialet mellom dem. Vi antar sfærisk symmetri. 
@@ -94,6 +96,97 @@ så kan vi omskrive \eqref{eq:SL} som
   -\frac{ d^2 }{ d\rho^2 }u(\rho) + \rho^2u(\rho) = \lambda u(\rho).\label{eq:SL-rewrite}
 \end{align}
 Dette er den første likningen som skal løses numerisk.
+
+
+
+
+
+\subsection{Repulsive Coulomb interaction}
+
+We will now study two electrons in a harmonic oscillator well which
+also interact via a repulsive Coulomb interaction.
+Let us start with the single-electron equation written as
+\[
+  -\frac{\hbar^2}{2 m} \frac{d^2}{dr^2} u(r) 
+       + \frac{1}{2}k r^2u(r)  = E^{(1)} u(r),
+\]
+where $E^{(1)}$ stands for the energy with one electron only.
+For two electrons with no repulsive Coulomb interaction, we have the following 
+Schr\"odinger equation
+\[
+\left(  -\frac{\hbar^2}{2 m} \frac{d^2}{dr_1^2} -\frac{\hbar^2}{2 m} \frac{d^2}{dr_2^2}+ \frac{1}{2}k r_1^2+ \frac{1}{2}k r_2^2\right)u(r_1,r_2)  = E^{(2)} u(r_1,r_2) .
+\]
+
+
+Note that we deal with a two-electron wave function $u(r_1,r_2)$ and 
+two-electron energy $E^{(2)}$.
+
+With no interaction this can be written out as the product of two
+single-electron wave functions, that is we have a solution on closed form.
+
+We introduce the relative coordinate ${\bf r} = {\bf r}_1-{\bf r}_2$
+and the center-of-mass coordinate ${\bf R} = 1/2({\bf r}_1+{\bf r}_2)$.
+With these new coordinates, the radial Schr\"odinger equation reads
+\[
+\left(  -\frac{\hbar^2}{m} \frac{d^2}{dr^2} -\frac{\hbar^2}{4 m} \frac{d^2}{dR^2}+ \frac{1}{4} k r^2+  kR^2\right)u(r,R)  = E^{(2)} u(r,R).
+\]
+
+The equations for $r$ and $R$ can be separated via the ansatz for the 
+wave function $u(r,R) = \psi(r)\phi(R)$ and the energy is given by the sum
+of the relative energy $E_r$ and the center-of-mass energy $E_R$, that
+is
+\[
+E^{(2)}=E_r+E_R.
+\]
+
+We add then the repulsive Coulomb interaction between two electrons,
+namely a term 
+\[
+V(r_1,r_2) = \frac{\beta e^2}{|{\bf r}_1-{\bf r}_2|}=\frac{\beta e^2}{r},
+\]
+with $\beta e^2=1.44$ eVnm.
+
+Adding this term, the $r$-dependent Schr\"odinger equation becomes
+\[
+\left(  -\frac{\hbar^2}{m} \frac{d^2}{dr^2}+ \frac{1}{4}k r^2+\frac{\beta e^2}{r}\right)\psi(r)  = E_r \psi(r).
+\]
+This equation is similar to the one we had previously in (a) and we introduce
+again a dimensionless variable $\rho = r/\alpha$. Repeating the same
+steps as in (a), we arrive at 
+\[
+  -\frac{d^2}{d\rho^2} \psi(\rho) 
+       + \frac{1}{4}\frac{mk}{\hbar^2} \alpha^4\rho^2\psi(\rho)+\frac{m\alpha \beta e^2}{\rho\hbar^2}\psi(\rho)  = 
+\frac{m\alpha^2}{\hbar^2}E_r \psi(\rho) .
+\]
+We want to manipulate this equation further to make it as similar to that in (a)
+as possible. We define a 'frequency' 
+\[
+\omega_r^2=\frac{1}{4}\frac{mk}{\hbar^2} \alpha^4,
+\]
+and fix the constant $\alpha$ by requiring 
+\[
+\frac{m\alpha \beta e^2}{\hbar^2}=1
+\]
+or 
+\[
+\alpha = \frac{\hbar^2}{m\beta e^2}.
+\]
+Defining 
+\[
+\lambda = \frac{m\alpha^2}{\hbar^2}E,
+\]
+we can rewrite Schr\"odinger's equation as
+\[
+  -\frac{d^2}{d\rho^2} \psi(\rho) + \omega_r^2\rho^2\psi(\rho) +\frac{1}{\rho} = \lambda \psi(\rho).
+\]
+We treat $\omega_r$ as a parameter which reflects the strength of the oscillator potential.
+
+Here we will study the cases $\omega_r = 0.01$, $\omega_r = 0.5$, $\omega_r =1$,
+and $\omega_r = 5$   
+for the ground state only, that is the lowest-lying state.
+
+
+
 
 
 \section{Diskretisering}
@@ -170,16 +263,16 @@ en eigenverdilikning,
 
 \section{Implementasjon av Jacobis rotasjons-algoritme}
 For å løse egenverdiligningen har vi brukt Jacobis rotasjons-algoritme. 
-Hovedideen er å gjøre gjentatte similærtransformasjoner av 
+Hovedideen er å gjøre gjentatte similærtransformasjoner(med en rotasjonsmatrise) av 
 matrisen inntil matrisen er tilstrekkelig diagonal. Vi sier at den er diagonal nok, når største 
 ikke-diagonale matriseelement er under en gitt toleranse,  $ max(A_{ij}) < \epsilon$. Algoritmen er gitt
 i forelesningsnotatene~\cite[seksjon 7.4, side 215]{Lecture-notes}. Vår implementasjon kan sees på github-repo \footnote{\url{https://github.com/bsamseth/fys3150-project2.git}}
 
+
 Vi definerer $\tan\theta = t= s/c$, med $s=\sin\theta$ og $c=\cos\theta$ og
 \[\cot 2\theta=\tau = \frac{a_{ll}-a_{kk}}{2a_{kl}}.
 \]
-Videre kan vi definere vinkelen $\theta$ slik at de ikke-diagonale elementene i matrisa 
-$a_{kl}$ blir null.
+For hver similærtransformasjon ønsker vi å velge $\theta$ slik at to ikke-diagonale matriseelementer blir 0. 
  Vi får andregradsligningen(bruker $\cot 2\theta=1/2(\cot \theta-\tan\theta)$
 \[
 t^2+2\tau t-1= 0,
@@ -192,17 +285,28 @@ og $c$ og $s$ får vi lett fra
 \[
    c = \frac{1}{\sqrt{1+t^2}},
 \]
-og $s=tc$.  
-Vi velger
-$t$ til å være den minste av røttene. Dette forsikrer oss om at $|\theta| \le \pi/4$) og minimerer derfor differansen mellom${\bf B}$ og ${\bf A}$ siden
+og $s=tc$. 
+
+Men for hver similærtransformasjon endres også noen andre elementer i matrisen. For 
+å minimere forskjellen, og forsikre oss om at matrisen blir stadig mer diagonal, 
+velger $t$ til å være den minste av røttene. Dette forsikrer oss om at $|\theta| \le \pi/4$ \ref{fig:theta} og minimerer derfor differansen mellom ${\bf B}$ og ${\bf A}$ siden
 \[
 ||{\bf B}-{\bf A}||_F^2=4(1-c)\sum_{i=1,i\ne k,l}^n(a_{ik}^2+a_{il}^2) +\frac{2a_{kl}^2}{c^2}.
 \]
+siden små $\theta$ gir små $c$.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.7]{theta.png}
+  \caption{\label{fig:theta} For hver $\tau$ får vi to muligheter for $\theta$. Fra plottet ser vi at vi alltid kan velge enten $\theta_1$ eller $\theta_2$ slik at $|\theta| \le \pi/4$ }
+\end{figure}
+
+\subsection{Test av algoritmen}
+
+\section{Resultater}
 
 
 
-
-(use the last equation to convince yourself that it ensures that $|\theta| \le \pi/4$ is indeed satisfied).
 
 
 
