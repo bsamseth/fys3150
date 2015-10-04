@@ -451,6 +451,16 @@ ganger for samme element, og dette ender med effekten vist i figur \ref{fig:numb
     løsningene er for tilfellet der $l=0$.}
 \end{figure}
 
+\section{Konklusjon}
+Jacobis rotasjonsalgoritme fungererer godt, men er veldig treg. Kjøretiden vokser veldig fort når vi øker størrelsen på matrisa. Vi utnytter ikke på noen som
+helst måte at matrisen vi sender inn er tridiagonal, og det er nærliggende 
+å tro at hvis vi hadde utnyttet dette kunne kjøretiden vært forbedret.
+Vårt valg av $\rho_{max}$ kommer også fra prøving og feiling. 
+Kanskje dette kunne vært gjort på en lurere måte. 
+
+Ellers ser resultatene fornuftige ut, og metoden funker godt til sitt bruk.
+
+
 \printbibliography
 \end{document}
 %%% Local Variables:
