@@ -19,7 +19,7 @@ solve_lower_3_states: solve_lower_3_states.o
 solve_lower_3_states.o: jacobiMethod.o solve_lower_3_states.cpp
 	$(CC) $(CFLAGS) -c solve_lower_3_states.cpp
 
-unitTest: unitTest.cpp $(OBJS) unitTest.o
+unitTest: unitTest.cpp unitTest.o
 	$(CC) $(CFLAGS) $(OBJS) unitTest.o -o unitTest.x ${LIBS}
 
 unitTest.o: jacobiMethod.o unitTest.cpp 
