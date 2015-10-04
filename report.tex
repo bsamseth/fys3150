@@ -109,7 +109,7 @@ så kan vi omskrive \eqref{eq:SL} som
 \subsection{Med frastøtende Coulomb-potensial}
 
 Videre skal vi se på to elektroner i en harmonisk oscillator-brønn som også 
-vekselvirker via et frastøtende coulomb-potensial.
+vekselvirker via et frastøtende Coulomb-potensial.
 Vi starter med single-electron ligningen
 \[
   -\frac{\hbar^2}{2 m} \frac{d^2}{dr^2} u(r) 
@@ -146,7 +146,7 @@ Legger så til frastøtende Coulomb-vekselvirkning med et ledd på formen
 \[
 V(r_1,r_2) = \frac{\beta e^2}{|{\bf r}_1-{\bf r}_2|}=\frac{\beta e^2}{r},
 \]
-med $\beta e^2=1.44$ eVnm.
+med $\beta e^2=\SI{1.44}{eVnm}$.
 
 Får da at den $r$-avhengige Schr\"odingerligningen blir
 \[
@@ -258,16 +258,16 @@ en eigenverdilikning,
 \end{align}
 
 For SL med frastøtende Coulomb-potensial ser vi at vi kan substituere
-inn $V_{repulsive} = {\omega_r}^2 + 1/\rho$. 
+inn $V_\text{repulsive} = {\omega_r}^2 + 1/\rho$. 
 Vi kan altså løse begge våre to Schr\"odingerligninger \eqref{eq:SL-rewrite} 
 og \eqref{eq:SL-rewrite2} som en matriseligning på denne formen. 
 
 
 \section{Implementasjon av Jacobis rotasjons-algoritme}
 For å løse egenverdiligningen har vi brukt Jacobis rotasjons-algoritme. 
-Hovedideen er å gjøre gjentatte similærtransformasjoner(med en rotasjonsmatrise) av 
+Hovedidéen er å gjøre gjentatte similærtransformasjoner(med en rotasjonsmatrise) av 
 matrisen inntil den er tilstrekkelig diagonal. Vi sier at den er diagonal nok, når største 
-ikke-diagonale matriseelement er under en gitt toleranse,  $ max(A_{ij}) < \epsilon$. Algoritmen er gitt
+ikke-diagonale matriseelement er under en gitt toleranse,  $ \max(A_{ij}) < \epsilon$. Algoritmen er gitt
 i forelesningsnotatene~\cite[seksjon 7.4, side 215]{Lecture-notes}. Vår implementasjon kan sees på Github. \footnote{\url{https://github.com/bsamseth/fys3150-project2.git}}
 
 
@@ -336,7 +336,7 @@ ikke-vekselvirkende elektroner i et (3-dimensjonalt)
 HO-potensial. Dersom vi kun ser på det plottet som viser løsningen for
 $\omega_r=1$, er dette faktisk løsningen på en likning som er helt
 ekvivalent med \eqref{eq:SL-rewrite} som vi ser på her nå. Da ser vi
-at alle tre tilstandenen befinner seg innenfor $\rho\in[0,5]$. 
+at alle tre tilstandene befinner seg innenfor $\rho\in[0,5]$. 
 
 Noe å merke seg er at dersom vi i figur
 \ref{fig:three-lowest-states-non-interacting} hadde brukt en lavere
@@ -345,9 +345,9 @@ løsningene tilfeldigvis passet akkurat innenfor intervallet vi hadde
 valgt. Løsningene blir ikke kappet av, men snarere trykket sammen med
 høyere topper på et mindre intervall. Dette er fordi løsningene alltid
 blir normaliserte slik at arealet under dem blir lik 1. Men dette
-betyr ikke at løsnignene faktisk er riktige! For å se hva
+betyr ikke at løsningene faktisk er riktige! For å se hva
 $\rho_\text{max}$ faktisk må være trenger vi å velge en så stor verdi
-at vi kan obervere at sannsynlighetsfordeligen faktisk dør ut
+at vi kan observere at sannsynlighetsfordelingen faktisk dør ut
 \emph{før} vi når $\rho_\text{max}$. Da kan vi heller senere
 optimalisere intervallet med viten om at vi ikke ødelegger
 løsningene. Et plot av typen i figur
@@ -370,14 +370,14 @@ nøyaktighet. Etter litt testing\footnote{Vi brukte programmet
 
 Dette er ikke \emph{veldig} store verdier for $n_\text{step}$, men
 Jacobimetoden er veldig treg til å begynne med, så det tar forholdsvis
-lang tid å gjøre bergningene. For å illustrere hvordan metoden ikke er
+lang tid å gjøre beregningene. For å illustrere hvordan metoden ikke er
 helt optimal skal vi se på hvor mange similærtransformasjoner som
 brukes for å komme frem til en løsning.
 
 Vi kan først telle opp det minimale antall transformasjoner som må
 til. Siden vi her sender inn en matrise som er på tridiagonalform, og
 hver transformasjon nuller ut et par med verdier, burde vi ideelt sett kunne
-forvente å bruke $N-1$ transformasjoner. Vi vet imidlertidig at hver 
+forvente å bruke $N-1$ transformasjoner. Vi vet imidlertid at hver 
 transformasjon også endrer elementer utenfor de tre midterste diagonalene.
 Antar vi at vi trenger én transformasjon for hvert ikke-diagonale element-par(også de som begynner som 0) er det ikke
 vanskelig å se at antallet transformasjoner som trengs for en $N \times N$ 
@@ -423,7 +423,7 @@ ganger for samme element, og dette ender med effekten vist i figur \ref{fig:numb
     similærtransformasjoner Jacobimetoden bruker som en funksjon av
     dimensjonen til matrisen som transformeres. En annengrads
     trendkurve er tegnet på og viser at antallet passer godt med en
-    annengradfunksjon. Det minimale antallet også tegnet opp, og vi
+    annengradsfunksjon. Det minimale antallet også tegnet opp, og vi
     ser hvor mye ekstra metoden bruker. Koeffisienten forran
     $n_\text{step}^2$ er omtrent $3.8$ ganger større enn for den
     optimale kurven.}
@@ -438,11 +438,11 @@ ser på hvordan energiene avhenger av frekvensen. Resultatene kan sees i tabell 
 \centering
 \caption{Energien i grunntilstanden for forskjellige $\omega_r$. Vi ser at energien
 øker i takt med frekvensen vi har definert. Denne ser vi på som et mål på hvor sterkt 
-oscillatorpotensialet.}
+oscillatorpotensialet er.}
 \label{tab:1}
 \vspace{0.1cm}
 \begin{tabular}{llll}
-$\omega_r$ & $E(\omega_r)$ & $n_{step}$ & $\rho_{max}$\\  
+$\omega_r$ & $E(\omega_r)$ & $n_\text{step}$ & $\rho_\text{max}$\\  
 \hline   %Hardkoder som den slasken jeg er
 0.01 & 0.105814 & 150 & 40  \\
 0.5 & 2.22995 & 150 & 7  \\
@@ -452,8 +452,9 @@ $\omega_r$ & $E(\omega_r)$ & $n_{step}$ & $\rho_{max}$\\
 \end{table}
 
 
-Vi ønsker også å sammenligne de Schr\"odinger-ligningene med hverandre. Detta har vi valgt å gjøre for 
-grunntilstanden og de to første eksiterte tilstandene. Resultatene kan sees i \ref{fig:three-lowest-states-non-interacting} og \ref{fig:three-lowest-states-interacting}.
+Vi ønsker også å sammenligne de to Schr\"odinger-ligningene med hverandre. Dette har vi valgt å gjøre for 
+grunntilstanden og de to første eksiterte tilstandene. Resultatene kan
+sees i figur \ref{fig:three-lowest-states-non-interacting} og \ref{fig:three-lowest-states-interacting}.
 
 \begin{figure}[ht]
   \centering
@@ -478,13 +479,45 @@ grunntilstanden og de to første eksiterte tilstandene. Resultatene kan sees i \
 \end{figure}
 
 
+\section{Testing}
+I et hvert prosjekt som involverer numeriske beregninger vil det være
+en fare for at man har gjort noe feil. Derfor har vi fra starten av
+utviklet tester av de metodene vi har implementert, som i dette
+tilfellet bare er Jacobimetoden. Ved å lage mindre tester som metodene
+alltid må passere, sikrer man seg (til en hvis grad) mot uforutsette
+feil som kan oppstå når man endrer på koden. Det er også en god måte å
+sjekke at metoden fungerer som forventet, før man bruker den på det
+virkelige problemet. 
+
+For Jacobimetoden vil det være relevant å teste at:
+\begin{enumerate}
+  \item Vi får riktige egenverdier.
+  \item Vi får riktige egenvektorer.
+  \item Metoden bruker 1 similærtransformasjon på en 2x2-matrise. 
+\end{enumerate}
+Det vil være mulig å teste flere ting, og i større grad enn det vi har
+gjort, men vi anser det som et minste tilstrekkelig krav å teste disse
+tingene. Alle tester er skrevet i programfilen \texttt{unitTest.cpp}. 
+
+
 \section{Konklusjon}
 Jacobis rotasjonsalgoritme fungererer godt, men er veldig treg. Kjøretiden vokser veldig fort når vi øker størrelsen på matrisa. Vi utnytter ikke på noen som
 helst måte at matrisen vi sender inn er tridiagonal, og det er nærliggende 
-å tro at hvis vi hadde utnyttet dette kunne kjøretiden vært forbedret.
-Vårt valg av $\rho_{max}$ kommer også fra prøving og feiling. Kanskje dette kunne vært gjort på en lurere måte. 
+å tro at hvis vi hadde utnyttet dette kunne kjøretiden vært
+forbedret. 
 
-Ellers ser resultatene fornuftige ut, og metoden funker godt til sitt bruk.
+Verdt å nevne er det likevel at vi ikke har fokusert på å optimalisere
+metoden med hensyn på fart. Eksempelvis har vi ikke kompilert med
+optimaliseringsflagg. Vi har tenkt at det er lite fornuftig å bruke
+mye tid på å finspisse en metode som i utgangspunktet er treg. Hvis vi
+hadde vært veldig opptatt av hastighet kunne vi heller gått for en
+løsning som f.eks. benytter Householder metoden. 
+
+Vårt valg av $\rho_\text{max}$ kommer forøvrig fra prøving og
+feiling. Dette kunne muligens vært gjort på en lurere måte. 
+
+Ellers ser resultatene fornuftige ut, og metoden har fungert godt nok til
+sitt bruk for oss her.
 
 
 \printbibliography
