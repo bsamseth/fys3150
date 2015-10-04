@@ -10,7 +10,7 @@
   \textsc{\Large }\\[0.5cm] % Major heading such as course name
   \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
   \HRule \\[0.4cm]
-  { \huge \bfseries Prosjekt 2 }\\[0.4cm] % Title of your document
+  { \huge \bfseries En titt på Jacobis metode og noen anvendelser på enkle Schr\"dingerligninger}\\[0.4cm] % Title of your document
   \HRule \\[1.5cm]
   \Large \emph{Skrevet av:}\\
   Lyder \textsc{Rumohr Blingsmo} og Bendik \textsc{Samseth}\\[3cm]
@@ -24,7 +24,7 @@
 \begin{abstract}
   I denne rapporten har vi løst Schödingers likning for to elektroner
   i en tredimensjonal harmonisk oscillator brønn med og uten en
-  Coulomb-vekselvirkning. For å gjøre dette har vi skrevet om
+  frastøtende Coulomb-vekselvirkning. For å gjøre dette har vi skrevet om
   likningen til diskret form som en eigenverdilikning, som deretter blir
   løst ved hjelp av en implementasjon av Jacobis metode. Vi har også
   sett at denne metoden er lite effektiv og ganske treg. Vi har til
@@ -33,18 +33,19 @@
   har også implementert flere (enhets)tester av koden som er
   utviklet. Alt materiale som refereres er tilgjengelig på
   \href{https://github.com/bsamseth/fys3150-project2.git}{Github}\footnote{Dersom
-    linken ikke er tilgjengelig, eller du besitter et utskrevet
-    eksemplar av rapporten, er den eksplisitte 
+    linken ikke er tilgjengelig, eller du har rapporten på papir, er den eksplisitte 
     adressen: \url{https://github.com/bsamseth/fys3150-project2.git}} .
 \end{abstract}
 
 \section{Omskrivning av problemet}
+Vi får forskjellige Scr\"dingerligninger ettersom vi tar med eller uten frastøtende vekselvirkning.
 
+
+\subsection{Uten frastøtende Coulomb-potensial}
 Vi antar at to elektroner befinner seg i et tredimensjonalt harmonisk
 oscillator (HO) brønnpotensial, og at de vekselvirker gjennom
-Coulombpotensialet mellom dem. Vi antar sfærisk symmetri. 
+statisk Coulomb-interaksjon. Vi antar sfærisk symmetri. 
 
-\section{Omskrivning av problemet}
 Vi er først interessert i løsningen på den radielle delen av
 Schödingers likning (SL) for et elektron. Denne likningen kan skrives
 som 
@@ -104,9 +105,82 @@ så kan vi omskrive \eqref{eq:SL} som
 \begin{align}
   -\frac{ d^2 }{ d\rho^2 }u(\rho) + \rho^2u(\rho) = \lambda u(\rho).\label{eq:SL-rewrite}
 \end{align}
-Dette er den første likningen som skal løses numerisk.
+
+\subsection{Med frastøtende Coulomb-potensial}
+
+Videre skal vi se på to elektroner i en harmonisk oscillator-brønn som også 
+vekselvirker via et frastøtende coulomb-potensial.
+Vi starter med single-electron ligningen
+\[
+  -\frac{\hbar^2}{2 m} \frac{d^2}{dr^2} u(r) 
+       + \frac{1}{2}k r^2u(r)  = E^{(1)} u(r),
+\]
+hvor $E^{(1)}$ er energien med bare ett elektron
+For to elektroner uten frastøtende Coulomb-potensial har vi
+følgende Schr\"dinger ligning
+\[
+\left(  -\frac{\hbar^2}{2 m} \frac{d^2}{dr_1^2} -\frac{\hbar^2}{2 m} \frac{d^2}{dr_2^2}+ \frac{1}{2}k r_1^2+ \frac{1}{2}k r_2^2\right)u(r_1,r_2)  = E^{(2)} u(r_1,r_2) .
+\]
+
+Merk at vi her ser på bølgefunksjonen med to elektroner, $u(r_1,r_2)$
+, med tilhørende energier $E^{(2)}$.
+
+Uten vekselvirkning kan dette skrives som et produkt av to single-electron
+bølgefunksjoner.
+
+Vi definerer relative koordinater ${\bf r} = {\bf r}_1-{\bf r}_2$
+og masse-senter koordinat ${\bf R} = 1/2({\bf r}_1+{\bf r}_2)$.
+Disse substituert inn i SL gir
+\[
+\left(  -\frac{\hbar^2}{m} \frac{d^2}{dr^2} -\frac{\hbar^2}{4 m} \frac{d^2}{dR^2}+ \frac{1}{4} k r^2+  kR^2\right)u(r,R)  = E^{(2)} u(r,R).
+\]
 
 
+Vi antar så at bølgefunksjonen kan skrives som $u(r,R) = \psi(r)\phi(R)$ med 
+tilhørende energier som en sum av relativ energi $E_r$ og massesenter-energi $E_R$, altså
+\[
+E^{(2)}=E_r+E_R.
+\]
+
+Legger så til frastøtende Coulomb-vekselvirkning med et ledd på formen
+\[
+V(r_1,r_2) = \frac{\beta e^2}{|{\bf r}_1-{\bf r}_2|}=\frac{\beta e^2}{r},
+\]
+med $\beta e^2=1.44$ eVnm.
+
+Får da at den $r$-avhengige Schr\"odingerligningen blir
+\[
+\left(  -\frac{\hbar^2}{m} \frac{d^2}{dr^2}+ \frac{1}{4}k r^2+\frac{\beta e^2}{r}\right)\psi(r)  = E_r \psi(r).
+\]
+Denne ligningen er lik den vi hadde i seksjonen ovenfor, og vi definerer
+igjen en dimensjonsløs variabel $\rho = r/\alpha$. Får da
+\[
+  -\frac{d^2}{d\rho^2} \psi(\rho) 
+       + \frac{1}{4}\frac{mk}{\hbar^2} \alpha^4\rho^2\psi(\rho)+\frac{m\alpha \beta e^2}{\rho\hbar^2}\psi(\rho)  = 
+\frac{m\alpha^2}{\hbar^2}E_r \psi(\rho) .
+\]
+For å få ligningen enda mer lik \eqref{eq:SL-rewrite} definerer vi en frekvens
+\[
+\omega_r^2=\frac{1}{4}\frac{mk}{\hbar^2} \alpha^4,
+\]
+finner $\alpha$ ved å kreve
+\[
+\frac{m\alpha \beta e^2}{\hbar^2}=1
+\]
+eller
+\[
+\alpha = \frac{\hbar^2}{m\beta e^2}.
+\]
+Definerer 
+\[
+\lambda = \frac{m\alpha^2}{\hbar^2}E,
+\]
+ender opp med Schr\"dingerligningen
+\[
+  -\frac{d^2}{d\rho^2} \psi(\rho) + \omega_r^2\rho^2\psi(\rho) +\frac{1}{\rho} = \lambda \psi(\rho). \label{eq:SL-rewrite2}
+\]
+Hvor $\omega_r$ er en parameter som beskriver styrken til 
+oscillator-potensialet.
 
 \section{Diskretisering}
 Vi skal nå få likning \eqref{eq:SL-rewrite} over på en diskret
@@ -180,12 +254,18 @@ en eigenverdilikning,
       \end{array}\right)\label{eq:SL-matrix}.
 \end{align}
 
+For SL med frastøtende Coulomb-potensial ser vi at vi kan substituere
+inn $V_{repulsive} = {\omega_r}^2 + 1/\rho$. 
+Vi kan altså løse begge våre to Schr\"dingerligninger \eqref{eq:SL-rewrite} 
+og \eqref{eq:SL-rewrite2} som en matriseligning på denne formen. 
+
+
 \section{Implementasjon av Jacobis rotasjons-algoritme}
 For å løse egenverdiligningen har vi brukt Jacobis rotasjons-algoritme. 
 Hovedideen er å gjøre gjentatte similærtransformasjoner(med en rotasjonsmatrise) av 
-matrisen inntil matrisen er tilstrekkelig diagonal. Vi sier at den er diagonal nok, når største 
+matrisen inntil den er tilstrekkelig diagonal. Vi sier at den er diagonal nok, når største 
 ikke-diagonale matriseelement er under en gitt toleranse,  $ max(A_{ij}) < \epsilon$. Algoritmen er gitt
-i forelesningsnotatene~\cite[seksjon 7.4, side 215]{Lecture-notes}. Vår implementasjon kan sees på github-repo \footnote{\url{https://github.com/bsamseth/fys3150-project2.git}}
+i forelesningsnotatene~\cite[seksjon 7.4, side 215]{Lecture-notes}. Vår implementasjon kan sees på Github. \footnote{\url{https://github.com/bsamseth/fys3150-project2.git}}
 
 
 Vi definerer $\tan\theta = t= s/c$, med $s=\sin\theta$ og $c=\cos\theta$ og
@@ -216,23 +296,9 @@ siden små $\theta$ gir små $c$.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[scale=0.7]{theta.png}
+  \includegraphics[scale=0.7]{fig/theta.png}
   \caption{\label{fig:theta} For hver $\tau$ får vi to muligheter for $\theta$. Fra plottet ser vi at vi alltid kan velge enten $\theta_1$ eller $\theta_2$ slik at $|\theta| \le \pi/4$ }
 \end{figure}
-
-\subsection{Test av algoritmen}
-
-\section{Resultater}
-
-
-
-
-
-
-
-
-
-
 
 \section{Presisjon og effektivitet}
 Nå som algoritmen er implementert er det fornuftig å se på hvor godt
@@ -374,18 +440,6 @@ ganger for samme element, og dette ender med effekten vist i figur \ref{fig:numb
     intervallet til $\rho$ i de forskjellige tilfellene. Alle
     løsningene er for tilfellet der $l=0$.}
 \end{figure}
-\begin{figure}[ht]
-  \centering
-  \includegraphics[scale=0.65]{fig/three_lowest_states_interacting.png}
-  \caption{\label{fig:three-lowest-states-interacting} Figuren viser
-    de tre laveste energitilstandene i det tilfellet der de to
-    elektronene vekselvirker. Hvert plot viser hvordan formen ser ut
-    for ulike verdier av $\omega_r$. Merk også forskjellen på
-    intervallet til $\rho$ i de forskjellige tilfellene. Alle
-    løsningene er for tilfellet der $l=0$.}
-\end{figure}
-
-
 
 \printbibliography
 \end{document}

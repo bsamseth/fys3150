@@ -15,7 +15,7 @@ plt.xlabel(r'$ cos 2 \theta / [ \tau ]$', fontsize='large')
 plt.ylabel(r'Angle, \theta', fontsize='large')
 plt.vlines(0, -2, 2, colors = u'k', linestyles='dashed')# np.pi/2, np.pi/2)
 plt.legend()
-plt.savefig("theta.png")
+plt.savefig("fig/theta.png")
 plt.show()
 
 
