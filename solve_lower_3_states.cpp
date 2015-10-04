@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 	exit(0);
     }
 
-    double tolerance = 1e-9; // for jacobiMethod, not accuracy of egenvalues
+    double tolerance = 1e-10; // for jacobiMethod, not accuracy of egenvalues
     int nstep = atoi(argv[1]);
     double rho_max = atof(argv[2]);
     double rho_min = 0.0;

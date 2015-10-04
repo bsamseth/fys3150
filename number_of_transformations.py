@@ -27,13 +27,17 @@ fitted_curve = fitted_curve_coeff[0] * x**2 + fitted_curve_coeff[1] * x + fitted
 
 print fitted_curve_coeff
 
+x_optimal = linspace(N_list[0], N_list[-1], 501)
+y_optimal = 0.5 * x_optimal * ( x_optimal-1)
+
 fig, ax = plt.subplots()
 ax.hold(True)
 ax.plot(N_list, number_of_transformations_list, label='Actual')
 ax.plot(x, fitted_curve, 'r-', label='Trend curve')
+ax.plot(x_optimal, y_optimal, label='Optimal curve')
 ax.set_title(r"Number of similarity transformations as funciton of $n_{step}$")
-ax.set_xlabel(r"$n_{step}$")
+ax.set_xlabel(r"$n_{step}$", size=16)
 ax.set_ylabel(r"Number of similarity transformations")
-ax.legend()
-plt.savefig("number_of_transformations_trend_plot.jpg")
+ax.legend(loc='upper left')
+plt.savefig("fig/number_of_transformations_trend_plot.jpg")
 plt.show()
