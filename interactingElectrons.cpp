@@ -34,14 +34,18 @@ int main(int argc, char** argv) {
 
 
 double potentialInteract(double rho, double omega_r){
+    /* Potential for the interacting case */
     return pow(omega_r*rho, 2) + 1.0/rho;
 }
 
 double potentialNonInteract(double rho, double omega_r){
+    /* Potential for the non-interacting case */
     return pow(omega_r*rho, 2);
 }
 
 void solve_and_write(int argc, char** argv, double (*potential)(double, double), bool interacting) {
+    /* Solve the SL with potential (*potential) with parameters as
+       given in argv, and write result to data file */
   double rho_min = 0;
   double rho_max = atof(argv[3]);
   int nstep = atoi(argv[2]);
@@ -88,7 +92,7 @@ void solve_and_write(int argc, char** argv, double (*potential)(double, double),
     sort(myvec.begin(), myvec.end());
     int * columns = new int[3];
     for(int i = 0; i < 3; i++){
-	outFile << myvec[i] << endl; //"eigenvalue " << i << " = " << myvec[i] << endl;
+	outFile << myvec[i] << endl;
       for (int j = 0; j < nstep -1; j++) {
 	  if (lambdas[j] == myvec[i]) {
 	      columns[i] = j;
@@ -97,15 +101,11 @@ void solve_and_write(int argc, char** argv, double (*potential)(double, double),
     }
 
     for (int k = 0; k < 3; k++ ){
-	//outFile << "Eigenvector " << k << " = (";
 	for (int i = 0; i < nstep-1; i++) {
-	    outFile << R[i][columns[k]] << " "; //<< ", ";
+	    outFile << R[i][columns[k]] << " ";
 	}
     	outFile << endl;
     } 
     outFile.close();
   }
 }
-
-
-

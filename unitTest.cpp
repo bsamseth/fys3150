@@ -198,7 +198,6 @@ void test_JacobiMethod_eigenvector() {
 
 
     double ** calculated = make_identity_matrix(n); // matrix that will store eigenvectors
-    double * lambdas = new double[n];
     jacobiMethod(A, calculated, n, new double[n], 1e-14); // fill calculated with eigenvector
 
     
