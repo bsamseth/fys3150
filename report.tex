@@ -10,7 +10,7 @@
   \textsc{\Large }\\[0.5cm] % Major heading such as course name
   \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
   \HRule \\[0.4cm]
-  { \huge \bfseries En titt på Jacobis metode og noen anvendelser på enkle Schr\"dingerligninger}\\[0.4cm] % Title of your document
+  { \huge \bfseries En titt på Jacobis metode og noen anvendelser på enkle Schr\"odingerligninger}\\[0.4cm] % Title of your document
   \HRule \\[1.5cm]
   \Large \emph{Skrevet av:}\\
   Lyder \textsc{Rumohr Blingsmo} og Bendik \textsc{Samseth}\\[3cm]
@@ -25,7 +25,7 @@
   I denne rapporten har vi løst Schödingers likning for to elektroner
   i en tredimensjonal harmonisk oscillator brønn med og uten en
   frastøtende Coulomb-vekselvirkning. For å gjøre dette har vi skrevet om
-  likningen til diskret form som en eigenverdilikning, som deretter blir
+  likningen til diskret form som en egenverdilikning, som deretter blir
   løst ved hjelp av en implementasjon av Jacobis metode. Vi har også
   sett at denne metoden er lite effektiv og ganske treg. Vi har til
   slutt sett på løsninger for flere forskjellige styrker av
@@ -117,7 +117,7 @@ Vi starter med single-electron ligningen
 \]
 hvor $E^{(1)}$ er energien med bare ett elektron
 For to elektroner uten frastøtende Coulomb-potensial har vi
-følgende Schr\"dinger ligning
+følgende Schr\"odinger ligning
 \[
 \left(  -\frac{\hbar^2}{2 m} \frac{d^2}{dr_1^2} -\frac{\hbar^2}{2 m} \frac{d^2}{dr_2^2}+ \frac{1}{2}k r_1^2+ \frac{1}{2}k r_2^2\right)u(r_1,r_2)  = E^{(2)} u(r_1,r_2) .
 \]
@@ -175,10 +175,13 @@ Definerer
 \[
 \lambda = \frac{m\alpha^2}{\hbar^2}E,
 \]
-ender opp med Schr\"dingerligningen
-\[
-  -\frac{d^2}{d\rho^2} \psi(\rho) + \omega_r^2\rho^2\psi(\rho) +\frac{1}{\rho} = \lambda \psi(\rho). \label{eq:SL-rewrite2}
-\]
+ender opp med Schr\"odingerligningen
+
+\begin{align}
+  -\frac{d^2}{d\rho^2} \psi(\rho) + \omega_r^2\rho^2\psi(\rho) +\frac{1}{\rho} = \lambda \psi(\rho).\label{eq:SL-rewrite2}
+\end{align}
+
+
 Hvor $\omega_r$ er en parameter som beskriver styrken til 
 oscillator-potensialet.
 
@@ -256,7 +259,7 @@ en eigenverdilikning,
 
 For SL med frastøtende Coulomb-potensial ser vi at vi kan substituere
 inn $V_{repulsive} = {\omega_r}^2 + 1/\rho$. 
-Vi kan altså løse begge våre to Schr\"dingerligninger \eqref{eq:SL-rewrite} 
+Vi kan altså løse begge våre to Schr\"odingerligninger \eqref{eq:SL-rewrite} 
 og \eqref{eq:SL-rewrite2} som en matriseligning på denne formen. 
 
 
@@ -315,8 +318,7 @@ for approksimasjonen vi bruker.
 
 Derfor ønsker vi å undersøke hvor mange punkter, $n_\text{step}$, vi
 trenger for å ha nøyaktighet med, f.eks, fire ledende siffer for de
-tre laveste egenverdiene. For dette har vi analytiske løsninger gitt
-som $\lambda_0=3,\lambda_1=7,\lambda_2=11$ som vi kan bruke til å
+tre laveste egenverdiene. For dette har vi analytisk løsning $\lambda_0=3,\lambda_1=7,\lambda_2=11$ som vi kan bruke til å
 sammenlike med. 
 
 I tillegg til å bestemme en passende
@@ -327,7 +329,7 @@ vi må ha $\rho_\text{max}$ stor nok til at de tilhørende egenvektorene
 blir med i sin helhet. 
 
 Hvis vi begynner med å finne en passende verdi for $\rho_\text{max}$,
-så skal vi foregripe begivenhetenes gang og se på figur
+så skal vi foregripe begivenhetenes gang og se på figur  %veldig rar setning, hva har du ment her?
 \ref{fig:three-lowest-states-non-interacting}. Figuren viser de tre
 laveste energitilstandene i et system som består av to
 ikke-vekselvirkende elektroner i et (3-dimensjonalt)
@@ -340,7 +342,7 @@ Noe å merke seg er at dersom vi i figur
 \ref{fig:three-lowest-states-non-interacting} hadde brukt en lavere
 verdi for $\rho_\text{max}$, så hadde det likevel sett ut som om
 løsningene tilfeldigvis passet akkurat innenfor intervallet vi hadde
-valgt. Løsnignene blir ikke kappet av, men snarere trykket sammen med
+valgt. Løsningene blir ikke kappet av, men snarere trykket sammen med
 høyere topper på et mindre intervall. Dette er fordi løsningene alltid
 blir normaliserte slik at arealet under dem blir lik 1. Men dette
 betyr ikke at løsnignene faktisk er riktige! For å se hva
@@ -358,8 +360,7 @@ samt litt testing har vi kommet frem til noen kombinasjoner som ser
 ut til å fungere nært optimalt. Med disse verdiene kan vi løse
 systemet for forskjellige verdier av $n_\text{step}$ til vi finner er kombinasjon med 4 siffers
 nøyaktighet. Etter litt testing\footnote{Vi brukte programmet
-  \texttt{solve\_lower\_3\_states.cpp} som er tilgjengelig på Github for
-  dette. Programmet skriver ut egenverdiene for de tre laveste
+  \texttt{solve\_lower\_3\_states.cpp} som er tilgjengelig på Github. Programmet skriver ut egenverdiene for de tre laveste
   tilstandene.} fant vi at følge kombinasjoner ga ønsket resultat. 
 \begin{itemize}
   \item[] {\makebox[2cm]{$n=0$\hfill} $\rho_\text{max} = 3.5 \cup n_\text{step}=55\rightarrow E = 2.9995$}
@@ -375,9 +376,12 @@ brukes for å komme frem til en løsning.
 
 Vi kan først telle opp det minimale antall transformasjoner som må
 til. Siden vi her sender inn en matrise som er på tridiagonalform, og
-hver transformasjon nuller ut et par med verdier, er det ikke
-vanskelig å se at antallet transformasjoner som trengs for en $N\times
-N$ matrise er
+hver transformasjon nuller ut et par med verdier, burde vi ideelt sett kunne
+forvente å bruke $N-1$ transformasjoner. Vi vet imidlertidig at hver 
+transformasjon også endrer elementer utenfor de tre midterste diagonalene.
+Antar vi at vi trenger én transformasjon for hvert element-par er det ikke
+vanskelig å se at antallet transformasjoner som trengs for en $N \times N$ 
+matrise er
 \begin{align*}
   T(N) = (N-1) + (N-2) + (N-3) + \dots = \sum_{i=1}^{N-1}i = \frac{ 1 }{ 2 }N(N-1).
 \end{align*}
@@ -425,17 +429,23 @@ ganger for samme element, og dette ender med effekten vist i figur \ref{fig:numb
     optimale kurven.}
 \end{figure}
 
-
-
-
-
-
 \begin{figure}[ht]
   \centering
   \includegraphics[scale=0.65]{fig/three_lowest_states_noninteracting.png}
   \caption{\label{fig:three-lowest-states-non-interacting} Figuren viser
     de tre laveste energitilstandene i det tilfellet der de to
     elektronene ikke vekselvirker. Hvert plot viser hvordan formen ser ut
+    for ulike verdier av $\omega_r$. Merk også forskjellen på
+    intervallet til $\rho$ i de forskjellige tilfellene. Alle
+    løsningene er for tilfellet der $l=0$.}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.65]{fig/three_lowest_states_interacting.png}
+  \caption{\label{fig:three-lowest-states-interacting} Figuren viser
+    de tre laveste energitilstandene i det tilfellet der de to
+    elektronene vekselvirker. Hvert plot viser hvordan formen ser ut
     for ulike verdier av $\omega_r$. Merk også forskjellen på
     intervallet til $\rho$ i de forskjellige tilfellene. Alle
     løsningene er for tilfellet der $l=0$.}
