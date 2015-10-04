@@ -429,6 +429,32 @@ ganger for samme element, og dette ender med effekten vist i figur \ref{fig:numb
     optimale kurven.}
 \end{figure}
 
+
+\section{Anvendelser}
+Vi anvender metoden vår på de to forskjellige Schr\"odingerligningene \eqref{eq:SL-rewrite} og \eqref{eq:SL-rewrite2} og sammenligner.
+Først finner vi grunntilstanden til \eqref{eq:SL-rewrite2} for $\omega_r = 0.01$, $\omega_r = 0.5$, $\omega_r = 1$ og $\omega_r = 5$ og
+ser på hvordan energiene avhenger av frekvensen. Resultatene kan sees i tabell \ref{tab:1}.
+\begin{table}[h]
+\centering
+\caption{Energien i grunntilstanden for forskjellige $\omega_r$. Vi ser at energien
+øker i takt med frekvensen vi har definert. Denne ser vi på som et mål på hvor sterkt 
+oscillatorpotensialet.}
+\label{tab:1}
+\vspace{0.1cm}
+\begin{tabular}{llll}
+$\omega_r$ & $E(\omega_r)$ & $n_{step}$ & $\rho_{max}$\\  
+\hline   %Hardkoder som den slasken jeg er
+0.01 & 0.105814 & 150 & 40  \\
+0.5 & 2.22995 & 150 & 7  \\
+1 & 4.05751  & 150 & 5\\
+5 & 17.4472 & 150 & 2  \\
+\end{tabular}
+\end{table}
+
+
+Vi ønsker også å sammenligne de Schr\"odinger-ligningene med hverandre. Detta har vi valgt å gjøre for 
+grunntilstanden og de to første eksiterte tilstandene. Resultatene kan sees i \ref{fig:three-lowest-states-non-interacting} og \ref{fig:three-lowest-states-interacting}.
+
 \begin{figure}[ht]
   \centering
   \includegraphics[scale=0.65]{fig/three_lowest_states_noninteracting.png}
@@ -451,12 +477,12 @@ ganger for samme element, og dette ender med effekten vist i figur \ref{fig:numb
     løsningene er for tilfellet der $l=0$.}
 \end{figure}
 
+
 \section{Konklusjon}
 Jacobis rotasjonsalgoritme fungererer godt, men er veldig treg. Kjøretiden vokser veldig fort når vi øker størrelsen på matrisa. Vi utnytter ikke på noen som
 helst måte at matrisen vi sender inn er tridiagonal, og det er nærliggende 
 å tro at hvis vi hadde utnyttet dette kunne kjøretiden vært forbedret.
-Vårt valg av $\rho_{max}$ kommer også fra prøving og feiling. 
-Kanskje dette kunne vært gjort på en lurere måte. 
+Vårt valg av $\rho_{max}$ kommer også fra prøving og feiling. Kanskje dette kunne vært gjort på en lurere måte. 
 
 Ellers ser resultatene fornuftige ut, og metoden funker godt til sitt bruk.
 
