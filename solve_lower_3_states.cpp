@@ -8,20 +8,21 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-
+    /* Use jacobiMethod to find the lowest three states
+       for the single-electron case. Write values to stdout */
     if (argc < 3) {
 	cout << "Usage: a.x nstep rho_max" << endl;
 	exit(0);
     }
 
-    double tolerance = 1e-9; // for jacobiMethod, not accuracy of egenvalues
+    double tolerance = 1e-10; // for jacobiMethod, not accuracy of egenvalues
     int nstep = atoi(argv[1]);
     double rho_max = atof(argv[2]);
     double rho_min = 0.0;
 
     double h = (rho_max - rho_min) / nstep;
 
-    
+    // set up the matrix
     double ** A = new double*[nstep-1];
     for (int i = 0; i < nstep-1; i++) {
 	A[i] = new double[nstep-1];
@@ -38,6 +39,7 @@ int main(int argc, char** argv) {
     }
     A[nstep-2][nstep-2] = const_diag + pow(rho_min + ((nstep-2)+1)*h, 2);
 
+    // solve equation
     double * lambdas = new double[nstep-1];
     int number_of_transformations = jacobiMethod(A, make_identity_matrix(nstep-1), nstep-1, lambdas, tolerance);
     vector<double> myvec (lambdas, lambdas + nstep-1);
