@@ -1,0 +1,5 @@
+Running all tests.
+Inside test_JacobiMethod_twoByTwoMatrix() ... success
+Inside test_JacobiMethod_threeByThreeMatrix() ... success
+Inside test_JacobiMethod_eigenvector() ... success
+Ran 3 tests. 
