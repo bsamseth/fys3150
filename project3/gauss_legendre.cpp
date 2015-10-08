@@ -85,6 +85,7 @@ double int_function(double x1, double y1, double z1, double x2, double y2, doubl
 
 
 
+
 void gauleg(double x1, double x2, double x[], double w[], int n)
 {
    int         m,j,i;
@@ -146,4 +147,5 @@ void gauleg(double x1, double x2, double x[], double w[], int n)
       *(w_high--) = *(w_low++);
    }
 } // End_ function gauleg()
+
 
