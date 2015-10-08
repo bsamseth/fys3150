@@ -4,9 +4,16 @@ LFLAGS =
 
 OBJS = 
 LIBS = -lunittest++ 
-TARGETS = gauss_legendre
+TARGETS = gauss_legendre gauss_laguerre
 
 all: $(TARGETS)
+
+
+gauss_laguerre: gauss_laguerre.o
+	$(CC) $(CFLAGS) gauss_laguerre.o -o gauss_laguerre.x $(LFLAGS)
+
+gauss_laguerre.o:  gauss_laguerre.cpp
+	$(CC) $(CFLAGS) -c gauss_laguerre.cpp
 
 
 gauss_legendre: gauss_legendre.o

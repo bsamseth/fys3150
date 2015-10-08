@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 
     
     int i,j,k,l,m,n;
-// #pragma omp parallel for 
+#pragma omp parallel for reduction(+:int_gauss) private(i,j,k,l,m,n)
     for (i=0;i<N;i++){
 	for (j = 0;j<N;j++){
 	    for (k = 0;k<N;k++){
