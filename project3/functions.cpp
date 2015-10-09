@@ -8,12 +8,7 @@
 
 #include "functions.h"
 
-#define EPS 3.0e-14
-#define MAXIT 10
-
 using namespace std;
-
-
 
 void gauleg(double x1, double x2, double x[], double w[], int n)
 {
@@ -133,8 +128,4 @@ double gammln( double xx)
 	ser=1.000000000190015;
 	for (j=0;j<=5;j++) ser += cof[j]/++y;
 	return -tmp+log(2.5066282746310005*ser/x);
-}
-
-// end function gammln
-#undef EPS
-#undef MAXIT
+}// end function gammln
