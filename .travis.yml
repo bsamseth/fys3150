@@ -1,3 +1,6 @@
 language: cpp
 
 script: cd project3/src/ && make
+
+notifications:
+  email: false
