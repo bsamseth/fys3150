@@ -9,8 +9,6 @@
 
 #include <omp.h>
 
-#define ZERO 1E-10
-
 using namespace std;
 using namespace std::chrono;
 
@@ -33,7 +31,7 @@ int main(int argc, char** argv) {
 
   
     // array for integration points and weights using Legendre polynomials
-    double w = (b-a)/(N+1);
+    double w = (b-a)/(N-1);
     //   Note that we initialize the sum
     double int_gauss = 0.;
     //   six-double loops
