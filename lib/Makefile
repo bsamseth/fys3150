@@ -1,5 +1,5 @@
 CC = c++
-CFLAGS = -O2
+CFLAGS = -O3
 
 all:
 	$(CC) $(CFLAGS) -c lib.cpp
