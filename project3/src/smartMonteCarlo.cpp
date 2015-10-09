@@ -18,30 +18,24 @@ double int_function(double x1, double x2, double y1, double y2, double z1, doubl
 
 
 int main(int argc, char** argv) {
-    if (argc < 4) {
-	cout << "Usage: " << argv[0] << " a b N" << endl;
+    if (argc < 2) {
+	cout << "Usage: " << argv[0] << " N" << endl;
 	exit(1);
     }
-
-    double a = atof(argv[1]);
-    double b = atof(argv[2]);
-    int    N = atoi(argv[3]);
+    int    N = atoi(argv[1]);
 
     double alpha = 2;
     
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
-  
-    // array for integration points and weights using Legendre polynomials
-
     //   Note that we initialize the sum
-    double int_gauss = 0.;
-    //   six-double loops
+    double int_MC = 0.;
+    double sum_sigma = 0;
 
     double invers_period = 1./RAND_MAX; // initialise the random number generator
     
     int i;
-#pragma omp parallel for reduction(+:int_gauss) private(i)
+#pragma omp parallel for reduction(+:int_MC, sum_sigma) private(i)
     for (i=0;i<N;i++){
 	double u1 = -log(1 - (double(rand())*invers_period));
 	double u2 = -log(1 - (double(rand())*invers_period)); 
@@ -49,17 +43,23 @@ int main(int argc, char** argv) {
 	double theta2 = (double(rand())*invers_period)*M_PI;
 	double phi1 = (double(rand())*invers_period)*2*M_PI; 
 	double phi2 = (double(rand())*invers_period)*2*M_PI; 
-	int_gauss += int_function(u1,u2,theta1,theta2,phi1,phi2);
+	double funval = int_function(u1,u2,theta1,theta2,phi1,phi2);
+	int_MC += funval;
+	sum_sigma += funval*funval;
     }
-    int_gauss /= (N*pow(2.0*alpha,5));
-    int_gauss *= 4*pow(M_PI,4); // jacobi 
+
+    double standard_avvik = (4*pow(M_PI,4)/pow(2.0*alpha,5))
+      *sqrt(sum_sigma/N - int_MC*int_MC/(N*N));
+    int_MC /= (N*pow(2.0*alpha,5));
+    int_MC *= 4*pow(M_PI,4); // jacobi 
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration = duration_cast<nanoseconds>( t2 - t1 ).count() / 1e9;
     
-    cout << "Computed = " << int_gauss << endl;
+    cout << "Computed = " << int_MC << endl;
+    cout << "standard avvik = " << standard_avvik << endl;
     cout << "Exact = " << 5*M_PI*M_PI/(16.0*16) << endl;
-    cout << "error = " << abs(int_gauss - 5*M_PI*M_PI/(16.0*16)) << endl;
+    cout << "error = " << abs(int_MC - 5*M_PI*M_PI/(16.0*16)) << endl;
     cout << "Time spent = " << duration << endl;
     return 0;
 }

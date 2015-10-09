@@ -29,16 +29,14 @@ int main(int argc, char** argv) {
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
-  
-    // array for integration points and weights using Legendre polynomials
     //   Note that we initialize the sum
-    double int_gauss = 0.;
-    //   six-double loops
+    double int_MC = 0.;
+    double sum_sigma = 0.;
 
     double invers_period = 1./RAND_MAX; // initialise the random number generator
     
     int i;
-#pragma omp parallel for reduction(+:int_gauss) private(i)
+#pragma omp parallel for reduction(+:int_MC, sum_sigma) private(i)
     for (i=0;i<N;i++){
       double x1 = (double(rand())*invers_period)*(b-a)+a; 
       double x2 = (double(rand())*invers_period)*(b-a)+a; 
@@ -46,17 +44,23 @@ int main(int argc, char** argv) {
       double y2 = (double(rand())*invers_period)*(b-a)+a; 
       double z1 = (double(rand())*invers_period)*(b-a)+a; 
       double z2 = (double(rand())*invers_period)*(b-a)+a; 
-      int_gauss += int_function(x1,x2,y1,y2,z1,z2);
+      double funval = int_function(x1,x2,y1,y2,z1,z2);
+      int_MC += funval;
+      sum_sigma += funval*funval;
     }
     double w = 1./(N);
-    int_gauss *= w*pow((b-a),6); //Jacobi and weights
+
+    double standard_avvik =pow((b-a),6)*sqrt((w*sum_sigma-w*w*int_MC*int_MC));
+    int_MC *= w*pow((b-a),6); //Jacobi and weights
+    
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration = duration_cast<nanoseconds>( t2 - t1 ).count() / 1e9;
     
-    cout << "Computed = " << int_gauss << endl;
+    cout << "Computed = " << int_MC << endl;
+    cout << "Standard avvik = " << standard_avvik << endl;
     cout << "Exact = " << 5*M_PI*M_PI/(16.0*16) << endl;
-    cout << "error = " << abs(int_gauss - 5*M_PI*M_PI/(16.0*16)) << endl;
+    cout << "error = " << abs(int_MC - 5*M_PI*M_PI/(16.0*16)) << endl;
     cout << "Time spent = " << duration << endl;
     return 0;
 }

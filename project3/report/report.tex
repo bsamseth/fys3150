@@ -10,7 +10,7 @@
   \textsc{\Large }\\[0.5cm] % Major heading such as course name
   \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
   \HRule \\[0.4cm]
-  { \huge \bfseries En titt på Jacobis metode og noen anvendelser på enkle Schr\"odingerligninger}\\[0.4cm] % Title of your document
+  { \huge \bfseries En sammenligning av numeriske integrasjonsmetoder, Gauss kvadratur og MonteCarlo}\\[0.4cm] % Title of your document
   \HRule \\[1.5cm]
   \Large \emph{Skrevet av:}\\
   Lyder \textsc{Rumohr Blingsmo} og Bendik \textsc{Samseth}\\[3cm]
@@ -18,7 +18,42 @@
   \vfill
 \end{titlepage}
 
-Sitat \cite{Lecture-notes}.
+\section{Innledning}
+
+Vi antar at bølgefunksjonen til hvert elektron kan skrives som en ett-partikkel
+bølgefunksjon for et elektron i et hydrogenatom. Single-particle bølgefunksjonen for 
+grunntilstanden er da gitt ved en dimensjonsløs variabel
+\[
+   {\bf r}_i =  x_i {\bf e}_x + y_i {\bf e}_y +z_i {\bf e}_z ,
+\]
+as
+\[
+   \psi_{1s}({\bf r}_i)  =   e^{-\alpha r_i},
+\]
+Her er ikke $\psi_{1s}$ normalisert. $\alpha$ er en parameter og
+\[
+r_i = \sqrt{x_i^2+y_i^2+z_i^2}.
+\]
+Vi setter $\alpha=2$, som tilsvarer ladningen til et heliumatom$Z=2$. 
+
+Antar videre at bølgefunksjonen for to elektroner da kan skrives som et produkt av
+to $1s$ bølgefunksjoner:
+\[
+   \Psi({\bf r}_1,{\bf r}_2)  =   e^{-\alpha (r_1+r_2)}.
+\]
+
+Integralet vi skal løse er den kvantemekaniske forventningsverdien
+til korrelasjonsenergien til to elektroner som frastøter hverandre via et Coulumb-potensial
+\begin{equation}\label{eq:correlationenergy}
+   \langle \frac{1}{|{\bf r}_1-{\bf r}_2|} \rangle =
+   \int_{-\infty}^{\infty} d{\bf r}_1d{\bf r}_2  e^{-2\alpha (r_1+r_2)}\frac{1}{|{\bf r}_1-{\bf r}_2|}.
+\end{equation}
+
+Her vet vi at integralet \eqref{eq:correlationenergy} har eksakt løsning $5\pi^2/16^2$. Vi skal tilnærme denne 
+løsningen på fire forskjellige måter og sammenligne resultatene både i presisjon og kjøretid.
+
+
+
 
 \printbibliography
 \end{document}
