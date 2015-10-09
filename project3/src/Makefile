@@ -1,4 +1,4 @@
-CC = c++
+CC = gcc
 CFLAGS = -O3 -Wall -std=c++11 -fopenmp
 LFLAGS = 
 
