@@ -31,35 +31,25 @@ int main(int argc, char** argv) {
 
   
     // array for integration points and weights using Legendre polynomials
-    double w = (b-a)/(N-1);
     //   Note that we initialize the sum
     double int_gauss = 0.;
     //   six-double loops
 
     double invers_period = 1./RAND_MAX; // initialise the random number generator
     
-    int i,j,k,l,m,n;
-#pragma omp parallel for reduction(+:int_gauss) private(i,j,k,l,m,n)
+    int i;
+#pragma omp parallel for reduction(+:int_gauss) private(i)
     for (i=0;i<N;i++){
-	for (j = 0;j<N;j++){
-	    for (k = 0;k<N;k++){
-		for (l = 0;l<N;l++){
-		    for (m = 0;m<N;m++){
-			for (n = 0;n<N;n++){
-			  double x1 = (double(rand())*invers_period)*(b-a)+a; 
-			  double x2 = (double(rand())*invers_period)*(b-a)+a; 
-			  double y1 = (double(rand())*invers_period)*(b-a)+a; 
-			  double y2 = (double(rand())*invers_period)*(b-a)+a; 
-			  double z1 = (double(rand())*invers_period)*(b-a)+a; 
-			  double z2 = (double(rand())*invers_period)*(b-a)+a; 
-			  int_gauss += int_function(x1,x2,y1,y2,z1,z2);
-			}
-		    }
-		}
-	    }
-	}
+      double x1 = (double(rand())*invers_period)*(b-a)+a; 
+      double x2 = (double(rand())*invers_period)*(b-a)+a; 
+      double y1 = (double(rand())*invers_period)*(b-a)+a; 
+      double y2 = (double(rand())*invers_period)*(b-a)+a; 
+      double z1 = (double(rand())*invers_period)*(b-a)+a; 
+      double z2 = (double(rand())*invers_period)*(b-a)+a; 
+      int_gauss += int_function(x1,x2,y1,y2,z1,z2);
     }
-    int_gauss *= pow(w,6);
+    double w = 1./(N);
+    int_gauss *= w*pow((b-a),6); //Jacobi and weights
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration = duration_cast<nanoseconds>( t2 - t1 ).count() / 1e9;
