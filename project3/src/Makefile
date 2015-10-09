@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -O3 -Wall -fopenmp
+CFLAGS = -O3 -Wall -std=c++0x -fopenmp
 LFLAGS = 
 
 OBJS = functions.o
