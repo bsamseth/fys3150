@@ -1,3 +1,6 @@
 language: cpp
 
+install: 
+- sudo apt-get install g++
+
 script: cd project3/src/ && make
