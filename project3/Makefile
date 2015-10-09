@@ -4,9 +4,15 @@ LFLAGS =
 
 OBJS = functions.o
 LIBS = -lunittest++ 
-TARGETS = gauss_legendre gauss_laguerre uniformmonteCarlo
+TARGETS = gauss_legendre gauss_laguerre uniformmonteCarlo smartMonteCarlo
 
 all: $(TARGETS)
+
+smartMonteCarlo: smartMonteCarlo.o
+	$(CC) $(CFLAGS) $(OBJS) smartMonteCarlo.o -o smartMonteCarlo.x $(LFLAGS)
+
+smartMonteCarlo.o: $(OBJS) smartMonteCarlo.cpp
+	$(CC) $(CFLAGS) -c smartMonteCarlo.cpp
 
 uniformmonteCarlo: uniformmonteCarlo.o
 	$(CC) $(CFLAGS) $(OBJS) uniformmonteCarlo.o -o uniformmonteCarlo.x $(LFLAGS)
