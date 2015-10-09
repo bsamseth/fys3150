@@ -18,6 +18,18 @@
   \vfill
 \end{titlepage}
 
+\begin{abstract}
+  I denne rapporten har vi beregnet forventingsverdien til korrelasjonsenergien
+  mellom to elektroner i bane rundt en heliumkjerne. Beregningen
+  innebærer å løse et 6-dimensjonalt integral. Vi bruker
+  Gauss-Legendre- og Gauss-Laguerre-kvadratur, samt
+  Monte Carlo-integrasjon med og uten ``importance sampling''. Vi
+  konkluderer med at Gauss-Legendre og standard Monte Carlo brukt
+  blindt på problemstillingen fungerer mindre bra, men med litt
+  tenkearbeid får vi gode resultater med Gauss-Laguerre og Monte Carlo
+  med ``importance sampling''.  
+\end{abstract}
+
 \section{Innledning}
 
 Vi antar at bølgefunksjonen til hvert elektron kan skrives som en ett-partikkel
@@ -51,7 +63,6 @@ til korrelasjonsenergien til to elektroner som frastøter hverandre via et Coulu
 
 Her vet vi at integralet \eqref{eq:correlationenergy} har eksakt løsning $5\pi^2/16^2$. Vi skal tilnærme denne 
 løsningen på fire forskjellige måter og sammenligne resultatene både i presisjon og kjøretid.
-
 
 
 

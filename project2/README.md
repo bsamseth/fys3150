@@ -13,6 +13,6 @@ Alle data og figurer som brukes i rapporten kan reproduseres ved å skrive
 ``` bash
 $ ./benchmark.sh
 ```
-Merk at dette forutsetter at `bash` finnes i `/bin/bash`. Dersom dette ikker tilfellet må noe annet spesifiseres.
+Merk at dette forutsetter at `bash` finnes i `/bin/bash`. Dersom dette ikk er tilfellet må noe annet spesifiseres.
 
 Dette vil reprodusere innholdet i [benchmarks/](benchmarks/).
