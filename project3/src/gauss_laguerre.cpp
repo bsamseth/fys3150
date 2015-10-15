@@ -16,15 +16,12 @@ using namespace std::chrono;
 double int_function(double r1, double r2, double theta1, double theta2, double phi1, double phi2);
 
 int main(int argc, char** argv) {
-    if (argc < 4) {
-	cout << "Usage: " << argv[0] << " a b N" << endl;
+    if (argc < 2) {
+	cout << "Usage: " << argv[0] << " N" << endl;
 	exit(1);
     }
 
-    double a = atof(argv[1]);
-    double b = atof(argv[2]);
-    int    N = atoi(argv[3]);
-
+    int    N = atoi(argv[1]);
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
