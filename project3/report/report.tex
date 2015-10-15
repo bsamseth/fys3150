@@ -1,5 +1,5 @@
 \documentclass[11pt]{article}
-\usepackage{../latex/preamble}
+\usepackage{../../latex/preamble}
 
 \begin{document}
   % make title page
@@ -46,7 +46,7 @@ Her er ikke $\psi_{1s}$ normalisert. $\alpha$ er en parameter og
 \[
 r_i = \sqrt{x_i^2+y_i^2+z_i^2}.
 \]
-Vi setter $\alpha=2$, som tilsvarer ladningen til et heliumatom$Z=2$. 
+Vi setter $\alpha=2$, som tilsvarer ladningen til et heliumatom $Z=2$. 
 
 Antar videre at bølgefunksjonen for to elektroner da kan skrives som et produkt av
 to $1s$ bølgefunksjoner:
@@ -67,7 +67,79 @@ løsningen på fire forskjellige måter og sammenligne resultatene både i presi
 \section{Metoder}
 Vi anvender to forskjellige metoder for Gauss-kvadratur og to forskjellige MC-metoder.
 \subsection{Gauss-kvadratur}
+\subsubsection{Rett fram med Legendre-polynomer}
+Vi skriver om \eqref{eq:correlationenergy} på formen
+
+\begin{align}\label{eq:xyzINT} 
+  \langle \frac{1}{|{\bf r}_1-{\bf r}_2|} \rangle =
+   \int_{-\infty}^{\infty} \dots \int_{-\infty}^{\infty}
+   \frac{d{x}_1d{x}_2d{y}_1d{y}_2d{z}_1d{z}_2  
+   e^{-2\alpha (x_1^2+x_2^2+y_1^2+y_2^2+z_1^2+z_2^2)}}{ \sqrt{{(x_1-x_2)}^2+{(y_1-y_2)}^2+{(y_1-y_2)}^2}}
+\end{align}
+
+Her ligger $x1$, $x2$, $y1$, $y2$, $z1$ og $z2$ på intervallet 
+$[-\infty, \infty]$. Dette er åpenbart umulig å representere numerisk
+og vi må derfor velge et intervall $[a,b]$ som vi mapper med Legendre-polynomer.
+Mer om disse polynomene \cite{Lecture-notes}. I vårt tilfelle
+har vi valgt intervallet $[-2,2]$ etter vurderinger av figur \ref{fig:PSI}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.7]{../fig/psiPlot.png}
+  \caption{\label{fig:PSI} Et plot av  $e^{-2\alpha (r_1+r_2)}$. Vi må velge
+et intervall $[a,b]$ slik at vi får med hovedtrekkene. Vi har valgt 
+intervallet $[-2,2]$. Siden vi ikke kan velge antall punkter, N,
+alt for stort, må vi også ta hensyn til dette i valget av intervall.}
+\end{figure}
+
+
+\subsubsection{Koordinatskift og Laguerre-polynomer}
+Her begynner vi med å gjøre et koordinatskifte av 
+\eqref{eq:correlationenergy} til sfæriske koordinater. Vi får da variablene
+
+\[
+   d{\bf r}_1d{\bf r}_2  = r_1^2dr_1 r_2^2dr_2 dcos(\theta_1)dcos(\theta_2)d\phi_1d\phi_2,
+\]
+og
+\[
+   \frac{1}{r_{12}}= \frac{1}{\sqrt{r_1^2+r_2^2-2r_1r_2cos(\beta)}}
+\]
+og 
+\[
+cos(\beta) = cos(\theta_1)cos(\theta_2)+sin(\theta_1)sin(\theta_2)cos(\phi_1-\phi_2))
+\]
+
+Det resulterende integralet blir
+
+\begin{align}
+\int_{0}^{\infty} r_1^2 dr_1 \int_{0}^{\infty} r_2^2 dr_2
+\int_{0}^{\pi} dcos(\theta_1) \int_{0}^{\pi} dcos(\theta_2)
+\int_{0}^{2\pi} d\phi_1 \int_{0}^{2\pi} d\phi_2 \frac{e^{-2\alpha (r_1+r_2)}}{r_{12}}
+\end{align}
+
+med
+
+\[
+dcos(\theta_1) = -sin(\theta_1)d\theta
+\]
+
+Her mapper vi $\phi_1$, $\phi_2$ $\theta_1$ og $\theta_2$ med Legendre-polynomer slik som i sted.
+Men $ r \in [0, \infty] $ med Laguerre-polynomer \cite{Lecture-notes}.
+
+
 \subsection{Monte Carlo}
+\subsubsection{Brute force Monte Carlo}
+Nok en gang bruker vi \eqref{eq:xyzINT} som utgangspunkt. Vi velger seks koordinater( $x1$, $x2$, $y1$, $y2$, $z1$ og $z2$) uniformt fordelt og tilfeldig i intervallet $[a,b]$. Dette gjør vi $N$ ganger.
+For hver gang $n_i$ regner vi ut integranden og summerer disse. Til slutt deler vi på antall punkter
+, d.v.s ganger med bredden på intervallet. Vi håper på at vi ved å velge tilfeldige punkter
+skal klare å fange opp oppførselen til funksjonen tilstrekkelig godt.
+\subsubsection{Importance sampling Monte Carlo}
+
+\section{Resultater}
+
+\section{Konklusjon}
+
+
 
 \printbibliography
 \end{document}
