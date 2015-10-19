@@ -10,7 +10,8 @@
   \textsc{\Large }\\[0.5cm] % Major heading such as course name
   \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
   \HRule \\[0.4cm]
-  { \huge \bfseries En sammenligning av numeriske integrasjonsmetoder, Gauss kvadratur og MonteCarlo}\\[0.4cm] % Title of your document
+  { \huge \bfseries En sammenligning av numeriske integrasjonsmetoder,
+    Gauss kvadratur og Monte Carlo}\\[0.4cm]
   \HRule \\[1.5cm]
   \Large \emph{Skrevet av:}\\
   Lyder \textsc{Rumohr Blingsmo} og Bendik \textsc{Samseth}\\[3cm]
@@ -31,6 +32,7 @@
 \end{abstract}
 
 \section{Innledning}
+\label{sec:innledning}
 
 Vi antar at bølgefunksjonen til hvert elektron kan skrives som en ett-partikkel
 bølgefunksjon for et elektron i et hydrogenatom. Single-particle bølgefunksjonen for 
@@ -65,10 +67,22 @@ Her vet vi at integralet \eqref{eq:correlationenergy} har eksakt løsning $5\pi^
 løsningen på fire forskjellige måter og sammenligne resultatene både i presisjon og kjøretid.
 
 \section{Metoder}
+\label{sec:metoder}
 Vi anvender to forskjellige metoder for Gauss-kvadratur og to forskjellige MC-metoder.
 \subsection{Gauss-kvadratur}
+\label{subsec:gauss-kvadratur}
+Gauss-kvadratur baserer seg på å tilnærme funksjonen vi ønsker å
+integrere ved ortogonale polynomer. Teorien bak metoden er beskrevet
+i~\cite{Lecture-notes}, men er litt for inngående til at det er
+hensiktsmessig å gå gjennom den i denne rapporten. Det viktige er at
+vi benytter et spesielt sett med polynomer; her bruker vi Legendre- og
+Laguerre-polynomer. Avhengig av integralet som skal løses vil det være
+hensiktsmessig å benytte et passende sett med polynomer.
+
 \subsubsection{Rett fram med Legendre-polynomer}
-Vi skriver om \eqref{eq:correlationenergy} på formen
+\label{subsubsec:gauss-legendre}
+Legendre-polynomer er definert for $x\in[-1,1]$. For å bruke disse
+polynomene begynner vi med å skrive om \eqref{eq:correlationenergy} på formen
 
 \begin{align}\label{eq:xyzINT} 
   \langle \frac{1}{|{\bf r}_1-{\bf r}_2|} \rangle =
@@ -80,7 +94,7 @@ Vi skriver om \eqref{eq:correlationenergy} på formen
 Her ligger $x1$, $x2$, $y1$, $y2$, $z1$ og $z2$ på intervallet 
 $[-\infty, \infty]$. Dette er åpenbart umulig å representere numerisk
 og vi må derfor velge et intervall $[a,b]$ som vi mapper med Legendre-polynomer.
-Mer om disse polynomene \cite{Lecture-notes}. I vårt tilfelle
+Mer om disse polynomene står i~\cite{Lecture-notes}. I vårt tilfelle
 har vi valgt intervallet $[-2,2]$ etter vurderinger av figur \ref{fig:PSI}.
 
 \begin{figure}[ht]
@@ -94,7 +108,8 @@ alt for stort, må vi også ta hensyn til dette i valget av intervall.}
 
 
 \subsubsection{Koordinatskift og Laguerre-polynomer}
-Her begynner vi med å gjøre et koordinatskifte av 
+\label{susubsec:gauss-laguerre}
+Laguerre-polynomene er definert for $x\in[0,\infty)$. Her begynner vi med å gjøre et koordinatskifte av 
 \eqref{eq:correlationenergy} til sfæriske koordinater. Vi får da variablene
 
 \[
@@ -104,7 +119,7 @@ og
 \[
    \frac{1}{r_{12}}= \frac{1}{\sqrt{r_1^2+r_2^2-2r_1r_2cos(\beta)}}
 \]
-og 
+med 
 \[
 cos(\beta) = cos(\theta_1)cos(\theta_2)+sin(\theta_1)sin(\theta_2)cos(\phi_1-\phi_2))
 \]
@@ -114,7 +129,7 @@ Det resulterende integralet blir
 \begin{align}
 \int_{0}^{\infty} r_1^2 dr_1 \int_{0}^{\infty} r_2^2 dr_2
 \int_{0}^{\pi} dcos(\theta_1) \int_{0}^{\pi} dcos(\theta_2)
-\int_{0}^{2\pi} d\phi_1 \int_{0}^{2\pi} d\phi_2 \frac{e^{-2\alpha (r_1+r_2)}}{r_{12}}
+\int_{0}^{2\pi} d\phi_1 \int_{0}^{2\pi} d\phi_2 \frac{e^{-2\alpha (r_1+r_2)}}{r_{12}}\label{eq:int-spherical}
 \end{align}
 
 med
@@ -168,8 +183,16 @@ trekke koordinatene $r_1,r_2$ fra en eksponentialfordeling,
 \begin{align}
   p(x) = e^{-x},\hspace{0.5cm}\int_0^\infty p(x)\,dx=1.\label{eq:exponential-prob}
 \end{align}
+Praktisk oppnår vi dette ved følgende transformasjon:
+\begin{align}
+  r_i = -\ln \left( 1-x \right)
+\end{align}
+der $x\in[0,1]$ er trukket fra en uniform fordeling.
+
 
 \section{Resultater}
+
+
 
 \section{Konklusjon}
 
