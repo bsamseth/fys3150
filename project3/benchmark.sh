@@ -25,7 +25,6 @@ DIRDATA=$DIR/$DATA
 DIRFIG=$DIR/$FIG
 # create data and fig folder
 echo "Creating folder structure"
-mkdir -p $DIRSRC
 mkdir -p $DIRDATA
 mkdir -p $DIRFIG
 
@@ -47,13 +46,13 @@ echo "Compilation complete"
 # =================================
 #This should reproduce the results reffered to in the report.
 echo "Running gauss_legendre.x for selected arguments"
-./gauss_legendre.x -2 2 25 > $DATA/gauss_legendre_30.dat
+./gauss_legendre.x -2 2 31 > $DATA/gauss_legendre.dat
 echo "Running gauss_laguerre.x for selected arguments"
-./gauss_laguerre.x 35 > $DATA/gauss_laguerre_35.dat
+./gauss_laguerre.x 40 > $DATA/gauss_laguerre.dat
 echo "Running uniformmonteCarlo.x for selected arguments"
-./uniformmonteCarlo.x -2 2 1000000 > $DATA/uniformmontecarlo_1000000.dat
+./uniformmonteCarlo.x -2 2 10000000 > $DATA/uniformmontecarlo.dat
 echo "Running smartMonteCarlo.x for selected arguments"
-./smartMonteCarlo.x 1000000 > $DATA/smartMonteCarlo_1000000.dat
+./smartMonteCarlo.x 10000000 > $DATA/smartMonteCarlo.dat
 
 # this will genereate all the figures shown in the report (only one)
 echo "Running tangensPlot.py"
