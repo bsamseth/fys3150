@@ -2,7 +2,11 @@ language: cpp
 
 script:
   - cd project3/ && chmod u+x benchmark.sh && ./benchmark.sh && cd -
-  - cd project3/report && pdflatex report.tex && biber report && pdflatex report.tex && cd -
+  # - cd project3/report && pdflatex report.tex && biber report && pdflatex report.tex && cd -
+
+before_install:
+  - sudo apt-get install python-pip
+  - sudo pip install matplotlib
 
 notifications:
   email: false
