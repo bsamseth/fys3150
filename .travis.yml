@@ -1,7 +1,8 @@
 language: cpp
 
-script: cd project3/ && chmod u+x benchmark.sh && ./benchmark.sh && cd -
-	cd project3/report && pdflatex report.tex && biber report && pdflatex report.tex && cd -
+script:
+  - cd project3/ && chmod u+x benchmark.sh && ./benchmark.sh && cd -
+  - cd project3/report && pdflatex report.tex && biber report && pdflatex report.tex && cd -
 
 notifications:
   email: false
