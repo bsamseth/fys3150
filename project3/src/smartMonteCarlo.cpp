@@ -47,11 +47,11 @@ int main(int argc, char** argv) {
 	int_MC += funval;
 	sum_sigma += funval*funval;
     }
-
+    double w = 1./(N);
     double standard_avvik = (4*pow(M_PI,4)/pow(2.0*alpha,5))
-      *sqrt(sum_sigma/N - int_MC*int_MC/(N*N));
-    int_MC /= (N*pow(2.0*alpha,5));
-    int_MC *= 4*pow(M_PI,4); // jacobi 
+	*sqrt(sum_sigma*w - int_MC*int_MC*w*w);
+    int_MC /= pow(2.0*alpha,5);
+    int_MC *= 4*pow(M_PI,4)*w; // jacobi 
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration = duration_cast<nanoseconds>( t2 - t1 ).count() / 1e9;
