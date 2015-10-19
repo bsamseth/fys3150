@@ -55,7 +55,7 @@ echo "Running smartMonteCarlo.x for selected arguments"
 ./smartMonteCarlo.x 10000000 > $DATA/smartMonteCarlo.dat
 
 # this will genereate all the figures shown in the report (only one)
-echo "Running tangensPlot.py"
+echo "Running plotFunc.py"
 python plotFunc.py
 # plotFunc.py stores the produced fig in ../fig/psiPlot.png
 # so cp this benchmarks/fig/
