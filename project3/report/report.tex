@@ -123,17 +123,51 @@ med
 dcos(\theta_1) = -sin(\theta_1)d\theta
 \]
 
-Her mapper vi $\phi_1$, $\phi_2$ $\theta_1$ og $\theta_2$ med Legendre-polynomer slik som i sted.
-Men $ r \in [0, \infty] $ med Laguerre-polynomer \cite{Lecture-notes}.
+Her mapper vi $\phi_1$, $\phi_2$ $\theta_1$ og $\theta_2$ med
+Legendre-polynomer slik som i sted (fordi $\phi\in[0,2\pi]$ og
+$\theta\in[0,\pi]$ lett kan dannes fra intervallet $[-1,1]$).
+Men $ r_i \in [0, \infty] $ mapper vi med
+Laguerre-polynomer~\cite{Lecture-notes}. Ved å bruke disse polynomene
+kan vi unngå problematikken knyttet til et intervall som går til $\infty$.
 
 
 \subsection{Monte Carlo}
+\label{subsec:monte-carlo}
+Monte Carlo-metoder baserer seg på å velge integrasjonspunktene som
+tilfeldige tall trukket fra en gitt sannsynlighetsfordeling. Tanken er
+her da at bare vi inkluderer mange nok bidrag (trekker mange
+tilfeldige integrasjonspunkter) så får hele integranden bidratt på en
+passende måte til integralet. Tankearbeidet her legges i hovedsak inn
+i hvilken sannsynlighetsfordeling man bruker.
+
 \subsubsection{Brute force Monte Carlo}
-Nok en gang bruker vi \eqref{eq:xyzINT} som utgangspunkt. Vi velger seks koordinater( $x1$, $x2$, $y1$, $y2$, $z1$ og $z2$) uniformt fordelt og tilfeldig i intervallet $[a,b]$. Dette gjør vi $N$ ganger.
-For hver gang $n_i$ regner vi ut integranden og summerer disse. Til slutt deler vi på antall punkter
-, d.v.s ganger med bredden på intervallet. Vi håper på at vi ved å velge tilfeldige punkter
-skal klare å fange opp oppførselen til funksjonen tilstrekkelig godt.
+\label{subsubsec:monte-carlo-uniform}
+Vi begynner med å gå rett frem og bruke en uniform
+sannsynlighetsfordeling, $p(x) = 1$. Nok en gang bruker vi
+\eqref{eq:xyzINT} som utgangspunkt. Vi velger seks koordinater ($x1$,
+$x2$, $y1$, $y2$, $z1$ og $z2$) uniformt fordelt og tilfeldig i
+intervallet $[a,b]$. Vi velger intervallet $[-2,2]$ med samme grunnlag
+som i seksjon \ref{subsubsec:gauss-legendre}. Dette gjør vi $N$ ganger, og for hver gang regner
+vi ut integranden og summerer alle bidragene. Til slutt deler vi på
+antall punkter, dvs. ganger med bredden på intervallet. Vi håper på
+at vi ved å velge tilfeldige punkter skal klare å fange opp
+oppførselen til funksjonen tilstrekkelig godt.
+
 \subsubsection{Importance sampling Monte Carlo}
+\label{susubsec:monte-carlo-importance-sampling}
+Nå skal vi forsøke oss med en litt smartere valgt
+sannsynlighetsfordeling. Vi tar utgangspunkt i
+(\ref{eq:int-spherical}). Analogt til hvordan vi gjorde det i
+\ref{susubsec:gauss-laguerre} så lar vi $\phi_1,\phi_2,\theta_1$ og
+$\theta_2$ bli trukket med en uniform fordeling.
+
+Posisjonskoordinatene skal vi derimot tenke litt mer på. Fra figur
+\ref{fig:PSI} ser vi at store verdier av $r_i$ ikke vil ha store
+bidrag på grunn av eksponentialet. Det virker dermed som en god idé å
+trekke koordinatene $r_1,r_2$ fra en eksponentialfordeling,
+\begin{align}
+  p(x) = e^{-x},\hspace{0.5cm}\int_0^\infty p(x)\,dx=1.\label{eq:exponential-prob}
+\end{align}
 
 \section{Resultater}
 
