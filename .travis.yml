@@ -5,8 +5,8 @@ script:
   - cd project3/report && pdflatex report.tex && biber report && pdflatex report.tex && cd -
 
 before_install:
-	- sudo apt-get update -qq
-	- sudo apt-get install -qq texlive-latex-base biber
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq texlive-latex-base biber
 
 notifications:
   email: false
