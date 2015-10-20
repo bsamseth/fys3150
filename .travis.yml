@@ -3,8 +3,6 @@ language: cpp
 script:
   - cd project3/ && chmod u+x benchmark.sh && ./benchmark.sh && cd -
   #- cd project3/report/ && make
-  # can't get refrences to work, just try a build without biblatex
-  - cd project3/report && pdflatex report.tex
   
 before_install:
   - sudo apt-get update && sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra dvipng
