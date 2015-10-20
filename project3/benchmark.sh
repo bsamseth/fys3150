@@ -48,7 +48,7 @@ echo "Compilation complete"
 echo "Running gauss_legendre.x for selected arguments"
 ./gauss_legendre.x -2 2 31 > $DATA/gauss_legendre.dat
 echo "Running gauss_laguerre.x for selected arguments"
-./gauss_laguerre.x 40 > $DATA/gauss_laguerre.dat
+./gauss_laguerre.x 31 > $DATA/gauss_laguerre.dat
 echo "Running uniformmonteCarlo.x for selected arguments"
 ./uniformmonteCarlo.x -2 2 10000000 > $DATA/uniformmontecarlo.dat
 echo "Running smartMonteCarlo.x for selected arguments"

@@ -28,7 +28,8 @@
   konkluderer med at Gauss-Legendre og standard Monte Carlo brukt
   blindt på problemstillingen fungerer mindre bra, men med litt
   tenkearbeid får vi gode resultater med Gauss-Laguerre og Monte Carlo
-  med ``importance sampling''.  
+  med ``importance sampling''. Alt av kildemateriale som refereres i
+  denne rapporten er tilgjengelig på Github~\cite{github-repo}.
 \end{abstract}
 
 \section{Innledning}
@@ -68,7 +69,19 @@ løsningen på fire forskjellige måter og sammenligne resultatene både i presi
 
 \section{Metoder}
 \label{sec:metoder}
-Vi anvender to forskjellige metoder for Gauss-kvadratur og to forskjellige MC-metoder.
+Vi anvender to forskjellige metoder for Gauss-kvadratur og to
+forskjellige MC-metoder. Nevner at beskrivelsen av hver metode ikke er
+veldig inngående, vi regner det som lite hensiktsmessig å gjengi hele
+teorier denne rapporten. Forelesningsnotater er sitert gjennom hele,
+og vi være hovedkilden for mer inngående forklaringer av metodene.
+
+Metodene beskrevet i seksjon \ref{susubsec:gauss-laguerre} og
+\ref{susubsec:monte-carlo-importance-sampling} gjør variabelbytter som
+gir en Jacobideterminant, dvs. en konstant som resultatet må ganges
+med for å skalere svaret tilbake riktig. Disse faktorene kan man lese
+ut fra kildekoden~\cite{github-repo} dersom man ønsker å se det
+eksplisitte uttryket.
+
 \subsection{Gauss-kvadratur}
 \label{subsec:gauss-kvadratur}
 Gauss-kvadratur baserer seg på å tilnærme funksjonen vi ønsker å
@@ -79,7 +92,7 @@ vi benytter et spesielt sett med polynomer; her bruker vi Legendre- og
 Laguerre-polynomer. Avhengig av integralet som skal løses vil det være
 hensiktsmessig å benytte et passende sett med polynomer.
 
-\subsubsection{Rett fram med Legendre-polynomer}
+\subsubsection{Rett fram med Legendre-polynomer (GULEG)}
 \label{subsubsec:gauss-legendre}
 Legendre-polynomer er definert for $x\in[-1,1]$. For å bruke disse
 polynomene begynner vi med å skrive om \eqref{eq:correlationenergy} på formen
@@ -94,8 +107,9 @@ polynomene begynner vi med å skrive om \eqref{eq:correlationenergy} på formen
 Her ligger $x1$, $x2$, $y1$, $y2$, $z1$ og $z2$ på intervallet 
 $[-\infty, \infty]$. Dette er åpenbart umulig å representere numerisk
 og vi må derfor velge et intervall $[a,b]$ som vi mapper med Legendre-polynomer.
-Mer om disse polynomene står i~\cite{Lecture-notes}. I vårt tilfelle
-har vi valgt intervallet $[-2,2]$ etter vurderinger av figur \ref{fig:PSI}.
+Mer om disse polynomene står finnes her~\cite{Lecture-notes}\cite{legendre-poly-wiki}. I vårt tilfelle
+har vi valgt intervallet $[-2,2]$ etter vurderinger av figur
+\ref{fig:PSI}. Endelig implementasjon finnes i filen \texttt{gauss\_legendre.cpp}.
 
 \begin{figure}[ht]
   \centering
@@ -107,7 +121,7 @@ alt for stort, må vi også ta hensyn til dette i valget av intervall.}
 \end{figure}
 
 
-\subsubsection{Koordinatskift og Laguerre-polynomer}
+\subsubsection{Koordinatskift og Laguerre-polynomer (GULAG)}
 \label{susubsec:gauss-laguerre}
 Laguerre-polynomene er definert for $x\in[0,\infty)$. Her begynner vi med å gjøre et koordinatskifte av 
 \eqref{eq:correlationenergy} til sfæriske koordinater. Vi får da variablene
@@ -135,15 +149,18 @@ Det resulterende integralet blir
 med
 
 \[
-dcos(\theta_1) = -sin(\theta_1)d\theta
+dcos(\theta_1) = -\sin(\theta_1)d\theta
 \]
 
 Her mapper vi $\phi_1$, $\phi_2$ $\theta_1$ og $\theta_2$ med
 Legendre-polynomer slik som i sted (fordi $\phi\in[0,2\pi]$ og
 $\theta\in[0,\pi]$ lett kan dannes fra intervallet $[-1,1]$).
 Men $ r_i \in [0, \infty] $ mapper vi med
-Laguerre-polynomer~\cite{Lecture-notes}. Ved å bruke disse polynomene
-kan vi unngå problematikken knyttet til et intervall som går til $\infty$.
+Laguerre-polynomer~\cite{Lecture-notes}\cite{laguerre-poly-wiki}. Ved å bruke disse polynomene
+kan vi unngå problematikken knyttet til et intervall som går til
+$\infty$.
+
+Endelig implementasjon finnes i filen \texttt{gauss\_laguerre.cpp}.
 
 
 \subsection{Monte Carlo}
@@ -155,7 +172,7 @@ tilfeldige integrasjonspunkter) så får hele integranden bidratt på en
 passende måte til integralet. Tankearbeidet her legges i hovedsak inn
 i hvilken sannsynlighetsfordeling man bruker.
 
-\subsubsection{Brute force Monte Carlo}
+\subsubsection{Brute force Monte Carlo (MCU)}
 \label{subsubsec:monte-carlo-uniform}
 Vi begynner med å gå rett frem og bruke en uniform
 sannsynlighetsfordeling, $p(x) = 1$. Nok en gang bruker vi
@@ -168,7 +185,9 @@ antall punkter, dvs. ganger med bredden på intervallet. Vi håper på
 at vi ved å velge tilfeldige punkter skal klare å fange opp
 oppførselen til funksjonen tilstrekkelig godt.
 
-\subsubsection{Importance sampling Monte Carlo}
+Endelig implementasjon finnes i filen \texttt{uniformmonteCarlo.cpp}.
+
+\subsubsection{Importance sampling Monte Carlo (MCI)}
 \label{susubsec:monte-carlo-importance-sampling}
 Nå skal vi forsøke oss med en litt smartere valgt
 sannsynlighetsfordeling. Vi tar utgangspunkt i
@@ -189,13 +208,81 @@ Praktisk oppnår vi dette ved følgende transformasjon:
 \end{align}
 der $x\in[0,1]$ er trukket fra en uniform fordeling.
 
+Endelig implementasjon finnes i filen \texttt{smartMonteCarlo.cpp}.
 
 \section{Resultater}
+Resultatene av å kjøre alle fire metoder er vist i tabell
+\ref{tab:1}. All data vist i tabellen ligger i undermappen
+\texttt{benchmarks/} i~\cite{github-repo}, og kan reproduseres ved å
+kjøre skriptet \texttt{benchmark.sh}. 
 
+\begin{table}[ht]
+\centering
+\caption{\label{tab:1} Tabell over resultatene fra alle fire
+  metoder. Antall punkter er satt lik for hver sjanger av metode i et
+  forsøk på å få en mer rettferdig sammenlikning. Standardavvik er kun beregnet for Monte
+  Carlo-metodene.}
+\vspace{0.5cm}
+% BEGIN RECEIVE ORGTBL resultater
+\begin{tabular}{llrrlr}
+Metode & Antall punkter (N) & Resultat & Feil & Standardavvik ($\sigma$) & Tid (s) \\
+\hline
+GULEG & 31\textsuperscript{6} & 0.189103 & 0.00366237 & -- & 17.3418 \\
+GULAG & 31\textsuperscript{6} & 0.190036 & 0.00272991 & -- & 4.29535 \\
+MCU & \num{10000000} & 0.187734 & 0.00503123 & 8.8765 & 18.2401 \\
+MCI & \num{10000000} & 0.192439 & 0.000326755 & 1.0282 & 18.6651 \\
+\end{tabular}
+% END RECEIVE ORGTBL resultater
+\end{table}
+\begin{comment}
+#+ORGTBL: SEND resultater orgtbl-to-latex :splice nil :skip 0 :efmt "%s\\times10^{%s}"
+| Metode | Antall punkter (N)    | Resultat |        Feil | Standardavvik ($\sigma$) | Tid (s) |
+|--------+-----------------------+----------+-------------+--------------------------+---------|
+| GULEG  | 31\textsuperscript{6} | 0.189103 |  0.00366237 | --                       | 17.3418 |
+| GULAG  | 31\textsuperscript{6} | 0.190036 |  0.00272991 | --                       | 4.29535 |
+| MCU    | \num{10000000}        | 0.187734 |  0.00503123 | 8.8765                   | 18.2401 |
+| MCI    | \num{10000000}        | 0.192439 | 0.000326755 | 1.0282                   | 18.6651 |
+\end{comment}
+
+Vi kan først se på Gauss-kvadraturen. Mest bemerkelsesverdig er det
+her at GULAG kjører gir ca. 3 ganger mindre feil, og det på mye mindre
+tid. Grunnen til at det går fortere har med implementasjonen å gjøre
+(vi kutter deler av de indre løkkene uten at det påvirker
+presisjonen), men vi kommer unna med mindre kjøretid og fremdeles
+bedre presisjon. Dette betyr i grunn at GULAG trenger færre punkter
+for å oppnå samme presisjon som vi får med bare GULEG. 
+
+For Monte Carlo-metodene er forskjellen også stor. Her tar begge
+metoder omtrent like lang tid å gjennomføre for et gitt antall punkter
+($10^7$ i tabellen), men MCI gir klart bedre resultater. Feilen blir
+redusert med mer enn en faktor på $10$, og standardavviket er mye
+lavere. 
 
 
 \section{Konklusjon}
+Vi har sett at vi kan gå frem for å løse (\ref{eq:correlationenergy})
+på flere forskjellige måter. Det er derimot veldig tydelig at litt
+tankearbeid kan gi stor belønning. For Gauss-kvadraturen kan vi slippe
+unna med mye mindre kjøretid (og fremdeles bedre resultat) ved å bruke
+passende polynomer, i stedet for å bare gå rett frem med
+Legendre-polynomer på hele integralet. For Monte Carlo-metodene har vi
+sett at ``importance sampling'' med en passende
+sannsynlighetsfordeling gir \textit{mye} bedre resultat. 
 
+Når det gjelder å sammenligne Gauss-kvadratur med Monte Carlo-metoder
+så synes vi MCI står frem som det beste alternativet. For det første
+er metoden langt enklere (både å forstå og implementere) for
+mange-dimensjonale integraler. Vi klarer også å oppnå en større presisjon enn det GULAG presterer. Selv
+når vi øker antallet punkter blir resultatene aldri bedre enn hva vi
+får med MCI. Det er også verdt å merke at Gauss-kvadraturen her er
+kjørt med $\sim 10^9$ punkter totalt, som er $100$ ganger
+flere punkter enn det MCI er kjørt med (i tabell \ref{tab:1}). 
+
+
+Det største læringsutbytte fra dette prosjektet er (utenom trening i å
+programmere løsningen av et integral) er nok en gang hvor mye man kan
+få igjen ved å gjøre litt ekstra tenkearbeid i forkant av
+programmeringen. 
 
 
 \printbibliography

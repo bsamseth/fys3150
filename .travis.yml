@@ -4,6 +4,7 @@ script:
   - cd project3/ && chmod u+x benchmark.sh && ./benchmark.sh && cd -
   
 before_install:
+  - sudo apt-get update && sudo apt-get install --no-install-recommends texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra dvipng texlive-latex-recommended
   - sudo apt-get install python-pip
   - sudo pip install matplotlib
 
