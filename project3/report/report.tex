@@ -20,7 +20,7 @@
 \end{titlepage}
 
 \begin{abstract}
-  I denne rapporten har vi beregnet forventingsverdien til korrelasjonsenergien
+  I denne rapporten har vi beregnet forventningsverdien til korrelasjonsenergien
   mellom to elektroner i bane rundt en heliumkjerne. Beregningen
   innebærer å løse et 6-dimensjonalt integral. Vi bruker
   Gauss-Legendre- og Gauss-Laguerre-kvadratur, samt
@@ -58,7 +58,7 @@ to $1s$ bølgefunksjoner:
 \]
 
 Integralet vi skal løse er den kvantemekaniske forventningsverdien
-til korrelasjonsenergien til to elektroner som frastøter hverandre via et Coulumb-potensial
+til korrelasjonsenergien til to elektroner som frastøter hverandre via et Coulomb-potensial
 \begin{equation}\label{eq:correlationenergy}
    \langle \frac{1}{|{\bf r}_1-{\bf r}_2|} \rangle =
    \int_{-\infty}^{\infty} d{\bf r}_1d{\bf r}_2  e^{-2\alpha (r_1+r_2)}\frac{1}{|{\bf r}_1-{\bf r}_2|}.
@@ -80,7 +80,7 @@ Metodene beskrevet i seksjon \ref{susubsec:gauss-laguerre} og
 gir en Jacobideterminant, dvs. en konstant som resultatet må ganges
 med for å skalere svaret tilbake riktig. Disse faktorene kan man lese
 ut fra kildekoden~\cite{github-repo} dersom man ønsker å se det
-eksplisitte uttryket.
+eksplisitte uttrykket.
 
 \subsection{Gauss-kvadratur}
 \label{subsec:gauss-kvadratur}
@@ -221,7 +221,9 @@ kjøre skriptet \texttt{benchmark.sh}.
 \caption{\label{tab:1} Tabell over resultatene fra alle fire
   metoder. Antall punkter er satt lik for hver sjanger av metode i et
   forsøk på å få en mer rettferdig sammenlikning. Standardavvik er kun beregnet for Monte
-  Carlo-metodene.}
+  Carlo-metodene. Merk at tidene som er oppgitt vil variere litt fra
+  gang til gang. Tidene avhenger også kraftig av den maskinen de blir
+  kjørt på.}
 \vspace{0.5cm}
 % BEGIN RECEIVE ORGTBL resultater
 \begin{tabular}{llrrlr}
@@ -235,7 +237,7 @@ MCI & \num{10000000} & 0.192439 & 0.000326755 & 1.0282 & 18.6651 \\
 % END RECEIVE ORGTBL resultater
 \end{table}
 \begin{comment}
-#+ORGTBL: SEND resultater orgtbl-to-latex :splice nil :skip 0 :efmt "%s\\times10^{%s}"
+#+ORGTBL: SEND resultater orgtbl-to-latex :splice nil :skip 0
 | Metode | Antall punkter (N)    | Resultat |        Feil | Standardavvik ($\sigma$) | Tid (s) |
 |--------+-----------------------+----------+-------------+--------------------------+---------|
 | GULEG  | 31\textsuperscript{6} | 0.189103 |  0.00366237 | --                       | 17.3418 |
@@ -284,7 +286,7 @@ programmere løsningen av et integral) er nok en gang hvor mye man kan
 få igjen ved å gjøre litt ekstra tenkearbeid i forkant av
 programmeringen. 
 
-
+\clearpage
 \printbibliography
 \end{document}
 %%% Local Variables:
