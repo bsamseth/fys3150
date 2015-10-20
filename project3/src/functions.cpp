@@ -10,6 +10,8 @@
 
 using namespace std;
 
+/* Functions taken from https://github.com/CompPhysics/ComputationalPhysics1/tree/gh-pages/doc/Projects/Project3/ */
+
 void gauleg(double x1, double x2, double x[], double w[], int n)
 {
    int         m,j,i;
