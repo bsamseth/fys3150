@@ -9,6 +9,8 @@ report: report.tex
 	$(BIB) report
 	$(LATEX) report.tex
 	$(LATEX) report.tex	
+simple:
+	$(LATEX) report.tex	
 
 clean_not_pdf:
 	$(RM) prv_report.* _region_.* *.dvi *.log *.aux *.run.xml *.bcf *.blg *.bbl *.out
