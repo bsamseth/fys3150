@@ -41,10 +41,47 @@ $J$ er en konstant som beskriver styrken på interaksjonen mellom
 nabopartikler. Symbolet $<kl>$ betyr at vi summerer over bare de
 nærmeste naboene. Vi antar også  ferromagnetisme, dvs.  $J> 0$. Vi bruker også
 periodiske randbetingelser. Det betyr at partiklene langs randa 'ser' 
-partiklene langs motsatte rand.
+partiklene langs motsatte rand. Vi trenger også de termodynamiske størrelsene:
 
+\begin{align}
+Z &= \sum_i e^{-\beta E(i)} = \sum_E \Omega(E) e^{-\beta E} \\
+C_V &= \pd{E}{T} \\
+|\mathcal{M} | &= \sum_i^4 s_i \\
+\Xi &= ...
+\end{align}
+
+Der $Z$ er partisjonsfunksjonen, $C_v$ er den spesifikke varmekapasiteten,
+$|\mathcal{M} |$ er magnetiseringen og $\Xi$ er susceptibiliteten. 
+
+\subsection{$2 \times 2$-tilfellet}
 For å få en intuisjon om hvordan et slikt system fungerer ser vi først på 
-$2 \times 2$-tilfellet. 
+$2 \times 2$-tilfellet. Vi ser for oss et rutenett av spinn
+\begin{align*}
+s_1 & s_2 \\
+s_3 & s_4  
+\end{align*}
+
+Vi får da energien
+
+\begin{align*}
+E &= -J ( s_1s_2 + s_1s_3 + s_2s_1 + s_2s_4 \\
+&  \hspace{1.1cm}+ s_3s_1 + s_3s_4 + s_4s_ + s_4s_3) \\ 
+&= - J  ( 2s_1s_2 + 2s_1s_3 + 2s_2s_1 + 2s_2s_4 ) 
+\end{align*}
+
+Bruker vi spinn-konfigurasjonen
+\begin{align*}
+\uparrow & \uparrow \\
+\uparrow & \uparrow
+\end{align*}
+
+Får vi energien 
+\begin{align*}
+E = - J  ( 2s_1s_2 + 2s_1s_3 + 2s_2s_1 + 2s_2s_4 ) = -J ( 8 \cdot 1 \cdot 1) = -8J  
+\end{align*}
+Gjør tilsvarende for alle mulige spinn-konfigurasjoner får vi følgende tabell:
+
+
 
 
 
