@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\usepackage{../../latex/preamble}
+
+\begin{document}
+  % make title page
+\begin{titlepage}
+  \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+  \center
+  \textsc{\LARGE Universitetet i Oslo}\\[1.5cm] % Name of your university/college
+  \textsc{\Large }\\[0.5cm] % Major heading such as course name
+  \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
+  \HRule \\[0.4cm]
+  { \huge \bfseries Ising-model blabla}\\[0.4cm]
+  \HRule \\[1.5cm]
+  \Large \emph{Skrevet av:}\\
+  Lyder \textsc{Rumohr Blingsmo} og Bendik \textsc{Samseth}\\[3cm]
+  {\large \today}\\[3cm]
+  \vfill
+\end{titlepage}
+
+\begin{abstract}
+I denne rapporten skal vi se på Ising-modellen i to dimensjoner. Det vil si
+et rutenett av $n \times n $ partikler, der alle partiklene enten har
+spinn opp, $\uparrow$ eller spinn ned, $\downarrow$. Spesielt ser vi
+på de termodynamiske egenskapene til et slikt system. Vi bruker
+Metropolis-algoritmen med 'periodic boundary conditions'. Alt materiale 
+som refereres er tilgjengelig på \href{https://github.com/bsamseth/fys3150-project2.git}{Github}\footnote{Dersom linken ikke er tilgjengelig, eller du har rapporten på papir, er den eksplisitte adressen: 
+\url{https://github.com/bsamseth/fys3150-project2.git}} . 
+\end{abstract}
+
+\section{Innledning}
+Ising-modellen er et system av $n \times n$ partikler ordnet i et rutenett. 
+Hver partikkel kan være i én av to tilstander, enten spinn opp, $\uparrow$,
+eller spinn ned, $\downarrow$. Energien blir da: 
+
+\begin{equation}
+  E=-J\sum_{<kl>}^{N}s_ks_l
+\end{equation}
+med  $s_k=\pm 1$, $N$ er antall partikler.
+$J$ er en konstant som beskriver styrken på interaksjonen mellom
+nabopartikler. Symbolet $<kl>$ betyr at vi summerer over bare de
+nærmeste naboene. Vi antar også  ferromagnetisme, dvs.  $J> 0$.
+
+
+
+\label{sec:innledning}
+\section{Resultater}
+\section{Konklusjon}
+
+\clearpage
+\printbibliography
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
