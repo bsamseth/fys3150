@@ -34,7 +34,7 @@ Hver partikkel kan være i én av to tilstander, enten spinn opp, $\uparrow$,
 eller spinn ned, $\downarrow$. Energien blir da: 
 
 \begin{equation}
-  E=-J\sum_{<kl>}^{N}s_ks_l
+  E=-J\sum_{<kl>}^{N}s_ks_l\label{eq:energi}
 \end{equation}
 med  $s_k=\pm 1$, $N$ er antall partikler.
 $J$ er en konstant som beskriver styrken på interaksjonen mellom
@@ -44,14 +44,14 @@ periodiske randbetingelser. Det betyr at partiklene langs randa 'ser'
 partiklene langs motsatte rand. Vi trenger også de termodynamiske størrelsene:
 
 \begin{align}
-Z &= \sum_i e^{-\beta E(i)} = \sum_E \Omega(E) e^{-\beta E} \\
-C_V &= \pd{E}{T} \\
-|\mathcal{M} | &= \sum_i^4 s_i \\
-\Xi &= ...
+Z &= \sum_i e^{-\beta E(i)} = \sum_E \Omega(E) e^{-\beta E}\label{eq:partisjons-funk} \\
+C_V &= \frac{ 1 }{ k_B T^2} \left( \mean{E^2}-\mean{E}^2 \right)\label{eq:spesifikk-varmekapasitet} \\
+\mathcal{M} &= \sum_i s_i\label{eq:magnetisering} \\
+\chi &= \frac{ 1 }{ k_BT } \left( \mean{\mathcal{M}^2} - \mean{\mathcal{M}^2} \right)\label{eq:susceptibilitet}.
 \end{align}
 
 Der $Z$ er partisjonsfunksjonen, $C_v$ er den spesifikke varmekapasiteten,
-$|\mathcal{M} |$ er magnetiseringen og $\Xi$ er susceptibiliteten. 
+$\mathcal{M}$ er magnetiseringen og $\chi$ er susceptibiliteten. 
 
 \subsection{$2 \times 2$-tilfellet}
 For å få en intuisjon om hvordan et slikt system fungerer ser vi først på 
@@ -114,6 +114,14 @@ Antall spinn opp & Degenerasjon & Energi & Magnetisering \\
 \end{comment}
 \end{table}
 
+Vi ser av tabell \ref{tab:spinn-energi-deg} at energien kan ha tre
+mulige verdier, $E = -8J,0,8J$. Da er partisjonsfunksjonen gitt ved
+likning (\ref{eq:partisjons-funk}) (bruker også degenerasjonsgradene
+oppgitt i tabellen):
+\begin{align}
+  Z = \sum_E \Omega(E)e^{-\beta E} = 2e^{-\beta \cdot 8J} + 2e^{\beta
+  \cdot 8J} + 12\label{eq:partisjons-funk-2x2}
+\end{align}
 
 
 
