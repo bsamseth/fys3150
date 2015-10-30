@@ -79,8 +79,40 @@ Får vi energien
 \begin{align*}
 E = - J  ( 2s_1s_2 + 2s_1s_3 + 2s_2s_1 + 2s_2s_4 ) = -J ( 8 \cdot 1 \cdot 1) = -8J  
 \end{align*}
-Gjør tilsvarende for alle mulige spinn-konfigurasjoner får vi følgende tabell:
+Gjør tilsvarende for alle mulige spinn-konfigurasjoner får vi tabell \ref{tab:spinn-energi-deg}:
 
+
+\begin{table}[ht]
+\centering
+\caption{Tabell over energiene og degenerasjonene til de ulike
+  spinn-konfigurasjonene til et $2\times 2$-rutenett av spinn.}
+\label{tab:spinn-energi-deg}
+% BEGIN RECEIVE ORGTBL spinnEnergi
+\begin{tabular}{cccc}
+Antall spinn opp & Degenerasjon & Energi & Magnetisering \\
+\hline
+4 & 1 & -8J & 4 \\
+3 & 4 & 0 & 2 \\
+2 & 4 & 0 & 0 \\
+2 & 2 & 8J & 0 \\
+1 & 4 & 0 & -2 \\
+0 & 1 & -8J & -4 \\
+\hline
+\end{tabular}
+% END RECEIVE ORGTBL spinnEnergi
+\begin{comment}
+#+ORGTBL: SEND spinnEnergi orgtbl-to-latex :splice nil :skip 0
+| Antall spinn opp | Degenerasjon | Energi | Magnetisering |
+|------------------+--------------+--------+---------------|
+|                4 |            1 | -8J    |             4 |
+|                3 |            4 | 0      |             2 |
+|                2 |            4 | 0      |             0 |
+|                2 |            2 | 8J     |             0 |
+|                1 |            4 | 0      |            -2 |
+|                0 |            1 | -8J    |            -4 |
+|------------------+--------------+--------+---------------|
+\end{comment}
+\end{table}
 
 
 
