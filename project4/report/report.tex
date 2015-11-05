@@ -123,32 +123,30 @@ oppgitt i tabellen):
   \cdot 8J} + 12\label{eq:partisjons-funk-2x2}
 \end{align}
 Med partisjonsfunksjonen i boks kan vi finne alle forventningsverdier.
+
 \begin{align}
 \begin{split}
   \mean{E} &= \frac{ 1 }{ Z }\sum_E \Omega(E) E e^{-E\beta}\\
            &= 8J \frac{ e^{-8J\beta}  - e^{8J\beta}}{ e^{-8J\beta}
-             + e^{8J\beta} + 6}
-\end{split}\\
+             + e^{8J\beta} + 6}\label{eq:mean-E-2x2}
+\end{split}\\[0.5cm]
 \begin{split}
   \mean{E^2} &= \frac{ 1 }{ Z }\sum_E E^2\Omega(E)e^{-E\beta}\\
   &= 64J^2 \frac{ e^{8J\beta} + e^{-8J\beta} }{ e^{-8J\beta} +
-    e^{8J\beta} + 6 }
-\end{split}\\
-\begin{split}
-  C_V &= \frac{ 1}{k_BT^2} \left( \mean{E^2} - \mean{E}^2 \right)
-\end{split}\\
+    e^{8J\beta} + 6 }\label{eq:mean-E2-2x2}
+\end{split}\\[0.5cm]
+  C_V &= \frac{ 1}{k_BT^2} \left( \mean{E^2} - \mean{E}^2 \right)\label{eq:mean-C-2x2}\\[0.5cm]
 \begin{split}
   \mean{|\mathcal{M}|} &= \frac{ 1 }{ Z }\sum_i |\mathcal{M}_i| e^{-E_i\beta}\\
-  &= \frac{ 4e^{8J\beta} + 8  }{ e^{-8J\beta} + e^{8J\beta} + 6 }.
-\end{split}\\
-\begin{split}
-  \mean{\mathcal{M}} &= 0
-\end{split}\\
+  &= \frac{ 4e^{8J\beta} + 8  }{ e^{-8J\beta} + e^{8J\beta} + 6 }.\label{eq:mean-abs-M-2x2}
+\end{split}\\[0.5cm]
+\mean{\mathcal{M}} &= 0\label{eq:mean-M-2x2}\\[0.5cm]
 \begin{split}
   \mean{\mathcal{M}^2} &= \frac{ 1 }{ Z } \sum_i \mathcal{M}^2
   e^{-E_i\beta}\\
-  &= 16 \frac{ e^{8J\beta} + 1 }{ e^{8J\beta} + e^{-8J\beta}+6 } (????)
-\end{split}
+  &= 16 \frac{ e^{8J\beta} + 1 }{ e^{8J\beta} + e^{-8J\beta}+6 }\label{eq:mean-M2-2x2}
+\end{split}\\[0.5cm]
+\mean{\chi} &= \frac{ 1 }{ k_B T} \left( \mean{\mathcal{M}^2}-\mean{\mathcal{M}}^2 \right)\label{eq:mean-chi-2x2}
 \end{align}
 
 
