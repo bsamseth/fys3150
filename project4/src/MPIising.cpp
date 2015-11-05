@@ -13,6 +13,8 @@
 #include <fstream>
 #include <iomanip>
 #include <cstdlib>
+#include <sstream>
+#include <string>
 using namespace  std;
 
 // output file
@@ -46,6 +48,15 @@ int main(int argc, char* argv[])
   double w[17], average[5], total_average[5], 
          initial_temp, final_temp, E, M, temp_step;
 
+
+  if (argc < 7) {
+    cout << "Usage: " << argv[0] << " outputFile n_spins MCCycles T0 T1 dT" << endl;
+    exit(1);
+  }
+    
+  n_spins = atoi(argv[2]); mcs = atoi(argv[3]);
+  initial_temp = atof(argv[4]); final_temp = atof(argv[5]); temp_step = atof(argv[6]);
+  
   //  MPI initializations
   MPI_Init (&argc, &argv);
   MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
@@ -55,11 +66,14 @@ int main(int argc, char* argv[])
       " read output file" << endl;
     exit(1);
   }
-  if (my_rank == 0 && argc > 1) {
+  if (my_rank == 0) {
     outfilename=argv[1];
-    ofile.open(outfilename); 
+    stringstream sstm;
+    sstm << outfilename << "_" << n_spins << "_" << mcs << "_" << initial_temp << "_" << final_temp << "_" << temp_step << ".dat";
+    string filename = sstm.str();
+    ofile.open(filename.c_str()); 
   }
-  n_spins = 2; mcs = 100000;  initial_temp = 0.5; final_temp = 2.6; temp_step =0.05;
+
   /*
   Determine number of intervall which are used by all processes
   myloop_begin gives the starting point on process my_rank
@@ -79,7 +93,7 @@ int main(int argc, char* argv[])
   spin_matrix = (int**) matrix(n_spins, n_spins, sizeof(int));
   // every node has its own seed for the random numbers, this is important else
   // if one starts with the same seed, one ends with the same random numbers
-  idum = -1-my_rank;  // random starting point
+  idum = -1-my_rank; //-time(NULL)-my_rank;  // random starting point
   // Start Monte Carlo sampling by looping over T first
   for ( double temperature = initial_temp; temperature <= final_temp; temperature+=temp_step){
     //    initialise energy and magnetization 
@@ -111,9 +125,10 @@ int main(int argc, char* argv[])
   ofile << setiosflags(ios::showpoint | ios::uppercase);
   ofile << setw(15) << "T";
   ofile << setw(15) << "E";
-  ofile << setw(15) << "C";
+  ofile << setw(15) << "Evar/T^2";
   ofile << setw(15) << "M";
-  ofile << setw(15) << "X";
+  ofile << setw(15) << "Mvar/T";
+  ofile << setw(15) << "MvarAbs/T";
   ofile << setw(15) << "|M|" << endl;
   ofile.close();  // close output file
   // End MPI
@@ -128,7 +143,7 @@ void initialize(int n_spins, int **spin_matrix,
   // setup spin matrix and intial magnetization
   for(int y =0; y < n_spins; y++) {
     for (int x= 0; x < n_spins; x++){
-      spin_matrix[y][x] = 1; // spin orientation for the ground state
+      spin_matrix[y][x] = -1; // spin orientation for the ground state
       M +=  (double) spin_matrix[y][x];
     }
   }
@@ -174,13 +189,15 @@ void output(int n_spins, int mcs, double temperature, double *total_average)
   double Mabstotal_average = total_average[4]*norm;
   // all expectation values are per spin, divide by 1/n_spins/n_spins
   double Evariance = (E2total_average- Etotal_average*Etotal_average)/n_spins/n_spins;
-  double Mvariance = (M2total_average - Mabstotal_average*Mabstotal_average)/n_spins/n_spins;
+  double Mvariance = (M2total_average - Mtotal_average*Mtotal_average)/n_spins/n_spins;
+  double MvarianceAbs = (M2total_average - Mabstotal_average*Mabstotal_average)/n_spins/n_spins;
   ofile << setiosflags(ios::showpoint | ios::uppercase);
   ofile << setw(15) << setprecision(8) << temperature;
   ofile << setw(15) << setprecision(8) << Etotal_average/n_spins/n_spins;
   ofile << setw(15) << setprecision(8) << Evariance/temperature/temperature;
   ofile << setw(15) << setprecision(8) << Mtotal_average/n_spins/n_spins;
   ofile << setw(15) << setprecision(8) << Mvariance/temperature;
+  ofile << setw(15) << setprecision(8) << MvarianceAbs/temperature;
   ofile << setw(15) << setprecision(8) << Mabstotal_average/n_spins/n_spins << endl;
 } // end output function
 
