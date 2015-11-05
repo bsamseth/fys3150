@@ -1,6 +1,7 @@
 \documentclass[11pt]{article}
 \usepackage{../../latex/preamble}
 
+\newcommand{\abs}[1]{|#1|}
 \begin{document}
   % make title page
 \begin{titlepage}
@@ -53,7 +54,43 @@ C_V &= \frac{ 1 }{ k_B T^2} \left( \mean{E^2}-\mean{E}^2 \right)\label{eq:spesif
 Her er $\beta = 1/k_BT$, $Z$ partisjonsfunksjonen, $C_v$ er den spesifikke varmekapasiteten,
 $\mathcal{M}$ er magnetiseringen og $\chi$ er susceptibiliteten. 
 
-\subsection{$2 \times 2$-tilfellet}
+\section{Implementering og testing}
+
+Vi har tatt utgangspunkt i eksempelprogrammet \texttt{MPIising.cpp}
+som finnes kursets Github-side~\cite{compphys-github}. Versjonen brukt
+i denne rapporten er tilgjengelig på Github~\cite{github-repo} under samme navn. Kjernen av
+programmet er Metropolisalgoritmen, som i vårt tilfelle går som følger: 
+
+\begin{enumerate}
+\item Initialiser en starttilstand med energi $E_0$, dvs. bestemmer retningen på
+  alle spinn i systemet. Vi velger alle til å peke ned.
+\item Velg en tilfeldig spinn og snu den.\label{steg2}
+\item Beregn endringen i energi, $\Delta E = E_1-E_0$, dette fører til.\label{steg3} 
+\item Dersom $\Delta E \leq 0$ godtar vi spinnendringen i håp om at vi
+  er nærmere den minste mulige verdien av $E$. Gå til punkt (\ref{steg7}).
+\item Dersom $\Delta E > 0 $, beregn Boltzmannsannsynligheten $w =
+  e^{-\beta\Delta E}$. 
+\item Sammenlikn $w$ med et tilfeldig tall $0\leq r\leq 1$
+\begin{enumerate}
+  \item Hvis $r\leq w$, godta spinnendringen
+  \item ellers, behold den originale spinntilstanden.
+\end{enumerate}
+\item Oppdater relevante forventningsverdier og gjenta prosessen.\label{steg7}
+  $N^2$ ganger, der $N^2$ er antall spinn.\footnote{Egentlig bare $N^2-1$ ganger fordi vi nå har gjort en
+  allerede.}
+\item Gjenta så steg (\ref{steg2})-(\ref{steg7}) mange ganger, der hver gjennomgang teller som
+  én Monte Carlo-syklus.
+\end{enumerate}
+
+I steg (\ref{steg3}) beregner vi energiendringen. Når vi kun endrer på
+én spinn om gangen er det kun 5 mulige verdier for $\Delta E$ for en
+gitt verdi av $T$~\cite[s. 436]{Lecture-notes}. Derfor velger vi å
+regne ut disse på forhånd og heller slå opp riktig verdi ved
+behov. Dette gjør vi for å spare oss for mange gjentatte kall på en
+eksponensialfunksjon. 
+
+
+\subsection{Test med $2 \times 2$-tilfellet}
 For å få en intuisjon om hvordan et slikt system fungerer ser vi først på 
 $2 \times 2$-tilfellet. Vi ser for oss et rutenett av spinn
 \begin{align*}
@@ -87,6 +124,7 @@ Gjør tilsvarende for alle mulige spinn-konfigurasjoner får vi tabell \ref{tab:
 \caption{Tabell over energiene og degenerasjonene til de ulike
   spinn-konfigurasjonene til et $2\times 2$-rutenett av spinn.}
 \label{tab:spinn-energi-deg}
+\vspace{0.5cm}
 % BEGIN RECEIVE ORGTBL spinnEnergi
 \begin{tabular}{cccc}
 Antall spinn opp & Degenerasjon & Energi & Magnetisering \\
@@ -146,8 +184,35 @@ Med partisjonsfunksjonen i boks kan vi finne alle forventningsverdier.
   e^{-E_i\beta}\\
   &= 16 \frac{ e^{8J\beta} + 1 }{ e^{8J\beta} + e^{-8J\beta}+6 }\label{eq:mean-M2-2x2}
 \end{split}\\[0.5cm]
-\mean{\chi} &= \frac{ 1 }{ k_B T} \left( \mean{\mathcal{M}^2}-\mean{\mathcal{M}}^2 \right)\label{eq:mean-chi-2x2}
+\mean{\chi} &= \frac{ 1 }{ k_B T} \left(
+              \mean{\mathcal{M}^2}-\mean{\mathcal{M}}^2
+              \right)\label{eq:mean-chi-2x2}\\[0.5cm]
+\mean{\chi}_\text{abs} &= \frac{ 1 }{ k_B T} \left( \mean{\mathcal{M}^2}-\mean{\mathcal{|M|}}^2 \right)\label{eq:mean-chi-2x2-abs}
 \end{align}
+
+Vi kan nå bruke disse formlene til å teste programmet. Vi velger å se
+på $T=1$. Tabell \ref{tab:2x2-eksakt-num} viser både eksakte og
+numeriske resultater. Etter litt testing kom vi frem til at ca. $10^6$
+Monte Carlo-sykluser gir god overensstemmelse.
+
+
+\begin{table}
+\centering
+\caption{Tabell over eksakte og numeriske resultater for $2\times
+  2$-tilfellet for $T=1$. Vi har brukt $10^6$ Monte Carlo-sykluser. Merk at
+alle tall er normalisert for antall spinn.}
+\label{tab:2x2-eksakt-num}
+\vspace{0.5cm}
+\begin{tabular}{l|ccccc}
+ & $\mean{E}$ & $\mean{ \abs{\mathcal{M} } }$ & $C_V$ & $\chi$ & $\chi_\text{abs}$ \\
+\hline
+Eksakt & -1.9959821 & 0.99866073 & 0.032082332 & 3.9933038 & 0.0040107395 \\
+Numerisk & -1.9960480 & 0.99869100 & 0.031585527 & 3.9933824 & 0.0038971461 
+\end{tabular}
+
+\end{table}
+
+
 
 
 \section{Resultater}
