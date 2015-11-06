@@ -1,60 +1,100 @@
 #! /usr/bin/python
-from subprocess import call
-import numpy as np
+"""
+Program used to visualize the expectation values generated
+by MPIising.cpp as functions of the number of Monte Carlo cycles.
+
+Usage: ./expectationValues.py n_spins T0 T1 dT MCcycle_min MCcycle_max MCcycle_N [--no-compute]'
+
+Optional parameter --no-compute can be added as final argument. If so,
+all data files are assumed to exits.
+"""
+
+import os
 import matplotlib.pyplot as plt
-call(["make"])  # compile cpp program
+import sys
+from time import time
+from numpy import linspace, logspace, zeros
+from math import log10
 
-fig = plt.figure()
-ax = fig.gca()
-plt.rc("text", usetex=True)
-ax.hold('on')
+try:
+    n_spins      = int(sys.argv[1])
+    T0           = float(sys.argv[2])
+    T1           = float(sys.argv[3])
+    dT           = float(sys.argv[4])
+    MCcycles_min = int(sys.argv[5])
+    MCcycles_max = int(sys.argv[6])
+    MCcycles_N   = int(sys.argv[7])
+    randomizer   = False # assume ordered initial spin
+    noCompute    = False # assume everything needs to be calculated
+except:
+    print 'Usage: %s n_spins T0 T1 dT MCcycle_min MCcycle_max MCcycle_N [--no-compute]' % sys.argv[0]
+    sys.exit(1)
 
-N = 3
-average_E = np.zeros((N,2))
-average_Cv = np.zeros((N,2))
-average_absM = np.zeros((N,2))
-average_M = np.zeros((N,2))
-average_sus = np.zeros((N,2))
-average_abssus = np.zeros((N,2))
-cycles = np.zeros(N)
-
-i = 0
-while i < N: 
-    cycles[i] = 10000*(i+1)
-    nspins = 20
-    T0 = 1.0
-    T1 = 2.4
-    dT = 1.4
-
-    call(["mpirun", "-n", "4", "MPIising.x", "data/out",
-          "%d" %nspins,  "%d" %cycles[i],  "%g" %T0,  "%g" %T1,  "%g" %dT])
-    data = open("data/out_%d_%d_%g_%g_%g.dat" %(nspins, cycles[i], T0, T1, dT), 'r')  # read data back in
-    data = data.read()
-    data = data.split("\n")
+if "--no-compute" in sys.argv:
+    noCompute = True
     
-    for j, line in enumerate(data[:-2]):
-        line = line.split()
-        average_E[i, j] = float(line[1])
-        average_Cv[i, j] = float(line[2])
-        average_M[i, j] = float(line[3])
-        average_sus[i, j] = float(line[4])
-        average_abssus[i, j] = float(line[5])
-        average_absM[i, j] = float(line[6])
-    i+=1
+if not noCompute: os.system("make")  # compile cpp program
 
-plt.rc('text', usetex=True)
-plt.subplot(211)
-plt.plot(cycles, average_E[:,0])
-plt.plot(cycles, average_E[:,1])
-plt.ylabel('')
-plt.title('Energy')
-plt.legend(['T=1', 'T=2.4'])
+t0 = time() # time execution
 
-plt.subplot(212)
-plt.plot(cycles, average_absM[:,0])
-plt.plot(cycles, average_absM[:,1])
-plt.xlabel('Number of MC cycles'); 
-plt.ylabel('')
-plt.title(r'$|M|$')
-plt.legend(['T=1', 'T=2.4'])
+# set up arrays
+T_N      = int(round((T1 - T0) / dT + 1))
+T_array  = linspace(T0, T1, T_N)
+MCcycles = logspace(log10(MCcycles_min), log10(MCcycles_max), MCcycles_N)
+E        = zeros((T_N,MCcycles_N))
+Cv       = zeros((T_N,MCcycles_N))
+M        = zeros((T_N,MCcycles_N))
+Mvar     = zeros((T_N,MCcycles_N))
+MvarAbs  = zeros((T_N,MCcycles_N))
+Mabs     = zeros((T_N,MCcycles_N))
+
+# compute/read data
+for i, cycles in enumerate(MCcycles):
+
+    if not noCompute:
+        cmd = "mpirun -n 4 MPIising.x data/out %d %d %g %g %g %d" % (n_spins, cycles, T0, T1, dT, randomizer)
+        print "Running: %s" % cmd
+        os.system(cmd)
+    
+    with open("data/out_%d_%d_%g_%g_%g.dat" % (n_spins, cycles, T0, T1, dT), 'r') as data: # read data
+        data = data.readlines()[:-1]
+        for j, line in enumerate(data):
+            numbers = [float(elm) for elm in line.split()[1:-1]]
+            E[j,i], Cv[j,i], M[j,i], Mvar[j,i], MvarAbs[j,i], Mabs[j,i] = numbers
+
+# done computing
+t1 = time()
+print 'Complete. Total time spent: %5.3f' % (t1-t0)
+
+
+# make plots
+# making two seperate plots with three quantities per figure
+# expectation values in one, and the variances in the other
+os.system("mkdir -p ../fig")  #  make sure the dir exists
+fig, ax = plt.subplots(3, sharex=True)
+for i in range(T_N):
+    ax[0].semilogx(MCcycles, E[i,:], label=r'$T = %g$' % T_array[i])
+    ax[1].semilogx(MCcycles, M[i,:], label=r'$T = %g$' % T_array[i])
+    ax[2].semilogx(MCcycles, Mabs[i,:], label=r'$T = %g$' % T_array[i])
+
+ax[0].set_ylabel(r"$\langle E \rangle$", size=16)
+ax[1].set_ylabel(r"$\langle M \rangle$", size=16)
+ax[2].set_ylabel(r"$\langle |M| \rangle$", size=16)
+ax[2].set_xlabel(r"Monte Carlo Cycles")
+ax[0].set_title(r'Expectation values as functions of Monte Carlo Cycles')
+ax[len(ax)/2].legend(loc='center left', bbox_to_anchor=(1, 0.5)) # one common legend
+plt.savefig("../fig/E_M_Mabs.png") # might need to change window for all to look good
+
+fig, ax = plt.subplots(3, sharex=True)
+for i in range(T_N):
+    ax[0].semilogx(MCcycles, Mvar[i,:], label=r'$T = %g$' % T_array[i])
+    ax[1].semilogx(MCcycles, MvarAbs[i,:], label=r'$T = %g$' % T_array[i])
+    ax[2].semilogx(MCcycles, Cv[i,:], label=r'$T = %g$' % T_array[i])
+ax[0].set_ylabel(r"$\sigma_M^2$", size=16)
+ax[1].set_ylabel(r"$\sigma_{|M|}^2$", size=16)
+ax[2].set_ylabel(r"$\langle C_V \rangle$", size=16)
+ax[2].set_xlabel(r"Monte Carlo Cycles")
+ax[0].set_title(r'Variances as functions of Monte Carlo Cycles')
+ax[len(ax)/2].legend(loc='center left', bbox_to_anchor=(1, 0.5)) 
+plt.savefig("../fig/variances.png")
 plt.show()
