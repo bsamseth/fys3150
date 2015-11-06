@@ -25,11 +25,11 @@ inline int periodic(int i, int limit, int add) {
   return (i+limit+add) % (limit);
 }
 // Function to initialise energy and magnetization
-void initialize(int, int **, double&, double&);
+void initialize(int, int **, double&, double&, int randomizer);
 // The metropolis algorithm 
-void Metropolis(int, long&, int **, double&, double&, double *);
+void Metropolis(int, long&, int **, double&, double&, double *,int* num_configurations);
 // prints to file the results of the calculations  
-void output(int, int, double, double *);
+void output(int, int, double, double *,int* num_configurations);
 //  Matrix memory allocation
 //  allocate space for a matrix
 void  **matrix(int, int, int);
@@ -46,16 +46,19 @@ int main(int argc, char* argv[])
   long idum;
   int **spin_matrix, n_spins, mcs, my_rank, numprocs;
   double w[17], average[5], total_average[5], 
-         initial_temp, final_temp, E, M, temp_step;
+    initial_temp, final_temp, E, M, temp_step;
+  int randomizer;
+  int num_configurations = 0;
+  
 
-
-  if (argc < 7) {
+  if (argc < 8) {
     cout << "Usage: " << argv[0] << " outputFile n_spins MCCycles T0 T1 dT" << endl;
     exit(1);
   }
     
   n_spins = atoi(argv[2]); mcs = atoi(argv[3]);
-  initial_temp = atof(argv[4]); final_temp = atof(argv[5]); temp_step = atof(argv[6]);
+  initial_temp = atof(argv[4]); final_temp = atof(argv[5]);
+  temp_step = atof(argv[6]); randomizer = atoi(argv[7]);
   
   //  MPI initializations
   MPI_Init (&argc, &argv);
@@ -63,7 +66,10 @@ int main(int argc, char* argv[])
   MPI_Comm_rank (MPI_COMM_WORLD, &my_rank);
   if (my_rank == 0 && argc <= 1) {
     cout << "Bad Usage: " << argv[0] << 
-      " read output file" << endl;
+      " read outputfile n_spins MCs T0 T1 dT rand" << endl
+	 << "rand is either zero or one. If zero initial spin" << endl 
+	 << "configuration is all down. If =one initial spin is random." 
+	 << endl;
     exit(1);
   }
   if (my_rank == 0) {
@@ -99,7 +105,7 @@ int main(int argc, char* argv[])
     //    initialise energy and magnetization 
     E = M = 0.;
     // initialise array for expectation values
-    initialize(n_spins, spin_matrix, E, M);
+    initialize(n_spins, spin_matrix, E, M, randomizer);
     // setup array for possible energy changes
     for( int de =-8; de <= 8; de++) w[de+8] = 0;
     for( int de =-8; de <= 8; de+=4) w[de+8] = exp(-de/temperature);
@@ -107,7 +113,7 @@ int main(int argc, char* argv[])
     for( int i = 0; i < 5; i++) total_average[i] = 0.;
     // start Monte Carlo computation
     for (int cycles = myloop_begin; cycles <= myloop_end; cycles++){
-      Metropolis(n_spins, idum, spin_matrix, E, M, w);
+      Metropolis(n_spins, idum, spin_matrix, E, M, w, num_configurations);
       // update expectation values  for local node
       average[0] += E;    average[1] += E*E;
       average[2] += M;    average[3] += M*M; average[4] += fabs(M);
@@ -118,7 +124,7 @@ int main(int argc, char* argv[])
     }
     // print results
     if ( my_rank == 0) {
-      output(n_spins, mcs, temperature, total_average);
+      output(n_spins, mcs, temperature, total_average, num_configurations);
     }
   }
   free_matrix((void **) spin_matrix); // free memory
@@ -129,7 +135,8 @@ int main(int argc, char* argv[])
   ofile << setw(15) << "M";
   ofile << setw(15) << "Mvar/T";
   ofile << setw(15) << "MvarAbs/T";
-  ofile << setw(15) << "|M|" << endl;
+  ofile << setw(15) << "|M|" ;
+  ofile << setw(15) << "Num_config" << endl;
   ofile.close();  // close output file
   // End MPI
   MPI_Finalize (); 
@@ -138,13 +145,30 @@ int main(int argc, char* argv[])
 
 // function to initialise energy, spin matrix and magnetization
 void initialize(int n_spins, int **spin_matrix, 
-		double& E, double& M)
+		double& E, double& M, int randomizer)
 {
   // setup spin matrix and intial magnetization
-  for(int y =0; y < n_spins; y++) {
-    for (int x= 0; x < n_spins; x++){
-      spin_matrix[y][x] = -1; // spin orientation for the ground state
-      M +=  (double) spin_matrix[y][x];
+  // randomizer decides if setup should be random or not
+  if(randomizer = 0){
+    for(int y =0; y < n_spins; y++) {
+      for (int x= 0; x < n_spins; x++){
+	spin_matrix[y][x] = -1; // spin orientation for the ground state
+	M +=  (double) spin_matrix[y][x];
+      }
+    }
+  }
+  else{
+    for(int y =0; y < n_spins; y++) {
+      for (int x= 0; x < n_spins; x++){
+	if(ran2(&idum) > 0.5){  //choose random up or down
+	  	spin_matrix[y][x] = 1;
+	}
+	else{
+	  	spin_matrix[y][x] = -1;
+	} 
+
+	M +=  (double) spin_matrix[y][x];
+      }
     }
   }
   // setup initial energy
@@ -157,7 +181,7 @@ void initialize(int n_spins, int **spin_matrix,
   }
 }// end function initialise
 
-void Metropolis(int n_spins, long& idum, int **spin_matrix, double& E, double&M, double *w)
+void Metropolis(int n_spins, long& idum, int **spin_matrix, double& E, double&M, double *w, int* num_configurations)
 {
   // loop over all spins
   for(int y =0; y < n_spins; y++) {
@@ -173,13 +197,14 @@ void Metropolis(int n_spins, long& idum, int **spin_matrix, double& E, double&M,
 	spin_matrix[iy][ix] *= -1;  // flip one spin and accept new spin config
         M += (double) 2*spin_matrix[iy][ix];
         E += (double) deltaE;
+	num_configurations++;
       }
     }
   }
 } // end of Metropolis sampling over spins
 
 
-void output(int n_spins, int mcs, double temperature, double *total_average)
+void output(int n_spins, int mcs, double temperature, double *total_average, int num_configurations)
 {
   double norm = 1/((double) (mcs));  // divided by total number of cycles 
   double Etotal_average = total_average[0]*norm;
@@ -198,7 +223,8 @@ void output(int n_spins, int mcs, double temperature, double *total_average)
   ofile << setw(15) << setprecision(8) << Mtotal_average/n_spins/n_spins;
   ofile << setw(15) << setprecision(8) << Mvariance/temperature;
   ofile << setw(15) << setprecision(8) << MvarianceAbs/temperature;
-  ofile << setw(15) << setprecision(8) << Mabstotal_average/n_spins/n_spins << endl;
+  ofile << setw(15) << setprecision(8) << Mabstotal_average/n_spins/n_spins;
+  ofile << setw(15) << setprecision(8) << num_configurations << endl;
 } // end output function
 
 /*
