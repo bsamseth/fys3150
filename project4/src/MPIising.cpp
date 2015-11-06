@@ -25,11 +25,11 @@ inline int periodic(int i, int limit, int add) {
   return (i+limit+add) % (limit);
 }
 // Function to initialise energy and magnetization
-void initialize(int, int **, double&, double&, int randomizer);
+void initialize(int, int **, double&, double&, int, long&);
 // The metropolis algorithm 
-void Metropolis(int, long&, int **, double&, double&, double *,int* num_configurations);
+void Metropolis(int, long&, int **, double&, double&, double *, int* );
 // prints to file the results of the calculations  
-void output(int, int, double, double *,int* num_configurations);
+void output(int, int, double, double *, int*);
 //  Matrix memory allocation
 //  allocate space for a matrix
 void  **matrix(int, int, int);
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
   
 
   if (argc < 8) {
-    cout << "Usage: " << argv[0] << " outputFile n_spins MCCycles T0 T1 dT" << endl;
+    cout << "Usage: " << argv[0] << " outputFile n_spins MCCycles T0 T1 dT randomizer" << endl;
     exit(1);
   }
     
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
     //    initialise energy and magnetization 
     E = M = 0.;
     // initialise array for expectation values
-    initialize(n_spins, spin_matrix, E, M, randomizer);
+    initialize(n_spins, spin_matrix, E, M, randomizer, idum);
     // setup array for possible energy changes
     for( int de =-8; de <= 8; de++) w[de+8] = 0;
     for( int de =-8; de <= 8; de+=4) w[de+8] = exp(-de/temperature);
@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
     for( int i = 0; i < 5; i++) total_average[i] = 0.;
     // start Monte Carlo computation
     for (int cycles = myloop_begin; cycles <= myloop_end; cycles++){
-      Metropolis(n_spins, idum, spin_matrix, E, M, w, num_configurations);
+      Metropolis(n_spins, idum, spin_matrix, E, M, w, &num_configurations);
       // update expectation values  for local node
       average[0] += E;    average[1] += E*E;
       average[2] += M;    average[3] += M*M; average[4] += fabs(M);
@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
     }
     // print results
     if ( my_rank == 0) {
-      output(n_spins, mcs, temperature, total_average, num_configurations);
+      output(n_spins, mcs, temperature, total_average, &num_configurations);
     }
   }
   free_matrix((void **) spin_matrix); // free memory
@@ -145,11 +145,11 @@ int main(int argc, char* argv[])
 
 // function to initialise energy, spin matrix and magnetization
 void initialize(int n_spins, int **spin_matrix, 
-		double& E, double& M, int randomizer)
+		double& E, double& M, int randomizer, long& idum)
 {
   // setup spin matrix and intial magnetization
   // randomizer decides if setup should be random or not
-  if(randomizer = 0){
+  if(randomizer == 0){
     for(int y =0; y < n_spins; y++) {
       for (int x= 0; x < n_spins; x++){
 	spin_matrix[y][x] = -1; // spin orientation for the ground state
@@ -158,6 +158,7 @@ void initialize(int n_spins, int **spin_matrix,
     }
   }
   else{
+    
     for(int y =0; y < n_spins; y++) {
       for (int x= 0; x < n_spins; x++){
 	if(ran2(&idum) > 0.5){  //choose random up or down
@@ -197,14 +198,14 @@ void Metropolis(int n_spins, long& idum, int **spin_matrix, double& E, double&M,
 	spin_matrix[iy][ix] *= -1;  // flip one spin and accept new spin config
         M += (double) 2*spin_matrix[iy][ix];
         E += (double) deltaE;
-	num_configurations++;
+	(*num_configurations)++;
       }
     }
   }
 } // end of Metropolis sampling over spins
 
 
-void output(int n_spins, int mcs, double temperature, double *total_average, int num_configurations)
+void output(int n_spins, int mcs, double temperature, double *total_average, int* num_configurations)
 {
   double norm = 1/((double) (mcs));  // divided by total number of cycles 
   double Etotal_average = total_average[0]*norm;
@@ -224,7 +225,7 @@ void output(int n_spins, int mcs, double temperature, double *total_average, int
   ofile << setw(15) << setprecision(8) << Mvariance/temperature;
   ofile << setw(15) << setprecision(8) << MvarianceAbs/temperature;
   ofile << setw(15) << setprecision(8) << Mabstotal_average/n_spins/n_spins;
-  ofile << setw(15) << setprecision(8) << num_configurations << endl;
+  ofile << setw(15) << setprecision(8) << (*num_configurations) << endl;
 } // end output function
 
 /*
