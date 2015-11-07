@@ -75,7 +75,9 @@ int main(int argc, char* argv[])
   if (my_rank == 0) {
     outfilename=argv[1];
     stringstream sstm;
-    sstm << outfilename << "_" << n_spins << "_" << mcs << "_" << initial_temp << "_" << final_temp << "_" << temp_step << ".dat";
+    sstm << outfilename << "_" << n_spins << "_" << mcs
+	 << "_" << initial_temp << "_" << final_temp
+	 << "_" << temp_step << "_" << randomizer << ".dat";
     string filename = sstm.str();
     ofile.open(filename.c_str());
       ofile << setiosflags(ios::showpoint | ios::uppercase);
