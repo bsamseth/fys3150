@@ -77,7 +77,16 @@ int main(int argc, char* argv[])
     stringstream sstm;
     sstm << outfilename << "_" << n_spins << "_" << mcs << "_" << initial_temp << "_" << final_temp << "_" << temp_step << ".dat";
     string filename = sstm.str();
-    ofile.open(filename.c_str()); 
+    ofile.open(filename.c_str());
+      ofile << setiosflags(ios::showpoint | ios::uppercase);
+      ofile << setw(15) << "T";
+      ofile << setw(15) << "E";
+      ofile << setw(15) << "Evar/T^2";
+      ofile << setw(15) << "M";
+      ofile << setw(15) << "Mvar/T";
+      ofile << setw(15) << "MvarAbs/T";
+      ofile << setw(15) << "|M|" ;
+      ofile << setw(15) << "Num_config" << endl;
   }
 
   /*
@@ -128,15 +137,6 @@ int main(int argc, char* argv[])
     }
   }
   free_matrix((void **) spin_matrix); // free memory
-  ofile << setiosflags(ios::showpoint | ios::uppercase);
-  ofile << setw(15) << "T";
-  ofile << setw(15) << "E";
-  ofile << setw(15) << "Evar/T^2";
-  ofile << setw(15) << "M";
-  ofile << setw(15) << "Mvar/T";
-  ofile << setw(15) << "MvarAbs/T";
-  ofile << setw(15) << "|M|" ;
-  ofile << setw(15) << "Num_config" << endl;
   ofile.close();  // close output file
   // End MPI
   MPI_Finalize (); 
