@@ -74,6 +74,7 @@ print 'Complete. Total time spent: %5.3f' % (t1-t0)
 os.system("mkdir -p ../fig")  #  make sure the dir exists
 randomName = "_random" if randomizer else ""
 fig, ax = plt.subplots(3, sharex=True)
+plt.rc('text', usetex=True)
 for i in range(T_N):
     ax[0].semilogx(MCcycles, E[i,:], label=r'$T = %g$' % T_array[i])
     ax[1].semilogx(MCcycles, M[i,:], label=r'$T = %g$' % T_array[i])
@@ -83,7 +84,9 @@ ax[0].set_ylabel(r"$\langle E \rangle$", size=16)
 ax[1].set_ylabel(r"$\langle M \rangle$", size=16)
 ax[2].set_ylabel(r"$\langle |M| \rangle$", size=16)
 ax[2].set_xlabel(r"Monte Carlo Cycles")
-ax[0].set_title(r'Expectation values as functions of Monte Carlo Cycles')
+ax[0].set_title(r'Expectation values as functions of Monte Carlo Cycles \\' \
+                'with $\text{n_spins T0 T1 dT MCcycle_min MCcycle_max MCcycle_N randomizer} = %s $' \
+                %([float(i) for i in sys.argv[1:-1]]))  
 ax[len(ax)/2].legend(loc='center left', bbox_to_anchor=(1, 0.5)) # one common legend
 plt.savefig("../fig/E_M_Mabs%s.png" % randomName) # might need to change window for all to look good
 
@@ -96,7 +99,7 @@ ax[0].set_ylabel(r"$\sigma_M^2$", size=16)
 ax[1].set_ylabel(r"$\sigma_{|M|}^2$", size=16)
 ax[2].set_ylabel(r"$\langle C_V \rangle$", size=16)
 ax[2].set_xlabel(r"Monte Carlo Cycles")
-ax[0].set_title(r'Variances as functions of Monte Carlo Cycles')
+ax[0].set_title(r'Variances as functions of Monte Carlo Cycles \\ with $n_spins T0 T1 dT MCcycle_min MCcycle_max MCcycle_N randomizer = %s $' %([float(i) for i in sys.argv[1:-1]])) 
 ax[len(ax)/2].legend(loc='center left', bbox_to_anchor=(1, 0.5)) 
 plt.savefig("../fig/variances%s.png" % randomName)
 
@@ -105,7 +108,7 @@ for i in range(T_N):
     ax.semilogx(MCcycles, conf_N[i,:]/MCcycles, label=r"$T = %g$" % T_array[i])
 ax.set_xlabel("Monte Carlo Cycles")
 ax.set_ylabel("Configurations")
-ax.set_title("Number of accepted configurations per Monte Carlo Cycle")
+ax.set_title(r'Number of accepted configurations per Monte Carlo Cycle \\ with $n_spins T0 T1 dT MCcycle_min MCcycle_max MCcycle_N randomizer = %s$' %([float(i) for i in sys.argv[1:-1]])) 
 ax.legend()
 plt.savefig("../fig/configurations%s.png" % randomName)
 plt.show()

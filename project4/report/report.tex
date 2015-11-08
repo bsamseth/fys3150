@@ -92,7 +92,8 @@ eksponensialfunksjon.
 
 \subsection{Test med $2 \times 2$-tilfellet}
 For å få en intuisjon om hvordan et slikt system fungerer ser vi først på 
-$2 \times 2$-tilfellet. Vi ser for oss et rutenett av spinn
+$2 \times 2$-tilfellet. Vi sammenligner programmet vårt med den 
+eksakte løsningen i dette tilfellet. Vi ser for oss et rutenett av spinn
 \begin{align*}
 s_1 & s_2 \\
 s_3 & s_4  
@@ -216,6 +217,45 @@ Numerisk & -1.9960480 & 0.99869100 & 0.031585527 & 3.9933824 & 0.0038971461
 
 
 \section{Resultater}
+
+Vi begynner med å se på hvor lang tid systemet bruker på å stabilisere seg. 
+
+\begin{figure}[ht]
+
+  \centering
+  \includegraphics[scale=0.7]{../fig/E_M_Mabs.png}
+  \includegraphics[scale=0.7]{../fig/E_M_Mabs_random.png}
+  \caption{Plot av forventningsverdien til energi,
+    magnetisering og absoluttverdien til magnetiseringa som funksjon av antall Monte Carlo-sykluser. 
+    Øverst har vi det ordnede tilfellet der alle spins begynner med å peke ned. Det andre tilfellet er 
+    med en tilfeldig startkonfigurasjon.}
+\label{fig:forventningsverdi}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.7]{../fig/variances.png}
+  \includegraphics[scale=0.7]{../fig/variances_random.png}
+  \caption{\label{fig:varianser} Plot av variansen til energien og magnetiseringa som
+funksjon av antall Monte Carlo-sykluser. Variansen regner vi både med å bruke $\chi$ og $|\chi|$. Øverst
+er det ordnete tilfellet, nederst det uordnede.}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.7]{../fig/configurations.png}
+  \includegraphics[scale=0.7]{../fig/configurations_random.png}
+
+  \caption{\label{fig:configurations} Et plot av antall configurations
+normalisert mot antall Monte Carlo-sykluser. Øverst er det ordnete tilfellet, nederst det uordnede.}
+\end{figure}
+
+
+
+
+
 \section{Konklusjon}
 
 \clearpage
