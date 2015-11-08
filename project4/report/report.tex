@@ -32,7 +32,7 @@ som refereres er tilgjengelig på~\cite{github-repo}.
 \label{sec:innledning}
 Ising-modellen er et system av $n \times n$ partikler ordnet i et rutenett. 
 Hver partikkel kan være i én av to tilstander, enten spinn opp, $\uparrow$,
-eller spinn ned, $\downarrow$. Energien blir da: 
+eller spinn ned, $\downarrow$. Energien er: 
 
 \begin{equation}
   E=-J\sum_{<kl>}^{N}s_ks_l\label{eq:energi}
@@ -42,7 +42,9 @@ $J$ er en konstant som beskriver styrken på interaksjonen mellom
 nabopartikler. Symbolet $<kl>$ betyr at vi summerer over bare de
 nærmeste naboene. Vi antar også  ferromagnetisme, dvs.  $J> 0$. Vi bruker også
 periodiske randbetingelser. Det betyr at partiklene langs randa 'ser' 
-partiklene langs motsatte rand. Vi trenger også de termodynamiske størrelsene:
+partiklene langs motsatte rand. For eksempel 'ser' en partikkel i posisjon
+(N,N) i rutenettet, både partikkelen i posisjon (1,N) og (N,1), og interakterer
+med disse som om de skulle vært naboer. Vi bruker de termodynamiske størrelsene:
 
 \begin{align}
 Z &= \sum_i e^{-\beta E(i)} = \sum_E \Omega(E) e^{-\beta E}\label{eq:partisjons-funk} \\
@@ -52,7 +54,9 @@ C_V &= \frac{ 1 }{ k_B T^2} \left( \mean{E^2}-\mean{E}^2 \right)\label{eq:spesif
 \end{align}
 
 Her er $\beta = 1/k_BT$, $Z$ partisjonsfunksjonen, $C_v$ er den spesifikke varmekapasiteten,
-$\mathcal{M}$ er magnetiseringen og $\chi$ er susceptibiliteten. 
+$\mathcal{M}$ er magnetiseringen og $\chi$ er susceptibiliteten. $E$, $T$ og $k_B$ er henholdsvis 
+energien, temperaturen og boltzmannkonstanten. Disse størrelsene skal vi regne ut for flere forskjellige
+størrelser på rutenettet og for mange forskjellige temperaturer.
 
 \section{Implementering og testing}
 
@@ -87,8 +91,10 @@ I steg (\ref{steg3}) beregner vi energiendringen. Når vi kun endrer på
 gitt verdi av $T$~\cite[s. 436]{Lecture-notes}. Derfor velger vi å
 regne ut disse på forhånd og heller slå opp riktig verdi ved
 behov. Dette gjør vi for å spare oss for mange gjentatte kall på en
-eksponensialfunksjon. 
-
+eksponensialfunksjon. Vi regner med alle de termodynamiske \ref{eq:partisjons-funk} - \ref{eq:susceptibilitet}
+ i enhetsløse størrelser. Tar som inputparametre størrelsen på rutenettet, antall Monte Carlo-sykluser,
+inititiell temperatur, sluttemperatur, temperatursteg og en parameter som bestemmer om den initielle
+spinkonfigurasjonen er tilfeldig eller ordnet.
 
 \subsection{Test med $2 \times 2$-tilfellet}
 For å få en intuisjon om hvordan et slikt system fungerer ser vi først på 
@@ -218,7 +224,10 @@ Numerisk & -1.9960480 & 0.99869100 & 0.031585527 & 3.9933824 & 0.0038971461
 
 \section{Resultater}
 
-Vi begynner med å se på hvor lang tid systemet bruker på å stabilisere seg. 
+Vi begynner med å se på hvor lang tid systemet bruker på å stabilisere seg. I dette tilfellet
+anser vi antall Monte Carlo-sykluser som et mål på tiden. For lave temperaturer ($T = 1$) ser vi at...
+
+
 
 \begin{figure}[ht]
 
