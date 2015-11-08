@@ -1,17 +1,18 @@
 language: cpp
 
 script:
-  - cd project4/src && make
-  - cd project3/ && chmod u+x benchmark.sh && ./benchmark.sh && cd -
-  #- cd project3/report/ && make
-  
+  - cd project4/src && make && cd -
+  - cd project3/src && make && cd - 
+    
 before_install:
-  - sudo apt-get update && sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra dvipng
-  - wget http://sourceforge.net/projects/biblatex-biber/files/biblatex-biber/0.9.9/binaries/Linux/biber-linux_x86_64.tar.gz/download --output-document biber-linux_x86_32.tar.gz
-  - tar -xvzf biber-linux_x86_32.tar.gz
-  - sudo mv biber /usr/bin/
-  - sudo apt-get install python-pip
-  - sudo pip install matplotlib
+  - sudo apt-get install libopenmpi-dev
+  - sudo apt-get install openmpi-bin
+  # - sudo apt-get update && sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra dvipng
+  # - wget http://sourceforge.net/projects/biblatex-biber/files/biblatex-biber/0.9.9/binaries/Linux/biber-linux_x86_64.tar.gz/download --output-document biber-linux_x86_32.tar.gz
+  # - tar -xvzf biber-linux_x86_32.tar.gz
+  # - sudo mv biber /usr/bin/
+  # - sudo apt-get install python-pip
+  # - sudo pip install matplotlib
 
 notifications:
   email: false
