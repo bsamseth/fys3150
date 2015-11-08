@@ -3,17 +3,17 @@ MPICC = mpic++
 CFLAGS = -O3 -Wall -std=c++0x -fopenmp
 LFLAGS = 
 
-OBJS = 
+OBJS = functions.o
 LIBS = 
 TARGETS = MPIising
 
 all: $(TARGETS)
 
-run: MPIising
-	mpirun -n 4 MPIising.x out.dat
+MPIising: $(OBJS) MPIising.cpp 
+	$(MPICC) -O3 $(OBJS) -o MPIising.x MPIising.cpp
 
-MPIising: MPIising.cpp
-	$(MPICC) -O3 -o MPIising.x MPIising.cpp
+functions.o: functions.cpp functions.h
+	$(CC) $(CFLAGS) -c functions.cpp
 
 clean :
 	rm -f *~ \#*# *.o *.x
