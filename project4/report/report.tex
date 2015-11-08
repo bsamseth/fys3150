@@ -74,7 +74,7 @@ programmet er Metropolisalgoritmen, som i vårt tilfelle går som følger:
   er nærmere den minste mulige verdien av $E$. Gå til punkt (\ref{steg7}).
 \item Dersom $\Delta E > 0 $, beregn Boltzmannsannsynligheten $w =
   e^{-\beta\Delta E}$. 
-\item Sammenlikn $w$ med et tilfeldig tall $0\leq r\leq 1$
+\item Sammenlikn $w$ med et tilfeldig tall $0\leq r\leq 1$ \label{steg6}
 \begin{enumerate}
   \item Hvis $r\leq w$, godta spinnendringen
   \item ellers, behold den originale spinntilstanden.
@@ -225,9 +225,15 @@ Numerisk & -1.9960480 & 0.99869100 & 0.031585527 & 3.9933824 & 0.0038971461
 \section{Resultater}
 
 Vi begynner med å se på hvor lang tid systemet bruker på å stabilisere seg. I dette tilfellet
-anser vi antall Monte Carlo-sykluser som et mål på tiden. For lave temperaturer ($T = 1$) ser vi at...
+anser vi antall Monte Carlo-sykluser som et mål på tiden. For lave temperaturer ($T = 1$) ser vi at det
+ordnede systemet begynner stabilt, som vil si i at det begynner i grunntilstanden, tilstanden med lavest energi. For lave temperaturer er det lite energi i systemet, og grunntilstanden er mest sannsynlig. Det uordnede
+systemet bruker litt tid på å stabilisere seg, men vi ser fra \ref{fig:configurations} at også her går
+antall konfigurasjoner mot 0 etter omtrent $3 \cdot 10^4$ sykluser. Det vil si at $w$ alltid er større $0\leq r\leq 1$ i steg \label{steg6} i Metropolis-algoritmen, og ingen spin-endringer blir gjort. Også systemet med høyere
+temperatur ($T=2.4$) bruker cirka $3 \cdot 10^4$ sykluser på å stabilisere seg.
 
-
+Ser vi derimot på antall konfigurasjoner i \ref{fig:configurations} ser vi at systemet med høy temperatur
+har mange flere tilgjengelige tilstander enn det med lav temperatur. Det høres fornuftig ut, siden det har mer
+'tilgjengelig' energi.
 
 \begin{figure}[ht]
 
