@@ -5,12 +5,15 @@ LFLAGS =
 
 OBJS = functions.o
 LIBS = 
-TARGETS = MPIising
+TARGETS = MPIising MPIisingImproved
 
 all: $(TARGETS)
 
 MPIising: $(OBJS) MPIising.cpp 
 	$(MPICC) -O3 $(OBJS) -o MPIising.x MPIising.cpp
+
+MPIisingImproved: $(OBJS) MPIisingImproved.cpp 
+	$(MPICC) -O3 $(OBJS) -o MPIisingImproved.x MPIisingImproved.cpp
 
 functions.o: functions.cpp functions.h
 	$(CC) $(CFLAGS) -c functions.cpp
