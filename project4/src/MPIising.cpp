@@ -114,6 +114,7 @@ int main(int argc, char* argv[])
       // update expectation values  for local node
       average[0] += E;    average[1] += E*E;
       average[2] += M;    average[3] += M*M; average[4] += fabs(M);
+      
     }
     // Find total average
     for( int i =0; i < 5; i++){

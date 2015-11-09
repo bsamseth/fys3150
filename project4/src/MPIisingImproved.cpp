@@ -23,6 +23,7 @@ using namespace  std;
 
 // output file
 ofstream ofile;
+ofstream ofile2;
 
 // Main program begins here
 
@@ -66,15 +67,21 @@ int main(int argc, char* argv[])
 	 << "_" << temp_step << "_" << randomizer << ".dat";
     string filename = sstm.str();
     ofile.open(filename.c_str());
-      ofile << setiosflags(ios::showpoint | ios::uppercase);
-      ofile << setw(15) << "T";
-      ofile << setw(15) << "E";
-      ofile << setw(15) << "Evar/T^2";
-      ofile << setw(15) << "M";
-      ofile << setw(15) << "Mvar/T";
-      ofile << setw(15) << "MvarAbs/T";
-      ofile << setw(15) << "|M|" ;
-      ofile << setw(15) << "Num_config" << endl;
+    ofile << setiosflags(ios::showpoint | ios::uppercase);
+    ofile << setw(15) << "T";
+    ofile << setw(15) << "E";
+    ofile << setw(15) << "Evar/T^2";
+    ofile << setw(15) << "M";
+    ofile << setw(15) << "Mvar/T";
+    ofile << setw(15) << "MvarAbs/T";
+    ofile << setw(15) << "|M|" ;
+    ofile << setw(15) << "Num_config" << endl;
+      
+    stringstream sstm2;
+    sstm2 << outfilename << "_" << "Energies" << "_" << n_spins << "_" << mcs
+	 << "_" << initial_temp << "_" << final_temp
+	 << "_" << temp_step << "_" << randomizer << ".dat";
+    ofile2.open(sstm2.str().c_str());
   }
 
   /*
@@ -126,6 +133,7 @@ int main(int argc, char* argv[])
       if ( termalized ) {
 	average[0] += E;    average[1] += E*E;
 	average[2] += M;    average[3] += M*M; average[4] += fabs(M);
+	ofile2 << E << " " << temperature << endl;
       }
       E_last = E; M_last = M;
     }
@@ -140,7 +148,10 @@ int main(int argc, char* argv[])
     cout << "My rank = " << my_rank << ": " << average[0] << endl;
   }
   free_matrix((void **) spin_matrix); // free memory
-  ofile.close();  // close output file
+  if ( my_rank == 0) {
+    ofile.close(); 
+    ofile2.close();
+  }
   // End MPI
   MPI_Finalize (); 
   return 0;
