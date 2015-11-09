@@ -32,19 +32,21 @@ som refereres er tilgjengelig på~\cite{github-repo}.
 \label{sec:innledning}
 Ising-modellen er et system av $n \times n$ partikler ordnet i et rutenett. 
 Hver partikkel kan være i én av to tilstander, enten spinn opp, $\uparrow$,
-eller spinn ned, $\downarrow$. Energien er: 
+eller spinn ned, $\downarrow$. Energien er gitt ved 
 
 \begin{equation}
   E=-J\sum_{<kl>}^{N}s_ks_l\label{eq:energi}
 \end{equation}
-med  $s_k=\pm 1$, $N$ er antall partikler.
+der  $s_k=\pm 1$, $N$ er antall partikler.
 $J$ er en konstant som beskriver styrken på interaksjonen mellom
 nabopartikler. Symbolet $<kl>$ betyr at vi summerer over bare de
 nærmeste naboene. Vi antar også  ferromagnetisme, dvs.  $J> 0$. Vi bruker også
 periodiske randbetingelser. Det betyr at partiklene langs randa 'ser' 
 partiklene langs motsatte rand. For eksempel 'ser' en partikkel i posisjon
 (N,N) i rutenettet, både partikkelen i posisjon (1,N) og (N,1), og interakterer
-med disse som om de skulle vært naboer. Vi bruker de termodynamiske størrelsene:
+med disse som om de skulle vært naboer. Dette tilsvarer at vi har
+gitterstruktur, der systemet vi ser på gjentas videre i alle
+retninger. Vi bruker de termodynamiske størrelsene:
 
 \begin{align}
 Z &= \sum_i e^{-\beta E(i)} = \sum_E \Omega(E) e^{-\beta E}\label{eq:partisjons-funk} \\
@@ -57,6 +59,7 @@ Her er $\beta = 1/k_BT$, $Z$ partisjonsfunksjonen, $C_v$ er den spesifikke varme
 $\mathcal{M}$ er magnetiseringen og $\chi$ er susceptibiliteten. $E$, $T$ og $k_B$ er henholdsvis 
 energien, temperaturen og boltzmannkonstanten. Disse størrelsene skal vi regne ut for flere forskjellige
 størrelser på rutenettet og for mange forskjellige temperaturer.
+
 
 \section{Implementering og testing}
 
@@ -198,15 +201,19 @@ Med partisjonsfunksjonen i boks kan vi finne alle forventningsverdier.
 \end{align}
 
 Vi kan nå bruke disse formlene til å teste programmet. Vi velger å se
-på $T=1$. Tabell \ref{tab:2x2-eksakt-num} viser både eksakte og
+på $T=1$.\footnote{Gjennom hele rapporten har vi gjort alle
+  størrelser dimensjonsløse med $J=k_B=1$.} Tabell \ref{tab:2x2-eksakt-num} viser både eksakte og
 numeriske resultater. Etter litt testing kom vi frem til at ca. $10^6$
-Monte Carlo-sykluser gir god overensstemmelse.
+Monte Carlo-sykluser gir god overensstemmelse (dette gjelder for å få
+bra verdier for \textit{alle} størrelser. F.eks. energien ser ut til å bli bra
+raskere enn si $C_V$).
 
 
 \begin{table}
 \centering
 \caption{Tabell over eksakte og numeriske resultater for $2\times
-  2$-tilfellet for $T=1$. Vi har brukt $10^6$ Monte Carlo-sykluser. Merk at
+  2$-tilfellet for $T=1$. Vi har brukt $10^6$ Monte Carlo-sykluser og
+  en startkonfigurasjon med alle spinn pekende ned, $\downarrow$. Merk at
 alle tall er normalisert for antall spinn.}
 \label{tab:2x2-eksakt-num}
 \vspace{0.5cm}
@@ -214,29 +221,45 @@ alle tall er normalisert for antall spinn.}
  & $\mean{E}$ & $\mean{ \abs{\mathcal{M} } }$ & $C_V$ & $\chi$ & $\chi_\text{abs}$ \\
 \hline
 Eksakt & -1.9959821 & 0.99866073 & 0.032082332 & 3.9933038 & 0.0040107395 \\
-Numerisk & -1.9960480 & 0.99869100 & 0.031585527 & 3.9933824 & 0.0038971461 
+Numerisk & -1.9960480 & 0.99869100 & 0.031585527 & 3.9933824 & 0.0038971461 \\
+Rel. feil & -3.3\e{-5} & -3.0\e{-5} & 1.5\e{-2}  & -2.0\e{-5} & 2.8\e{-2} 
 \end{tabular}
-
 \end{table}
 
 
 
+\subsection{Termalisering}
+Resultatene fra forrige punkt kommer fra å ta gjennomsnittet av alle
+verdiene som oppsto gjennom Monte Carlo-simuleringen. Det er da
+åpenbart at bidragene fra de første tilstandene vil være avhengig av
+den initielle konfigurasjonen vi starter systemet i. Ideelt ønsker vi
+kun å finne forventningsverdiene når systemet er i likevekt. Vi burde
+derfor bruke et antall sykluser på å nå likevekt \textit{før} vi
+begynner å samle inn data til forventningsverdiene. Spørsmålet blir da
+hvor mange sykluser vi skal bruke.
 
-\section{Resultater}
+Som et første estimat på et passende antall sykluser begynner vi med å
+plotte utviklingen av de ulike forventningsverdiene som funksjon av
+antallet Monte Carlo-sykluser som blir brukt. Vi velger å se på
+tilfellet med et $20\times 20$ system. 
 
-Vi begynner med å se på hvor lang tid systemet bruker på å stabilisere seg. I dette tilfellet
-anser vi antall Monte Carlo-sykluser som et mål på tiden. For lave temperaturer ($T = 1$) ser vi at det
-ordnede systemet begynner stabilt, som vil si i at det begynner i grunntilstanden, tilstanden med lavest energi. For lave temperaturer er det lite energi i systemet, og grunntilstanden er mest sannsynlig. Det uordnede
-systemet bruker litt tid på å stabilisere seg, men vi ser fra \ref{fig:configurations} at også her går
-antall konfigurasjoner mot 0 etter omtrent $3 \cdot 10^4$ sykluser. Det vil si at $w$ alltid er større $0\leq r\leq 1$ i steg \label{steg6} i Metropolis-algoritmen, og ingen spin-endringer blir gjort. Også systemet med høyere
-temperatur ($T=2.4$) bruker cirka $3 \cdot 10^4$ sykluser på å stabilisere seg.
+For lave temperaturer ($T = 1$) ser vi at det ordnede systemet
+begynner stabilt, som vil si i at det begynner i grunntilstanden,
+tilstanden med lavest energi. For lave temperaturer er det lite energi
+i systemet, og grunntilstanden er mest sannsynlig. Det uordnede 
+systemet bruker litt tid på å stabilisere seg, men vi ser fra
+\ref{fig:configurations} at også her går antall konfigurasjoner mot 0
+etter omtrent $3 \cdot 10^4$ sykluser. Det vil si at $w$ alltid er
+større $0\leq r\leq 1$ i steg \label{steg6} i Metropolis-algoritmen,
+og ingen spin-endringer blir gjort. Også systemet med høyere
+temperatur ($T=2.4$) bruker cirka $3 \cdot 10^4$ sykluser på å
+stabilisere seg.
 
 Ser vi derimot på antall konfigurasjoner i \ref{fig:configurations} ser vi at systemet med høy temperatur
 har mange flere tilgjengelige tilstander enn det med lav temperatur. Det høres fornuftig ut, siden det har mer
 'tilgjengelig' energi.
 
 \begin{figure}[ht]
-
   \centering
   \includegraphics[scale=0.7]{../fig/E_M_Mabs.png}
   \includegraphics[scale=0.7]{../fig/E_M_Mabs_random.png}
@@ -262,11 +285,16 @@ er det ordnete tilfellet, nederst det uordnede.}
   \centering
   \includegraphics[scale=0.7]{../fig/configurations.png}
   \includegraphics[scale=0.7]{../fig/configurations_random.png}
-
   \caption{\label{fig:configurations} Et plot av antall configurations
 normalisert mot antall Monte Carlo-sykluser. Øverst er det ordnete tilfellet, nederst det uordnede.}
 \end{figure}
 
+
+
+\section{Resultater}
+
+Vi begynner med å se på hvor lang tid systemet bruker på å stabilisere seg. I dette tilfellet
+anser vi antall Monte Carlo-sykluser som et mål på tiden. 
 
 
 
@@ -280,3 +308,5 @@ normalisert mot antall Monte Carlo-sykluser. Øverst er det ordnete tilfellet, n
 %%% mode: latex
 %%% TeX-master: t
 %%% End:
+
+
