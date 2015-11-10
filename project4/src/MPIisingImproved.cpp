@@ -145,7 +145,6 @@ int main(int argc, char* argv[])
     if ( my_rank == 0) {
       ofile << output(n_spins, mcs, temperature, total_average, &num_configurations);
     }
-    cout << "My rank = " << my_rank << ": " << average[0] << endl;
   }
   free_matrix((void **) spin_matrix); // free memory
   if ( my_rank == 0) {
