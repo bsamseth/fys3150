@@ -39,7 +39,7 @@ chi      = zeros((L_N, T_N))
 Mabs     = zeros((L_N, T_N))   
 
 # compute/read data
-for i, Li in enumerate(L):
+for j, Li in enumerate(L):
 
     if not noCompute:
         cmd = "mpirun -n 4 MPIising.x data/out %d %d %g %g %g %d" % (Li, MCcycles_N, T0, T1, dT, randomizer)
@@ -48,7 +48,7 @@ for i, Li in enumerate(L):
     
     with open("data/out_%d_%d_%g_%g_%g_%d.dat" % (Li, MCcycles_N, T0, T1, dT, randomizer), 'r') as data: # read data
         data = data.readlines()[1:]
-        for j, line in enumerate(data):
+        for i, line in enumerate(data):
             numbers = [float(elm) for elm in line.split()[1:]]
             E[j,i], Cv[j,i], dummy, dummy2, chi[j,i], Mabs[j,i], dummy3 = numbers
 
@@ -65,7 +65,7 @@ randomName = "_random" if randomizer else ""
 fig, ax = plt.subplots()
 plt.rc('text', usetex=True)
 for i in range(L_N):
-    ax.plot(L, Mabs[i,:], label=r"$L=%g" % L[i])
+    ax.plot(T_array, Mabs[i,:], label=r"$L=%g" % L[i])
 
 plt.show()
 
