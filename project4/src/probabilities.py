@@ -73,6 +73,7 @@ for i in range(T_N):
     plt.setp(patches, 'facecolor', 'g', 'alpha', 0.75)
     ax[i].legend()
     ax[i].set_ylabel(r"$\mathcal{P}(E)$")
-ax[-1].set_xlabel(r"$E$")
+ax[-1].set_xlabel(r"$E$" + "\nRun: %s" % " ".join([arg for arg in sys.argv if arg != "--no-compute"]))
 ax[0].set_title(r"Probability distribution $\mathcal{P}(E)$")
+plt.savefig("../fig/prob_E.png")
 plt.show()

@@ -72,7 +72,7 @@ ax[0].set_ylabel(r"$\langle E\rangle$")
 ax[1].set_ylabel(r"$\langle |M|\rangle$")
 ax[2].set_ylabel(r"$\langle C_V\rangle$")
 ax[3].set_ylabel(r"$\langle \chi_{abs}\rangle$")
-ax[3].set_xlabel(r"$T$")
+ax[3].set_xlabel("T\n Run: %s" % " ".join([arg for arg in sys.argv if arg != "--no-compute"]))
 ax[0].set_title("Expectation values as functions of temperature")
 
 # one centered label + get legend inside plot-view
