@@ -248,14 +248,14 @@ begynner stabilt, som vil si i at det begynner i grunntilstanden,
 tilstanden med lavest energi. For lave temperaturer er det lite energi
 i systemet, og grunntilstanden er mest sannsynlig. Det uordnede 
 systemet bruker litt tid på å stabilisere seg, men vi ser fra
-\ref{fig:configurations} at også her går antall konfigurasjoner mot 0
+figur \ref{fig:configurations} at også her går antall konfigurasjoner mot 0
 etter omtrent $3 \cdot 10^4$ sykluser. Det vil si at $w$ alltid er
 større $0\leq r\leq 1$ i steg \label{steg6} i Metropolis-algoritmen,
 og ingen spin-endringer blir gjort. Også systemet med høyere
 temperatur ($T=2.4$) bruker cirka $3 \cdot 10^4$ sykluser på å
 stabilisere seg.
 
-Ser vi derimot på antall konfigurasjoner i \ref{fig:configurations} ser vi at systemet med høy temperatur
+Ser vi derimot på antall konfigurasjoner i figur \ref{fig:configurations} ser vi at systemet med høy temperatur
 har mange flere tilgjengelige tilstander enn det med lav temperatur. Det høres fornuftig ut, siden det har mer
 'tilgjengelig' energi.
 
@@ -289,6 +289,33 @@ er det ordnete tilfellet, nederst det uordnede.}
 normalisert mot antall Monte Carlo-sykluser. Øverst er det ordnete tilfellet, nederst det uordnede.}
 \end{figure}
 
+\subsubsection{Implementering av termalisering}
+Fra disse resultatene estimerer vi altså at vi burde starte
+datasamlingen først etter ca. $3\e{4}$ sykluser. Et alternativ bruke
+dette som en gitt grense i programmet. Vi skal derimot forsøke en litt
+mer robust metode:
+
+Vi kan sammenlikne energien (og/eller andre størrelser vi beregner)
+fra et tidligere punkt i simuleringen med en ny verdi si 1000 sykluser
+etterpå. Dersom systemet ikke har nådd likevekt vil vi forvente å se
+en betydelig endring av verdien, men dersom systemet har blitt
+termalisert burde vi ikke se store svingninger. Vi kan dermed se at
+hvis verdiene ikke har endret seg mer en en gitt prosentandel på et
+gitt antall sykluser så antar vi at systemet er termalisert og vi kan
+begynne å samle data.
+
+Denne metoden er desverre ikke uten svakheter. Først og fremst blir
+det opp til oss å finne en passende grense for prosentandelen vi
+tillater at endres. Men selv om vi finner en ideell verdi for denne
+kan det hende at vi bare ved en tilfeldighet ender med nye verdier som
+er veldig like de vi hadde tidligere, selv om systemet ikke har nådd
+den mest sannsynlige tilstanden. Dette er likevel ikke altfor
+sannsynlig dersom vi er litt strenge, så vi ``krysser fingrene'' og
+håper på det beste. 
+
+Det kan nevnes at dette kan gjøres mye mer robust ved å bruke
+autokorrelasjonsfunksjonen, men vi har ikke brukt dette i denne
+rapporten av hensyn til tid.
 
 
 \section{Resultater}
