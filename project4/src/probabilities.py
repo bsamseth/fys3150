@@ -61,16 +61,18 @@ t1 = time()
 print 'Complete. Total time spent: %5.3f' % (t1-t0)
 
 # make plots
-# making two seperate plots with three quantities per figure
-# expectation values in one, and the variances in the other
 os.system("mkdir -p ../fig")  #  make sure the dir exists
 randomName = "_random" if randomizer else ""
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)
 fig, ax = plt.subplots(T_N, sharex=False, sharey=False)
 for i in range(T_N):
-    ax[i].hist(E[i,:], bins=range(int(min(E[i,:])), int(max(E[i,:]))+1),
-            rwidth=1, normed=1, label=r"$T=%g$" % T[i])
+    n, bins, patches = ax[i].hist(E[i,:],
+                                  bins=range(int(min(E[i,:])), int(max(E[i,:]))+1),
+                                  rwidth=1, normed=1, label=r"$T=%g$" % T[i])
+    plt.setp(patches, 'facecolor', 'g', 'alpha', 0.75)
     ax[i].legend()
-    ax[i].set_ylabel("Prob")
-ax[len(ax)-1].set_xlabel("Energy")
+    ax[i].set_ylabel(r"$\mathcal{P}(E)$")
+ax[-1].set_xlabel(r"$E$")
+ax[0].set_title(r"Probability distribution $\mathcal{P}(E)$")
 plt.show()

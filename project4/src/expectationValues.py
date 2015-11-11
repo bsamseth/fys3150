@@ -74,6 +74,7 @@ print 'Complete. Total time spent: %5.3f' % (t1-t0)
 os.system("mkdir -p ../fig")  #  make sure the dir exists
 randomName = "_random" if randomizer else ""
 fig, ax = plt.subplots(3, sharex=True)
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)
 for i in range(T_N):
     ax[0].semilogx(MCcycles, E[i,:], linewidth=2, label=r'$T = %g$' % T_array[i])

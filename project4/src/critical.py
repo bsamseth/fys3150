@@ -58,14 +58,28 @@ print 'Complete. Total time spent: %5.3f' % (t1-t0)
 
 
 # make plots
-# making two seperate plots with three quantities per figure
-# expectation values in one, and the variances in the other
 os.system("mkdir -p ../fig")  #  make sure the dir exists
-randomName = "_random" if randomizer else ""
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(nrows=4, sharex=True)
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)
 for i in range(L_N):
-    ax.plot(T_array, Mabs[i,:], label=r"$L=%g" % L[i])
+    ax[0].plot(T_array, E[i,:], label=r"$L=%g$" % L[i])
+    ax[1].plot(T_array, Mabs[i,:], label=r"$L=%g$" % L[i])
+    ax[2].plot(T_array, Cv[i,:], label=r"$L=%g$" % L[i])
+    ax[3].plot(T_array, chi[i,:], label=r"$L=%g$" % L[i])
 
+ax[0].set_ylabel(r"$\langle E\rangle$")
+ax[1].set_ylabel(r"$\langle |M|\rangle$")
+ax[2].set_ylabel(r"$\langle C_V\rangle$")
+ax[3].set_ylabel(r"$\langle \chi_{abs}\rangle$")
+ax[3].set_xlabel(r"$T$")
+ax[0].set_title("Expectation values as functions of temperature")
+
+# one centered label + get legend inside plot-view
+for cax in ax:
+    box = cax.get_position()
+    cax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+ax[1].legend(loc='center left', bbox_to_anchor=(1, -0.25))
+plt.savefig("../fig/critical.png")
 plt.show()
 
