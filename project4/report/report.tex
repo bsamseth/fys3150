@@ -318,6 +318,48 @@ autokorrelasjonsfunksjonen, men vi har ikke brukt dette i denne
 rapporten av hensyn til tid.
 
 
+\section{Beregning av kritisk temperatur}
+En sentral størrelse for dette systemet er den kritiske temperaturen
+$T_C$. Rundt denne temperaturen kan vi beskrive mange fysiske
+størrelser ved hjelp av potenslover. Eksempelvis er
+forventningsverdien til magnetiseringen gitt som 
+\begin{align}
+  \mean{\mathcal{M}(T)} \sim (T - T_C)^{\beta},
+\end{align}
+der $\beta=1/8$ er en såkalt kritisk eksponent. Vi har en lignende
+relasjon for varmekapasiteten,
+\begin{align}
+  C_V(T) \sim |T-T_C|^{\alpha},
+\end{align}
+og susceptibiliteten,
+\begin{align}
+  \chi(T) \sim |T_C - T|^{\gamma}.
+\end{align}
+med $\alpha=0$ og $\gamma=7/4$.
+
+En annen viktig størrelse er korrelasjonslengden $\xi$, som er i
+størrelsesorden lik avstanden mellom spinnene for $T\gg T_C$. Spinnene
+vil bli stadig mer korrelert når temperaturen nærmer seg $T_C$, som
+svarer til at $\xi$ vokser når $T\rightarrow T_C$. Den divergente
+oppførselen til $\xi$ rundt $T_C$ er igjen gitt ved en potenslov:
+\begin{align}
+  \xi(T) \sim |T_C - T|^\nu.\label{eq:corr-length-critical}
+\end{align}
+En andreordens faseovergang karakteriseres av en korrelasjonslengde
+som spenner hele systemet. I en slik overgang er derfor
+korrelasjonslengden proporsjonal med størrelsen på
+spinn-rutenettet. Vi vil alltid være begrenset til å se på et endelig
+rutenett, men ved såkalt ``finite size scaling ralation'' er det mulig
+å knytte oppførselen til endelig-dimensjonale rutenett til den
+termodynamiske grensen der $L\rightarrow\infty$. For den kritiske
+temperaturen er denne skaleringen gitt som 
+\begin{align}
+  T_C(L) - T_C(L=\infty) = aL^{-1/\nu},
+\end{align} 
+der $a$ er en konstant og $\nu$ definert i likning
+(\ref{eq:corr-length-critical}). 
+
+
 \section{Resultater}
 
 Vi begynner med å se på hvor lang tid systemet bruker på å stabilisere seg. I dette tilfellet
