@@ -119,15 +119,20 @@ int main(int argc, char* argv[])
     bool termalized = false;
     double E_last = E;
     double M_last = M;
-    double percent = 2;
-    int counter = 1;
+    double percent = 0.10;
     // start Monte Carlo computation
     for (int cycles = myloop_begin; cycles <= myloop_end; cycles++){
       Metropolis(n_spins, idum, spin_matrix, E, M, w, &num_configurations);
       // update expectation values  for local node
 
-      if (cycles % 1000 == 0) {
+      if (not termalized and cycles % 1000 == 0) {
+	// cout << "M - M_last = " << (M - M_last) << endl;
+	if (not termalized) {
+	  if (abs(E_last - E) < percent * abs(E) and abs(M_last - M) < percent * abs(M))
+	    cout << "my rank = " << my_rank << ", termalized at cycle = " << cycles << endl;
+	}
 	termalized += abs(E_last - E) < percent * abs(E) and abs(M_last - M) < percent * abs(M);
+	E_last = E; M_last = M;
       }
 	  
       if ( termalized ) {
@@ -135,7 +140,6 @@ int main(int argc, char* argv[])
 	average[2] += M;    average[3] += M*M; average[4] += fabs(M);
 	ofile2 << E << " " << temperature << endl;
       }
-      E_last = E; M_last = M;
     }
     // Find total average
     for( int i =0; i < 5; i++){
