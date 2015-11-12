@@ -126,7 +126,9 @@ int main(int argc, char* argv[])
     }
   }
   free_matrix((void **) spin_matrix); // free memory
-  ofile.close();  // close output file
+  if (my_rank == 0) {
+    ofile.close();  // close output file
+  }
   // End MPI
   MPI_Finalize (); 
   return 0;

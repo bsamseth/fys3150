@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
     bool termalized = false;
     double E_last = E;
     double M_last = M;
-    double percent = 0.10;
+    double percent = 0.05;
     // start Monte Carlo computation
     for (int cycles = myloop_begin; cycles <= myloop_end; cycles++){
       Metropolis(n_spins, idum, spin_matrix, E, M, w, &num_configurations);
@@ -128,8 +128,10 @@ int main(int argc, char* argv[])
       if (not termalized and cycles % 1000 == 0) {
 	// cout << "M - M_last = " << (M - M_last) << endl;
 	if (not termalized) {
-	  if (abs(E_last - E) < percent * abs(E) and abs(M_last - M) < percent * abs(M))
+	  if (abs(E_last - E) < percent * abs(E) and abs(M_last - M) < percent * abs(M)) {
 	    cout << "my rank = " << my_rank << ", termalized at cycle = " << cycles << endl;
+	    mcs = myloop_end - cycles;
+	  }
 	}
 	termalized += abs(E_last - E) < percent * abs(E) and abs(M_last - M) < percent * abs(M);
 	E_last = E; M_last = M;
@@ -141,13 +143,16 @@ int main(int argc, char* argv[])
 	ofile2 << E << " " << temperature << endl;
       }
     }
+    int mc_termalized = 0;
+    MPI_Reduce(&mcs, &mc_termalized, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    cout << "mc_termaliz = " << mc_termalized << endl;
     // Find total average
     for( int i =0; i < 5; i++){
       MPI_Reduce(&average[i], &total_average[i], 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     }
     // print results
     if ( my_rank == 0) {
-      ofile << output(n_spins, mcs, temperature, total_average, &num_configurations);
+      ofile << output(n_spins, mc_termalized, temperature, total_average, &num_configurations);
     }
   }
   free_matrix((void **) spin_matrix); // free memory
