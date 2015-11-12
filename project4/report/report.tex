@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[11pt, twocolumn]{article}
 \usepackage{../../latex/preamble}
 
 \newcommand{\abs}[1]{|#1|}
@@ -20,6 +20,8 @@
   \vfill
 \end{titlepage}
 
+\twocolumn[
+\begin{@twocolumnfalse}
 \begin{abstract}
 I denne rapporten skal vi se på Ising-modellen i to dimensjoner. Det vil si
 et rutenett av $n \times n $ partikler, der alle partiklene enten har
@@ -29,6 +31,9 @@ oppfører seg rundt den kritiske temperaturen. Vi bruker
 Metropolis-algoritmen med 'periodic boundary conditions'. Alt materiale 
 som refereres er tilgjengelig på~\cite{github-repo}. 
 \end{abstract}
+\end{@twocolumnfalse}
+]
+
 
 \section{Innledning}
 \label{sec:innledning}
@@ -131,7 +136,7 @@ E = - J  ( 2s_1s_2 + 2s_1s_3 + 2s_2s_1 + 2s_2s_4 ) = -J ( 8 \cdot 1 \cdot 1) = -
 Gjør tilsvarende for alle mulige spinn-konfigurasjoner får vi tabell \ref{tab:spinn-energi-deg}:
 
 
-\begin{table}[ht]
+\begin{table*}[ht]
 \centering
 \caption{Tabell over energiene og degenerasjonene til de ulike
   spinn-konfigurasjonene til et $2\times 2$-rutenett av spinn.}
@@ -162,7 +167,7 @@ Antall spinn opp & Degenerasjon & Energi & Magnetisering \\
 |                0 |            1 | -8J    |            -4 |
 |------------------+--------------+--------+---------------|
 \end{comment}
-\end{table}
+\end{table*}
 
 Vi ser av tabell \ref{tab:spinn-energi-deg} at energien kan ha tre
 mulige verdier, $E = -8J,0,8J$. Da er partisjonsfunksjonen gitt ved
@@ -224,7 +229,7 @@ bra verdier for \textit{alle} størrelser. F.eks. energien ser ut til å bli bra
 raskere enn si $C_V$).
 
 
-\begin{table}
+\begin{table*}
 \centering
 \caption{Tabell over eksakte og numeriske resultater for $2\times
   2$-tilfellet for $T=1$. Vi har brukt $10^6$ Monte Carlo-sykluser og
@@ -239,7 +244,7 @@ Eksakt & -1.9959821 & 0.99866073 & 0.032082332 & 3.9933038 & 0.0040107395 \\
 Numerisk & -1.9960480 & 0.99869100 & 0.031585527 & 3.9933824 & 0.0038971461 \\
 Rel. feil & $-3.3\e{-5}$ & $-3.0\e{-5}$ & $1.5\e{-2}$  & $-2.0\e{-5}$ & $2.8\e{-2}$ 
 \end{tabular}
-\end{table}
+\end{table*}
 
 
 
@@ -274,7 +279,7 @@ Ser vi derimot på antall konfigurasjoner i figur \ref{fig:configurations} ser v
 har mange flere tilgjengelige tilstander enn det med lav temperatur. Det høres fornuftig ut, siden det har mer
 'tilgjengelig' energi.
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/E_M_Mabs.png}
   \includegraphics[scale=0.7]{../fig/E_M_Mabs_random.png}
@@ -283,26 +288,26 @@ har mange flere tilgjengelige tilstander enn det med lav temperatur. Det høres 
     Øverst har vi det ordnede tilfellet der alle spins begynner med å peke ned. Det andre tilfellet er 
     med en tilfeldig startkonfigurasjon.}
 \label{fig:forventningsverdi}
-\end{figure}
+\end{figure*}
 
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/variances.png}
   \includegraphics[scale=0.7]{../fig/variances_random.png}
   \caption{\label{fig:varianser} Plot av variansen til energien og magnetiseringa som
 funksjon av antall Monte Carlo-sykluser. Variansen regner vi både med å bruke $\chi$ og $|\chi|$. Øverst
 er det ordnete tilfellet, nederst det uordnede.}
-\end{figure}
+\end{figure*}
 
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/configurations.png}
   \includegraphics[scale=0.7]{../fig/configurations_random.png}
   \caption{\label{fig:configurations} Et plot av antall configurations
 normalisert mot antall Monte Carlo-sykluser. Øverst er det ordnete tilfellet, nederst det uordnede.}
-\end{figure}
+\end{figure*}
 
 \subsubsection{Implementering av termalisering}
 \label{subsec:implementering-av-termalisering}
@@ -347,7 +352,7 @@ verdiene fra tabell \ref{tab:2x2-eksakt-num}. Denne gangen har vi satt
 temperaturen til $T=2.3$, $L=2$ og brukt $10^6$ Monte
 Carlo-sykluser. Det nye resultatet er vist i tabell \ref{tab:exact-numerical-improved}
 
-\begin{table}
+\begin{table*}
 \centering
 \caption{Tabell over eksakte og numeriske resultater for $2\times
   2$-tilfellet for $T=2.3$. Vi har brukt $10^6$ Monte Carlo-sykluser og
@@ -369,7 +374,7 @@ Rel. feil term. & $-3.17\e{-4}$ & $-2.62\e{-4}$ & $1.87\e{-3}$ &
                                                                  $-2.66\e{-4}$ & $2.75\e{-3}$\\
 Forbedring  & 27\% & 21\% & 21\% & 25\% & 15\%
 \end{tabular}
-\end{table}
+\end{table*}
 
 Fra tabellen ser vi at vi har jevnt over en forbedring på ca. $20\%$ i
 den relative feilen. Vi kunne trolig forbedret dette ytterligere ved å
@@ -391,7 +396,7 @@ sannsynlighetsfordelingen ser veldig ut som en gaussisk sannsynlighetsfordeling.
 
 
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/prob_E.png}
   \caption{Et histogram av tilstandene for $n=20$ ved to 
@@ -399,7 +404,7 @@ forskjellige temperaturer. Vi ser at ved lav temperatur
 skjer det relativt lite i systemet, og vi har få tilstands-hopp. Ved høyere temperatur ser vi derimot at vi har mange tilgjengelige tilstander for systemet, og 
 sannsynlighetsfordelingen ser veldig ut som en gaussisk sannsynlighetsfordeling.}
 \label{fig:probabilities}
-\end{figure}
+\end{figure*}
 
 
 
@@ -469,14 +474,14 @@ Github~\cite{github-repo}. Resultatene er vist i figur \ref{fig:critical-plot} (
 parameterene brukt til å lage plottet er vist på undersiden av
 figuren). 
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.5]{../fig/critical.png}
   \caption{\label{fig:critical-plot} Forventningsverdier som funksjon
     av temperatur. Vi observerer en faseovergang rundt en kritisk
     temperatur, og merker oss at toppene til $C_V(T)$ og
     $\chi_\text{abs}(T)$ blir stadig høyere for større verdier av $L$.}
-\end{figure}
+\end{figure*}
 Figuren minner oss om at $C_V \propto \pd{E}{T}$ og $\chi_\text{abs}
 \propto \pd{\abs{M}}{T}$ ettersom vi har maksima for disse størrelsene
 der vendepunktene er. Vi vet videre at $\mathcal{M}$ skal gå i
@@ -498,6 +503,7 @@ kritiske temperaturen i den termodynamiske grensen. Programmet
 resultatet. Følgende kall på programmet gir utskriften:
 
 \clearpage
+\onecolumn
 \printbibliography
 \end{document}
 %%% Local Variables:
