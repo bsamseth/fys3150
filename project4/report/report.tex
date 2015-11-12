@@ -179,23 +179,36 @@ Med partisjonsfunksjonen i boks kan vi finne alle forventningsverdier.
   \mean{E} &= \frac{ 1 }{ Z }\sum_E \Omega(E) E e^{-E\beta}\\
            &= 8J \frac{ e^{-8J\beta}  - e^{8J\beta}}{ e^{-8J\beta}
              + e^{8J\beta} + 6}\label{eq:mean-E-2x2}
-\end{split}\\[0.5cm]
+\end{split}
+\end{align}
+\begin{align}
 \begin{split}
   \mean{E^2} &= \frac{ 1 }{ Z }\sum_E E^2\Omega(E)e^{-E\beta}\\
   &= 64J^2 \frac{ e^{8J\beta} + e^{-8J\beta} }{ e^{-8J\beta} +
     e^{8J\beta} + 6 }\label{eq:mean-E2-2x2}
-\end{split}\\[0.5cm]
-  C_V &= \frac{ 1}{k_BT^2} \left( \mean{E^2} - \mean{E}^2 \right)\label{eq:mean-C-2x2}\\[0.5cm]
+\end{split}
+\end{align}
+\begin{align}
+  C_V &= \frac{ 1}{k_BT^2} \left( \mean{E^2} - \mean{E}^2
+        \right)\label{eq:mean-C-2x2}
+\end{align}
+\begin{align}
 \begin{split}
   \mean{|\mathcal{M}|} &= \frac{ 1 }{ Z }\sum_i |\mathcal{M}_i| e^{-E_i\beta}\\
   &= \frac{ 4e^{8J\beta} + 8  }{ e^{-8J\beta} + e^{8J\beta} + 6 }.\label{eq:mean-abs-M-2x2}
-\end{split}\\[0.5cm]
-\mean{\mathcal{M}} &= 0\label{eq:mean-M-2x2}\\[0.5cm]
+\end{split}
+\end{align}
+\begin{align}
+\mean{\mathcal{M}} &= 0\label{eq:mean-M-2x2}
+\end{align}
+\begin{align}
 \begin{split}
   \mean{\mathcal{M}^2} &= \frac{ 1 }{ Z } \sum_i \mathcal{M}^2
   e^{-E_i\beta}\\
   &= 16 \frac{ e^{8J\beta} + 1 }{ e^{8J\beta} + e^{-8J\beta}+6 }\label{eq:mean-M2-2x2}
-\end{split}\\[0.5cm]
+\end{split}
+\end{align}
+\begin{align}
 \mean{\chi} &= \frac{ 1 }{ k_B T} \left(
               \mean{\mathcal{M}^2}-\mean{\mathcal{M}}^2
               \right)\label{eq:mean-chi-2x2}\\[0.5cm]
@@ -218,9 +231,9 @@ raskere enn si $C_V$).
   en startkonfigurasjon med alle spinn pekende ned, $\downarrow$. Merk at
 alle tall er normalisert for antall spinn.}
 \label{tab:2x2-eksakt-num}
-\vspace{0.5cm}
+\vspace{0.1cm}
 \begin{tabular}{l|ccccc}
- & $\mean{E}$ & $\mean{ \abs{\mathcal{M} } }$ & $C_V$ & $\chi$ & $\chi_\text{abs}$ \\
+$T=1$ & $\mean{E}$ & $\mean{ \abs{\mathcal{M} } }$ & $C_V$ & $\chi$ & $\chi_\text{abs}$ \\
 \hline
 Eksakt & -1.9959821 & 0.99866073 & 0.032082332 & 3.9933038 & 0.0040107395 \\
 Numerisk & -1.9960480 & 0.99869100 & 0.031585527 & 3.9933824 & 0.0038971461 \\
@@ -292,6 +305,7 @@ normalisert mot antall Monte Carlo-sykluser. Øverst er det ordnete tilfellet, n
 \end{figure}
 
 \subsubsection{Implementering av termalisering}
+\label{subsec:implementering-av-termalisering}
 Fra disse resultatene estimerer vi altså at vi burde starte
 datasamlingen først etter ca. $3\e{4}$ sykluser. Et alternativ bruke
 dette som en gitt grense i programmet. Vi skal derimot forsøke en litt
@@ -308,16 +322,61 @@ begynne å samle data.
 
 Denne metoden er desverre ikke uten svakheter. Først og fremst blir
 det opp til oss å finne en passende grense for prosentandelen vi
-tillater at endres. Men selv om vi finner en ideell verdi for denne
-kan det hende at vi bare ved en tilfeldighet ender med nye verdier som
-er veldig like de vi hadde tidligere, selv om systemet ikke har nådd
-den mest sannsynlige tilstanden. Dette er likevel ikke altfor
-sannsynlig dersom vi er litt strenge, så vi ``krysser fingrene'' og
-håper på det beste. 
+tillater at endres. Dette er ikke så lett å gjøre generelt, ettersom
+ulike temperaturer og startkonfigurasjoner vil bruke ulik tid på å nå
+likevekt. Og selv om vi finner en ideell verdi for denne kan det hende
+at vi bare ved en tilfeldighet ender med nye verdier som er veldig
+like de vi hadde tidligere, selv om systemet ikke har nådd den mest
+sannsynlige tilstanden. Dette er likevel ikke altfor sannsynlig, så vi
+``krysser fingrene'' og håper på det beste.
+
+Ved litt testing fant vi at en grense som så ut til å fungere for alle relevante
+temperatur var ca. $10\%$. Vi regner altså system som termalisert
+dersom det ikke endrer seg mer enn denne verdien i forhold til et
+tidligere tidspunkt.\footnote{Programmet som inneholder termaliserings
+implementasjonen heter \texttt{MPIisingImproved.cpp} og er
+tilgjengelig på Github~\cite{github-repo}}
 
 Det kan nevnes at dette kan gjøres mye mer robust ved å bruke
 autokorrelasjonsfunksjonen, men vi har ikke brukt dette i denne
 rapporten av hensyn til tid.
+
+\subsubsection{Forbedringer med termalisering}
+Som en test av denne implementasjonen har vi på nytt regnet ut
+verdiene fra tabell \ref{tab:2x2-eksakt-num}. Denne gangen har vi satt
+temperaturen til $T=2.3$, $L=2$ og brukt $10^6$ Monte
+Carlo-sykluser. Det nye resultatet er vist i tabell \ref{tab:exact-numerical-improved}
+
+\begin{table}
+\centering
+\caption{Tabell over eksakte og numeriske resultater for $2\times
+  2$-tilfellet for $T=2.3$. Vi har brukt $10^6$ Monte Carlo-sykluser og
+  en startkonfigurasjon med alle spinn pekende ned, $\downarrow$. Merk at
+alle tall er normalisert for antall spinn. Vi ser en forbedring
+med programmet som tar hensyn til termalisering. Forbedringen er gitt
+som hvor mange prosent større den relative feilen er for det
+ikke-termaliserte resultatet.}
+\label{tab:exact-numerical-improved}
+\vspace{0.1cm}
+\begin{tabular}{l|ccccc}
+$T=2.3$ & $\mean{E}$ & $\mean{ \abs{\mathcal{M} } }$ & $C_V$ & $\chi$ & $\chi_\text{abs}$ \\
+\hline
+Eksakt          & -1.684566     & 0.89512301    & 0.40664873   & 1.5114861 & 0.11801616 \\
+Standard        & -1.6852440    & 0.89540700    & 0.40572904   & 1.5119883 & 0.11764227 \\
+Termalisert     & -1.6851001    & 0.89535794    & 0.40588694   & 1.5118878 & 0.11769110\\
+Rel. feil std.  & $-4.02\e{-4}$ & $-3.17\e{-4}$ & $2.26\e{-3}$ & $3.32\e{-4}$ & $3.17\e{-3}$ \\
+Rel. feil term. & $-3.17\e{-4}$ & $-2.62\e{-4}$ & $1.87\e{-3}$ &
+                                                                 $-2.66\e{-4}$ & $2.75\e{-3}$\\
+Forbedring  & 27\% & 21\% & 21\% & 25\% & 15\%
+\end{tabular}
+\end{table}
+
+Fra tabellen ser vi at vi har jevnt over en forbedring på ca. $20\%$ i
+den relative feilen. Vi kunne trolig forbedret dette ytterligere ved å
+finne en annen prosentgrense (fra seksjon
+\ref{subsec:implementering-av-termalisering}), men vi begrenser oss
+til å bruke en og samme verdi for alle temperaturer/verdier av
+$L$/antall Monte Carlo-sykluser. 
 
 \section{Sannsynlighetsfordeling}
 
@@ -359,13 +418,63 @@ rutenett, men ved såkalt ``finite size scaling ralation'' er det mulig
 termodynamiske grensen der $L\rightarrow\infty$. For den kritiske
 temperaturen er denne skaleringen gitt som 
 \begin{align}
-  T_C(L) - T_C(L=\infty) = aL^{-1/\nu},
+  T_C(L) - T_C(L=\infty) = aL^{-1/\nu}\label{eq:Tc-scaling},
 \end{align} 
-der $a$ er en konstant og $\nu$ definert i likning
-(\ref{eq:corr-length-critical}). 
+der $a$ er en konstant og $\nu$ definert i likning \eqref{eq:corr-length-critical}.  Vi kan sette
+$\nu=1$~\cite{oppgavetekst-prosjekt-4}. 
 
+\vspace{\baselineskip}
 
-\section{Konklusjon}
+Med utgangspunkt i likning \eqref{eq:Tc-scaling} kan vi beregne den
+kritiske temperaturen for noen endelige verdier av $L$ og bruke dem
+til å finne verdien når $L\rightarrow\infty$. Vi ser at vi har en
+ukjent $a$, så vi trenger å beregne for to verdier av $L$ slik at vi
+får to likninger med to ukjente. Altså,
+
+\begin{align}
+  &T_C(L_1) - T_C(L=\infty) = aL_1^{-1/\nu}\\
+  &T_C(L_2) - T_C(L=\infty) = aL_2^{-1/\nu}\\
+\Rightarrow &a = \frac{ T_C(L_1) - T_C(L_2)} {L_1^{-1/\nu} -
+  L_2^{-1/\nu}}\\
+\Rightarrow &T_C(L=\infty) = T_C(L_1) - \frac{ T_C(L_1) - T_C(L_2)} {L_1^{-1/\nu} -
+  L_2^{-1/\nu}}L_1^{-1/\nu}\label{eq:Tc-inf-scale-expression}.
+\end{align}
+Det eneste som gjenstår nå er å bestemme $T_C(L)$ ut fra
+beregningene. Vi har laget et program som genererer plott for
+forventningsverdiene $\mean{E}$, $\mean{\abs{\mathcal{M}}}$, $C_V$ og
+$\chi_\text{abs}$ som funksjoner av temperatur. Programmet heter
+\texttt{critical.py} og er tilgjengelig på
+Github~\cite{github-repo}. Resultatene er vist i figur \ref{fig:critical-plot} (merk at
+parameterene brukt til å lage plottet er vist på undersiden av
+figuren). 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.5]{../fig/critical.png}
+  \caption{\label{fig:critical-plot} Forventningsverdier som funksjon
+    av temperatur. Vi observerer en faseovergang rundt en kritisk
+    temperatur, og merker oss at toppene til $C_V(T)$ og
+    $\chi_\text{abs}(T)$ blir stadig høyere for større verdier av $L$.}
+\end{figure}
+Figuren minner oss om at $C_V \propto \pd{E}{T}$ og $\chi_\text{abs}
+\propto \pd{\abs{M}}{T}$ ettersom vi har maksima for disse størrelsene
+der vendepunktene er. Vi vet videre at $\mathcal{M}$ skal gå i
+en sirkel fra $\mathcal{M}(T=0)=1$ til $\mathcal{M}(T\geq T_C)=0$ i
+grensen $L\rightarrow\infty$~\cite{ising-model-texas-uni}. Desto
+større $L$, desto fortere vil verdien synke mot null ved den kritiske
+temperaturen. Vi ser antydning til denne tendensen, men er langt fra
+en sirkelform. Dette har selvsagt med å gjøre at er begrenset til et
+relativt lite rutenett. 
+
+Vi observerer at $\chi_\text{abs}$ har den tydeligeste toppen, og
+bruker derfor denne størrelsen når vi skal bestemme verdien til
+$T_C(L)$. Dette er da enkelt temperaturen der $\chi_\text{abs}$ er
+maksimal. Gjør vi dette for to verdier av $L$ (gjerne de to største vi
+har kjørt for siden disse har tydeligst maksima) kan vi bruke likning
+\eqref{eq:Tc-inf-scale-expression} og finne et estimat for den
+kritiske temperaturen i den termodynamiske grensen. Programmet
+\texttt{critical.py} automatiserer denne beregningen og gir oss
+resultatet. Følgende kall på programmet gir utskriften:
 
 \clearpage
 \printbibliography
@@ -374,5 +483,3 @@ der $a$ er en konstant og $\nu$ definert i likning
 %%% mode: latex
 %%% TeX-master: t
 %%% End:
-
-
