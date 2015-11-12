@@ -7,7 +7,7 @@ import os
 import matplotlib.pyplot as plt
 import sys
 from time import time
-from numpy import linspace, logspace, zeros
+from numpy import linspace, logspace, zeros, argmax
 from math import log10
 
 try:
@@ -42,7 +42,7 @@ Mabs     = zeros((L_N, T_N))
 for j, Li in enumerate(L):
 
     if not noCompute:
-        cmd = "mpirun -n 4 MPIising.x data/out %d %d %g %g %g %d" % (Li, MCcycles_N, T0, T1, dT, randomizer)
+        cmd = "mpirun -n 4 MPIisingImproved.x data/out %d %d %g %g %g %d" % (Li, MCcycles_N, T0, T1, dT, randomizer)
         print "Running: %s" % cmd
         os.system(cmd)
     
@@ -55,6 +55,14 @@ for j, Li in enumerate(L):
 # done computing
 t1 = time()
 print 'Complete. Total time spent: %5.3f' % (t1-t0)
+
+index1 = argmax(chi[-1,:])
+index2 = argmax(chi[-2,:])
+
+a = (T_array[index1] - T_array[index2]) / float(1./L[-1] - 1./L[-2])
+T_crit = T_array[index1] - a / L[index1]
+print "Critical temperature Tc = %g" % T_crit
+
 
 
 # make plots
