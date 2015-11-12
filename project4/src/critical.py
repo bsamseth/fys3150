@@ -60,7 +60,7 @@ index1 = argmax(chi[-1,:])
 index2 = argmax(chi[-2,:])
 
 a = (T_array[index1] - T_array[index2]) / float(1./L[-1] - 1./L[-2])
-T_crit = T_array[index1] - a / L[index1]
+T_crit = T_array[index1] - a / L[-1]
 print "Critical temperature Tc = %g" % T_crit
 
 

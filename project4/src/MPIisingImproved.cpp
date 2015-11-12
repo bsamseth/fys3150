@@ -129,7 +129,6 @@ int main(int argc, char* argv[])
 	// cout << "M - M_last = " << (M - M_last) << endl;
 	if (not termalized) {
 	  if (abs(E_last - E) < percent * abs(E) and abs(M_last - M) < percent * abs(M)) {
-	    cout << "my rank = " << my_rank << ", termalized at cycle = " << cycles << endl;
 	    mcs = myloop_end - cycles;
 	  }
 	}
@@ -145,7 +144,6 @@ int main(int argc, char* argv[])
     }
     int mc_termalized = 0;
     MPI_Reduce(&mcs, &mc_termalized, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    cout << "mc_termaliz = " << mc_termalized << endl;
     // Find total average
     for( int i =0; i < 5; i++){
       MPI_Reduce(&average[i], &total_average[i], 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);

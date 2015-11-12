@@ -11,10 +11,11 @@
   \textsc{\Large }\\[0.5cm] % Major heading such as course name
   \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
   \HRule \\[0.4cm]
-  { \huge \bfseries Ising-model blabla}\\[0.4cm]
+  { \huge \bfseries En titt på Isingmodellen, og dens applikasjoner
+  på termodynamiske størrelser}\\[0.4cm]
   \HRule \\[1.5cm]
   \Large \emph{Skrevet av:}\\
-  Lyder \textsc{Rumohr Blingsmo} og Bendik \textsc{Samseth}\\[3cm]
+  Lyder \textsc{Rumohr Blingsmo} (k.nr. 2) og Bendik \textsc{Samseth} (k.nr. 27)\\[3cm]
   {\large \today}\\[3cm]
   \vfill
 \end{titlepage}
@@ -23,7 +24,8 @@
 I denne rapporten skal vi se på Ising-modellen i to dimensjoner. Det vil si
 et rutenett av $n \times n $ partikler, der alle partiklene enten har
 spinn opp, $\uparrow$ eller spinn ned, $\downarrow$. Spesielt ser vi
-på de termodynamiske egenskapene til et slikt system. Vi bruker
+på de termodynamiske egenskapene til et slikt system, og hvordan disse
+oppfører seg rundt den kritiske temperaturen. Vi bruker
 Metropolis-algoritmen med 'periodic boundary conditions'. Alt materiale 
 som refereres er tilgjengelig på~\cite{github-repo}. 
 \end{abstract}
@@ -317,6 +319,9 @@ Det kan nevnes at dette kan gjøres mye mer robust ved å bruke
 autokorrelasjonsfunksjonen, men vi har ikke brukt dette i denne
 rapporten av hensyn til tid.
 
+\section{Sannsynlighetsfordeling}
+
+
 
 \section{Beregning av kritisk temperatur}
 En sentral størrelse for dette systemet er den kritiske temperaturen
@@ -358,14 +363,6 @@ temperaturen er denne skaleringen gitt som
 \end{align} 
 der $a$ er en konstant og $\nu$ definert i likning
 (\ref{eq:corr-length-critical}). 
-
-
-\section{Resultater}
-
-Vi begynner med å se på hvor lang tid systemet bruker på å stabilisere seg. I dette tilfellet
-anser vi antall Monte Carlo-sykluser som et mål på tiden. 
-
-
 
 
 \section{Konklusjon}

@@ -72,7 +72,7 @@ void Metropolis(int n_spins, long& idum, int **spin_matrix, double& E, double&M,
 } // end of Metropolis sampling over spins
 
 
-const char*  output(int n_spins, int mcs, double temperature, double *total_average, int* num_configurations)
+string  output(int n_spins, int mcs, double temperature, double *total_average, int* num_configurations)
 {
   double norm = 1/((double) (mcs));  // divided by total number of cycles 
   double Etotal_average = total_average[0]*norm;
@@ -94,7 +94,7 @@ const char*  output(int n_spins, int mcs, double temperature, double *total_aver
   outtxt << setw(15) << setprecision(8) << MvarianceAbs/temperature;
   outtxt << setw(15) << setprecision(8) << Mabstotal_average/n_spins/n_spins;
   outtxt << setw(15) << setprecision(8) << (*num_configurations) << endl;
-  return outtxt.str().c_str();
+  return outtxt.str();
 } // end output function
 
 /*
