@@ -42,7 +42,7 @@ Mabs     = zeros((L_N, T_N))
 for j, Li in enumerate(L):
 
     if not noCompute:
-        cmd = "mpirun -n 4 MPIising.x data/out %d %d %g %g %g %d" % (Li, MCcycles_N, T0, T1, dT, randomizer)
+        cmd = "mpirun -n 4 MPIisingImproved.x data/out %d %d %g %g %g %d" % (Li, MCcycles_N, T0, T1, dT, randomizer)
         print "Running: %s" % cmd
         os.system(cmd)
     
