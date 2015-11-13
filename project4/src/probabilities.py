@@ -7,7 +7,7 @@ import os
 import matplotlib.pyplot as plt
 import sys
 from time import time
-from numpy import linspace, logspace, zeros, where
+from numpy import linspace, logspace, zeros, where, var, asarray
 from math import log10
 
 try:
@@ -60,6 +60,8 @@ with open("data/out_Energies_%d_%d_%g_%g_%g_%d.dat" % (n_spins, MCcycles_N, T0, 
 # done computing
 t1 = time()
 print 'Complete. Total time spent: %5.3f' % (t1-t0)
+for i,temp in enumerate(T):
+    print "var(T=%g)= %g" % (temp, var(asarray(E[i]))/(n_spins**2 * temp**2))
 
 # make plots
 os.system("mkdir -p ../fig")  #  make sure the dir exists
@@ -70,7 +72,7 @@ fig, ax = plt.subplots(T_N, sharex=False, sharey=False)
 for i in range(T_N):
     n, bins, patches = ax[i].hist(E[i],
                                   bins=range(int(min(E[i])), int(max(E[i]))+1),
-                                  rwidth=1, normed=1, label=r"$T=%g$" % T[i])
+                                  rwidth=1, normed=0, label=r"$T=%g$" % T[i])
     plt.setp(patches, 'facecolor', 'g', 'alpha', 0.75)
     ax[i].legend()
     ax[i].set_ylabel(r"$\mathcal{P}(E)$")

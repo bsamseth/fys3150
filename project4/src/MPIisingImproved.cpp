@@ -32,10 +32,11 @@ int main(int argc, char* argv[])
   char *outfilename;
   long idum;
   int **spin_matrix, n_spins, mcs, my_rank, numprocs;
-  double w[17], average[5], total_average[5], 
+  double w[17], average[5], total_average[5],
     initial_temp, final_temp, E, M, temp_step;
   int randomizer;
   int num_configurations = 0;
+  int mc_termalized;
   
 
   if (argc < 8) {
@@ -105,18 +106,24 @@ int main(int argc, char* argv[])
   // if one starts with the same seed, one ends with the same random numbers
   idum = -1-my_rank; //-time(NULL)-my_rank;  // random starting point
   // Start Monte Carlo sampling by looping over T first
+  bool termalized = false;
   for ( double temperature = initial_temp; temperature <= final_temp; temperature+=temp_step){
     //    initialise energy and magnetization 
     E = M = 0.;
     // initialise array for expectation values
-    initialize(n_spins, spin_matrix, E, M, randomizer, idum);
+    if (temperature == initial_temp)
+      initialize(n_spins, spin_matrix, E, M, randomizer, idum);
+    else
+      initialize_keepconfig(n_spins, spin_matrix, E, M);
+    
     // setup array for possible energy changes
     for( int de =-8; de <= 8; de++) w[de+8] = 0;
     for( int de =-8; de <= 8; de+=4) w[de+8] = exp(-de/temperature);
     for( int i = 0; i < 5; i++) average[i] = 0.;
     for( int i = 0; i < 5; i++) total_average[i] = 0.;
+    mc_termalized = 0;
 
-    bool termalized = false;
+    int mcs_tmp = myloop_end - myloop_begin + 1;
     double E_last = E;
     double M_last = M;
     double percent = 0.05;
@@ -127,12 +134,10 @@ int main(int argc, char* argv[])
 
       if (not termalized and cycles % 1000 == 0) {
 	// cout << "M - M_last = " << (M - M_last) << endl;
-	if (not termalized) {
-	  if (abs(E_last - E) < percent * abs(E) and abs(M_last - M) < percent * abs(M)) {
-	    mcs = myloop_end - cycles;
-	  }
+	if (abs(E_last - E) < percent * abs(E) and abs(M_last - M) < percent * abs(M)) {
+	  mcs_tmp = myloop_end - cycles;    
 	}
-	termalized += abs(E_last - E) < percent * abs(E) and abs(M_last - M) < percent * abs(M);
+	termalized = termalized or (abs(E_last - E) < percent * abs(E) and abs(M_last - M) < percent * abs(M));
 	E_last = E; M_last = M;
       }
 	  
@@ -142,8 +147,8 @@ int main(int argc, char* argv[])
 	ofile2 << E << " " << temperature << endl;
       }
     }
-    int mc_termalized = 0;
-    MPI_Reduce(&mcs, &mc_termalized, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    
+    MPI_Reduce(&mcs_tmp, &mc_termalized, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     // Find total average
     for( int i =0; i < 5; i++){
       MPI_Reduce(&average[i], &total_average[i], 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);

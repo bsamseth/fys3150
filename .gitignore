@@ -7,6 +7,7 @@ data/
 *.blg
 #*#
 *.aux
+*.toc
 *.log
 *.out
 *.prv

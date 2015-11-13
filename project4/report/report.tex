@@ -11,7 +11,7 @@
   \textsc{\Large }\\[0.5cm] % Major heading such as course name
   \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
   \HRule \\[0.4cm]
-  { \huge \bfseries En titt på Isingmodellen, og dens applikasjoner
+  { \huge \bfseries En titt på Isingmodellen og dens applikasjoner
   på termodynamiske størrelser}\\[0.4cm]
   \HRule \\[1.5cm]
   \Large \emph{Skrevet av:}\\
@@ -19,17 +19,20 @@
   {\large \today}\\[3cm]
   \vfill
 \end{titlepage}
-
 \twocolumn[
 \begin{@twocolumnfalse}
+\tableofcontents
 \begin{abstract}
-I denne rapporten skal vi se på Ising-modellen i to dimensjoner. Det vil si
-et rutenett av $n \times n $ partikler, der alle partiklene enten har
-spinn opp, $\uparrow$ eller spinn ned, $\downarrow$. Spesielt ser vi
-på de termodynamiske egenskapene til et slikt system, og hvordan disse
-oppfører seg rundt den kritiske temperaturen. Vi bruker
-Metropolis-algoritmen med 'periodic boundary conditions'. Alt materiale 
-som refereres er tilgjengelig på~\cite{github-repo}. 
+I denne rapporten har vi sett på Ising-modellen i to dimensjoner. Spesielt ser vi
+på de termodynamiske egenskapene til et system under denne modellen, og hvordan disse
+oppfører seg rundt den kritiske temperaturen. Vi bruker Metropolis-algoritmen med 
+'periodic boundary conditions' for å gjøre simuleringene. Vi har også
+sett på effekten av termalisering på forventningsverdiene som regnes
+ut. Til slutt estimerer vi den kritiske temperaturen i den
+termodynamiske grensen. Vi ender opp med et akseptabelt estimat, men
+ser at vi gjerne skulle hatt tid til å gjøre mer nøyaktige
+(tidkrevende) beregninger. Alt materiale som har blitt referert er tilgjengelig 
+på Github~\cite{github-repo}. 
 \end{abstract}
 \end{@twocolumnfalse}
 ]
@@ -37,23 +40,28 @@ som refereres er tilgjengelig på~\cite{github-repo}.
 
 \section{Innledning}
 \label{sec:innledning}
-Ising-modellen er et system av $n \times n$ partikler ordnet i et rutenett. 
+Ising-modellen har mange praktiske applikasjoner. Den ble utviklet som en
+beskrivelse av magnetisme i krystaller, men kan også anvendes på så vidt
+forskjellige ting som frysning og fordampning av væsker, folding av 
+protein-molekyler og oppførselen av 'glassy substances'~\cite{nature-ising}.
+
+Modellen består av et system av $L \times L$ partikler ordnet i et rutenett. 
 Hver partikkel kan være i én av to tilstander, enten spinn opp, $\uparrow$,
 eller spinn ned, $\downarrow$. Energien er gitt ved 
 
 \begin{equation}
   E=-J\sum_{<kl>}^{N}s_ks_l\label{eq:energi}
 \end{equation}
-der  $s_k=\pm 1$, $N$ er antall partikler.
+der  $s_k=\pm 1$, $N = L^2$ er antall partikler.
 $J$ er en konstant som beskriver styrken på interaksjonen mellom
 nabopartikler. Symbolet $<kl>$ betyr at vi summerer over bare de
-nærmeste naboene. Vi antar også  ferromagnetisme, dvs.  $J> 0$. Vi bruker også
+nærmeste naboene. Vi antar ferromagnetisme, dvs.  $J> 0$, og bruker også
 periodiske randbetingelser. Det betyr at partiklene langs randa 'ser' 
 partiklene langs motsatte rand. For eksempel 'ser' en partikkel i posisjon
-(N,N) i rutenettet, både partikkelen i posisjon (1,N) og (N,1), og interakterer
+(L,L) i rutenettet, både partikkelen i posisjon (1,L) og (L,1), og interakterer
 med disse som om de skulle vært naboer. Dette tilsvarer at vi har
 gitterstruktur, der systemet vi ser på gjentas videre i alle
-retninger. Vi bruker de termodynamiske størrelsene:
+retninger. Når vi har energien kan vi definere noen termodynamiske størrelser:
 
 \begin{align}
 Z &= \sum_i e^{-\beta E(i)} = \sum_E \Omega(E) e^{-\beta E}\label{eq:partisjons-funk} \\
@@ -76,20 +84,19 @@ i denne rapporten er tilgjengelig på Github~\cite{github-repo} under samme navn
 programmet er Metropolisalgoritmen, som i vårt tilfelle går som følger: 
 
 \begin{enumerate}
-\item Initialiser en starttilstand med energi $E_0$, dvs. bestemmer retningen på
-  alle spinn i systemet. Vi velger alle til å peke ned.
+\item Initialiser en vilkårlig starttilstand med energi $E_0$, dvs. 
+bestem retningen på alle spinn i systemet. 
 \item Velg en tilfeldig spinn og snu den.\label{steg2}
 \item Beregn endringen i energi, $\Delta E = E_1-E_0$, dette fører til.\label{steg3} 
 \item Dersom $\Delta E \leq 0$ godtar vi spinnendringen i håp om at vi
   er nærmere den minste mulige verdien av $E$. Gå til punkt (\ref{steg7}).
-\item Dersom $\Delta E > 0 $, beregn Boltzmannsannsynligheten $w =
-  e^{-\beta\Delta E}$. 
+\item Dersom $\Delta E > 0 $, beregn Boltzmann-sannsynligheten $w = e^{-\beta\Delta E}$. 
 \item Sammenlikn $w$ med et tilfeldig tall $0\leq r\leq 1$ \label{steg6}
 \begin{enumerate}
   \item Hvis $r\leq w$, godta spinnendringen
   \item ellers, behold den originale spinntilstanden.
 \end{enumerate}
-\item Oppdater relevante forventningsverdier og gjenta prosessen.\label{steg7}
+\item Oppdater relevante forventningsverdier og gjenta prosessen\label{steg7}
   $N^2$ ganger, der $N^2$ er antall spinn.\footnote{Egentlig bare $N^2-1$ ganger fordi vi nå har gjort en
   allerede.}
 \item Gjenta så steg (\ref{steg2})-(\ref{steg7}) mange ganger, der hver gjennomgang teller som
@@ -100,16 +107,17 @@ I steg (\ref{steg3}) beregner vi energiendringen. Når vi kun endrer på
 én spinn om gangen er det kun 5 mulige verdier for $\Delta E$ for en
 gitt verdi av $T$~\cite[s. 436]{Lecture-notes}. Derfor velger vi å
 regne ut disse på forhånd og heller slå opp riktig verdi ved
-behov. Dette gjør vi for å spare oss for mange gjentatte kall på en
-eksponensialfunksjon. Vi regner med alle de termodynamiske \ref{eq:partisjons-funk} - \ref{eq:susceptibilitet}
- i enhetsløse størrelser. Tar som inputparametre størrelsen på rutenettet, antall Monte Carlo-sykluser,
-inititiell temperatur, sluttemperatur, temperatursteg og en parameter som bestemmer om den initielle
-spinkonfigurasjonen er tilfeldig eller ordnet.
+behov. Dette gjør vi for å spare oss for mange gjentatte kall på \texttt{exp()}. Vi regner alle de termodynamiske størrelsene
+i ligning \eqref{eq:partisjons-funk} - \eqref{eq:susceptibilitet} enhetsløst. 
+ Som inputparametre tar vi størrelsen på rutenettet, antall Monte Carlo-sykluser,
+initiell temperatur, sluttemperatur, temperatursteg og en parameter som bestemmer om den initielle
+spinkonfigurasjonen er tilfeldig eller ordnet med alle spinn pekende ned. Koden er parallellisert med Open MPI. \footnote{Vi har konsekvent kjørt med fire
+prosesser. Hver prosess kjører en uavhengig Ising-modell, med en fjerdedel av det totale antall Monte Carlo-sykluser. }
 
 \subsection{Test med $2 \times 2$-tilfellet}
 For å få en intuisjon om hvordan et slikt system fungerer ser vi først på 
-$2 \times 2$-tilfellet. Vi sammenligner programmet vårt med den 
-eksakte løsningen i dette tilfellet. Vi ser for oss et rutenett av spinn
+$2 \times 2$-tilfellet. Her kan vi finne en eksakt løsning, og det er en god test
+av programmet vårt å sammenligne med denne. Vi ser for oss et rutenett av spinn
 \begin{align*}
 s_1 & s_2 \\
 s_3 & s_4  
@@ -142,7 +150,6 @@ Gjør tilsvarende for alle mulige spinn-konfigurasjoner får vi tabell \ref{tab:
   spinn-konfigurasjonene til et $2\times 2$-rutenett av spinn.}
 \label{tab:spinn-energi-deg}
 \vspace{0.5cm}
-% BEGIN RECEIVE ORGTBL spinnEnergi
 \begin{tabular}{cccc}
 Antall spinn opp & Degenerasjon & Energi & Magnetisering \\
 \hline
@@ -154,19 +161,6 @@ Antall spinn opp & Degenerasjon & Energi & Magnetisering \\
 0 & 1 & -8J & -4 \\
 \hline
 \end{tabular}
-% END RECEIVE ORGTBL spinnEnergi
-\begin{comment}
-#+ORGTBL: SEND spinnEnergi orgtbl-to-latex :splice nil :skip 0
-| Antall spinn opp | Degenerasjon | Energi | Magnetisering |
-|------------------+--------------+--------+---------------|
-|                4 |            1 | -8J    |             4 |
-|                3 |            4 | 0      |             2 |
-|                2 |            4 | 0      |             0 |
-|                2 |            2 | 8J     |             0 |
-|                1 |            4 | 0      |            -2 |
-|                0 |            1 | -8J    |            -4 |
-|------------------+--------------+--------+---------------|
-\end{comment}
 \end{table*}
 
 Vi ser av tabell \ref{tab:spinn-energi-deg} at energien kan ha tre
@@ -226,7 +220,7 @@ på $T=1$.\footnote{Gjennom hele rapporten har vi gjort alle
 numeriske resultater. Etter litt testing kom vi frem til at ca. $10^6$
 Monte Carlo-sykluser gir god overensstemmelse (dette gjelder for å få
 bra verdier for \textit{alle} størrelser. F.eks. energien ser ut til å bli bra
-raskere enn si $C_V$).
+raskere enn f.eks. $C_V$).
 
 
 \begin{table*}
@@ -254,23 +248,22 @@ verdiene som oppsto gjennom Monte Carlo-simuleringen. Det er da
 åpenbart at bidragene fra de første tilstandene vil være avhengig av
 den initielle konfigurasjonen vi starter systemet i. Ideelt ønsker vi
 kun å finne forventningsverdiene når systemet er i likevekt. Vi burde
-derfor bruke et antall sykluser på å nå likevekt \textit{før} vi
-begynner å samle inn data til forventningsverdiene. Spørsmålet blir da
-hvor mange sykluser vi skal bruke.
+derfor bruke noen sykluser på å nå likevekt \textit{før} vi
+begynner å samle inn data til forventningsverdiene. 
 
 Som et første estimat på et passende antall sykluser begynner vi med å
 plotte utviklingen av de ulike forventningsverdiene som funksjon av
 antallet Monte Carlo-sykluser som blir brukt. Vi velger å se på
 tilfellet med et $20\times 20$ system. 
 
-For lave temperaturer ($T = 1$) ser vi at det ordnede systemet
+For lave temperaturer ($T = 1$) ser vi fra figur \ref{fig:configurations} at det ordnede systemet
 begynner stabilt, som vil si i at det begynner i grunntilstanden,
 tilstanden med lavest energi. For lave temperaturer er det lite energi
 i systemet, og grunntilstanden er mest sannsynlig. Det uordnede 
 systemet bruker litt tid på å stabilisere seg, men vi ser fra
-figur \ref{fig:configurations} at også her går antall konfigurasjoner mot 0
+figur \ref{fig:configurations} at også her går antall konfigurasjoner mot null
 etter omtrent $3 \cdot 10^4$ sykluser. Det vil si at $w$ alltid er
-større $0\leq r\leq 1$ i steg \label{steg6} i Metropolis-algoritmen,
+større $0\leq r\leq 1$ i steg \ref{steg6} i Metropolis-algoritmen,
 og ingen spin-endringer blir gjort. Også systemet med høyere
 temperatur ($T=2.4$) bruker cirka $3 \cdot 10^4$ sykluser på å
 stabilisere seg.
@@ -312,7 +305,7 @@ normalisert mot antall Monte Carlo-sykluser. Øverst er det ordnete tilfellet, n
 \subsubsection{Implementering av termalisering}
 \label{subsec:implementering-av-termalisering}
 Fra disse resultatene estimerer vi altså at vi burde starte
-datasamlingen først etter ca. $3\e{4}$ sykluser. Et alternativ bruke
+datasamlingen først etter ca. $3\e{4}$ sykluser. Et alternativ ville vært å bruke
 dette som en gitt grense i programmet. Vi skal derimot forsøke en litt
 mer robust metode:
 
@@ -320,31 +313,31 @@ Vi kan sammenlikne energien (og/eller andre størrelser vi beregner)
 fra et tidligere punkt i simuleringen med en ny verdi si 1000 sykluser
 etterpå. Dersom systemet ikke har nådd likevekt vil vi forvente å se
 en betydelig endring av verdien, men dersom systemet har blitt
-termalisert burde vi ikke se store svingninger. Vi kan dermed se at
-hvis verdiene ikke har endret seg mer en en gitt prosentandel på et
-gitt antall sykluser så antar vi at systemet er termalisert og vi kan
-begynne å samle data.
+termalisert burde vi ikke se store svingninger. Derfor hvis verdiene ikke har endret
+seg mer enn en gitt prosentandel på et visst antall sykluser så antar vi at
+systemet er termalisert og vi kan begynne å samle data. Dette gjør vi
+kun for den første temperaturen. For de resterende temperaturene lagrer
+vi spinkonfigurasjonen fra det foregående temperatursteget og antar at hvis
+modellen var termalisert for $T$, vil samme spinkonfigurasjon være tilnærmet
+termalisert for $T+ \Delta T$.
 
-Denne metoden er dessverre ikke uten svakheter. Først og fremst blir
+Denne metoden er dessverre ikke idiotsikker. Først og fremst blir
 det opp til oss å finne en passende grense for prosentandelen vi
 tillater at endres. Dette er ikke så lett å gjøre generelt, ettersom
 ulike temperaturer og startkonfigurasjoner vil bruke ulik tid på å nå
-likevekt. Og selv om vi finner en ideell verdi for denne kan det hende
+likevekt. Selv om vi finner en ideell verdi for denne kan det også hende
 at vi bare ved en tilfeldighet ender med nye verdier som er veldig
 like de vi hadde tidligere, selv om systemet ikke har nådd den mest
-sannsynlige tilstanden. Dette er likevel ikke altfor sannsynlig, så vi
+sannsynlige tilstanden. Dette er likevel svært usannsynlig, så vi
 ``krysser fingrene'' og håper på det beste.
 
 Ved litt testing fant vi at en grense som så ut til å fungere for alle relevante
-temperatur var ca. $10\%$. Vi regner altså system som termalisert
-dersom det ikke endrer seg mer enn denne verdien i forhold til et
-tidligere tidspunkt.\footnote{Programmet som inneholder termaliserings
-implementasjonen heter \texttt{MPIisingImproved.cpp} og er
+temperaturer var ca. $5\%$. Vi regner altså systemet som termalisert når
+energien og magnetiseringen ikke endrer seg mer enn $5 \%$ på 1000 sykluser.\footnote{Programmet som inneholder termaliserings-implementasjonen heter \texttt{MPIisingImproved.cpp} og er
 tilgjengelig på Github~\cite{github-repo}}
 
-Det kan nevnes at dette kan gjøres mye mer robust ved å bruke
-autokorrelasjonsfunksjonen, men vi har ikke brukt dette i denne
-rapporten av hensyn til tid.
+En enda mer robust metode ville f.eks. vært å bruke autokorrelasjonsfunksjonen,
+men vi har valgt å ikke prioritere dette i denne omgang.
 
 \subsubsection{Forbedringer med termalisering}
 Som en test av denne implementasjonen har vi på nytt regnet ut
@@ -380,29 +373,50 @@ Fra tabellen ser vi at vi har jevnt over en forbedring på ca. $20\%$ i
 den relative feilen. Vi kunne trolig forbedret dette ytterligere ved å
 finne en annen prosentgrense (fra seksjon
 \ref{subsec:implementering-av-termalisering}), men vi begrenser oss
-til å bruke en og samme verdi for alle temperaturer/verdier av
-$L$/antall Monte Carlo-sykluser. 
+til å bruke en og samme verdi for alle temperaturer, verdier av
+$L$ og/eller antall Monte Carlo-sykluser. 
 
 \section{Sannsynlighetsfordeling}
-Med programmet mer eller mindre ferdigkodet og -testet kan vi begynne
+Med programmet mer eller mindre ferdigkodet og testet kan vi begynne
 å se mer på egenskapene ved modellen. Det er interessant å se hvilke
-tilstander modellen er i for forskjellige temperaturer, og hvor ofte disse
-forekommer. I figur \ref{fig:probabilities} ser vi et histogram av tilstandene
-for $n=20$ ved temperaturene $T=1$ og $T=2.4$. Vi ser at ved lav temperatur
-skjer det relativt lite i systemet, og vi har få hopp. Dette er tilsvarende
+energier som forekommer for forskjellige temperaturer, og hvor mange ganger dette skjer.
+I figur \ref{fig:probabilities} ser vi et histogram av tilstandene
+for $L=20$ ved temperaturene $T=1$, $T=1.7$ og $T=2.4$. Vi ser at ved lav temperatur
+skjer det relativt lite i systemet, og vi har få tilstandsendringer. 
+Dette er tilsvarende
 det vi så i figur \ref{fig:configurations}. Ved høyere temperatur ser vi derimot
 at vi har mange tilgjengelige tilstander for systemet, og 
-sannsynlighetsfordelingen ser veldig ut som en gaussisk sannsynlighetsfordeling.
+sannsynlighetsfordelingen ser veldig ut som en Boltzmann-fordeling.
 
+Programmet som lager histogrammet, \texttt{probabilities.py}, skriver
+også ut varmekapasiteten ved hjelp av variansen til datasettet. Vi kan
+sammenlikne disse verdiene med forventningsverdien som blir
+beregnet. Tabell \ref{tab:var-vs-Cv} viser dette. Vi ser (slik vi
+burde) at disse to beregningene gir lignende svar. 
 
+\begin{table*}
+\centering
+\caption{Tabellen viser varmekapasiteten beregnet fra variansen i
+  histogrammet i figur \ref{fig:probabilities} og verdien som beregnes
+av \texttt{MPIisingimproved.cpp}.}
+\label{tab:var-vs-Cv}
+\vspace{0.1cm}
+\begin{tabular}{c|cc}
+hei &\texttt{MPIisingimproved.cpp} & Varians i histogram\\
+\hline
+$T=1.0$ & 0.01033735  & 0.023351\\
+$T=1.7$ & 0.34147839  & 0.348439 \\
+$T=2.4$ & 1.4264178 & 1.40566
+\end{tabular}
+\end{table*}
 
 \begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/prob_E.png}
-  \caption{Et histogram av tilstandene for $n=20$ ved to 
+  \caption{Et histogram av tilstandene for $L=20$ ved tre
 forskjellige temperaturer. Vi ser at ved lav temperatur
 skjer det relativt lite i systemet, og vi har få tilstands-hopp. Ved høyere temperatur ser vi derimot at vi har mange tilgjengelige tilstander for systemet, og 
-sannsynlighetsfordelingen ser veldig ut som en gaussisk sannsynlighetsfordeling.}
+sannsynlighetsfordelingen ser veldig ut som en Boltzmann-fordeling.}
 \label{fig:probabilities}
 \end{figure*}
 
@@ -478,12 +492,18 @@ figuren).
 
 \begin{figure*}[ht]
   \centering
-  \includegraphics[scale=0.5]{../fig/critical.png}
+  \includegraphics[scale=0.7]{../fig/critical.png}
   \caption{\label{fig:critical-plot} Forventningsverdier som funksjon
     av temperatur. Vi observerer en faseovergang rundt en kritisk
     temperatur, og merker oss at toppene til $C_V(T)$ og
-    $\chi_\text{abs}(T)$ blir stadig høyere for større verdier av $L$.}
+    $\chi_\text{abs}(T)$ blir stadig høyere for større verdier av
+    $L$. Selv om det ikke er veldig tydelig ser vi også antydning til
+    vendepunkter ved kritisk temperatur for $\mean{E}$ og
+    $\mean{|\mathcal{M}|}$. Vi kan også merke oss at oppløsningen i
+    $T$ burde vært større dersom vi hadde ønsket et bedre estimat for
+    $T_C(L=\infty)$.}
 \end{figure*}
+
 Figuren minner oss om at $C_V \propto \pd{E}{T}$ og $\chi_\text{abs}
 \propto \pd{\abs{M}}{T}$ ettersom vi har maksima for disse størrelsene
 der vendepunktene er. Vi vet videre at $\mathcal{M}$ skal gå i
@@ -502,7 +522,32 @@ har kjørt for siden disse har tydeligst maksima) kan vi bruke likning
 \eqref{eq:Tc-inf-scale-expression} og finne et estimat for den
 kritiske temperaturen i den termodynamiske grensen. Programmet
 \texttt{critical.py} automatiserer denne beregningen og gir oss
-resultatet. Følgende kall på programmet gir utskriften:
+resultatet. Med parametere som vist i figur \ref{fig:critical-plot}
+får vi et estimat
+\begin{align}
+  T_C(L=\infty)_\text{approx} = 2.28
+\end{align}
+
+Vi kan sammenlikne resultatet med Lars Onsagers analytiske resultat~\cite{oppgavetekst-prosjekt-4},
+\begin{align}
+\begin{split}
+  kT_C(L=\infty)/J &= \frac{ 2 }{ \ln \left( 1+\sqrt{2} \right) }\\
+  &\approx 2.269
+\end{split}
+\end{align}
+
+Vi ser at vår tilnærming ikke er helt på mål, men likevel ikke veldig
+langt unna heller. Vi må bemerke at resultatene våre hadde hatt godt
+av en større oppløsning i $T$, og det kan godt hende at vi hadde
+oppnådd et mye mer presist resultat dersom vi hadde tid til å kjøre en
+større simulering. Vi hadde dessverre en programmeringsfeil som ikke
+ble oppdaget før samme dag som innleveringsfristen. Dette gjorde at
+alle tidligere datasett måtte regnes ut på nytt, og vi hadde dermed
+ikke mulighet til å la en maskin stå over natten (slik vi hadde gjort i
+forkant av oppdagelsen av feilen). 
+
+\section{Konklusjon}
+
 
 \clearpage
 \onecolumn

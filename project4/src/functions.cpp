@@ -49,6 +49,26 @@ void initialize(int n_spins, int **spin_matrix,
   }
 }// end function initialise
 
+
+void initialize_keepconfig(int n_spins, int **spin_matrix, 
+		double& E, double& M)
+{
+  E = M = 0;
+  // setup initial energy
+  for(int y =0; y < n_spins; y++) {
+    for (int x= 0; x < n_spins; x++){
+      E -=  (double) spin_matrix[y][x]*
+	(spin_matrix[periodic(y,n_spins,-1)][x] +
+	 spin_matrix[y][periodic(x,n_spins,-1)]);
+      M +=  (double) spin_matrix[y][x];
+    }
+  }
+}// end function initialise
+
+
+
+
+
 void Metropolis(int n_spins, long& idum, int **spin_matrix, double& E, double&M, double *w, int* num_configurations)
 {
   // loop over all spins
