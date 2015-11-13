@@ -428,6 +428,7 @@ sannsynlighetsfordelingen ser veldig ut som en Boltzmann-fordeling.}
 
 
 \subsection{Beregning av kritisk temperatur}
+\label{subsec:krit-temp}
 En sentral størrelse for dette systemet er den kritiske temperaturen
 $T_C$. Rundt denne temperaturen kan vi beskrive mange fysiske
 størrelser ved hjelp av potenslover. Eksempelvis er
@@ -552,7 +553,31 @@ ikke mulighet til å la en maskin stå over natten (slik vi hadde gjort i
 forkant av oppdagelsen av feilen). 
 
 \section{Konklusjon}
+Vi har fått en grundig innføring i Isingmodellen, hvordan den er
+bygget opp og hvordan den kan brukes til å simulere et system med
+gitterstruktur. I prosessen har vi fått muligheten til å bruke
+Metropolisalgoritmen og få en intuitiv forståelse av logikken bak
+denne. 
 
+På den tekniske siden av ting har vi fått et innblikk i hvordan vi kan
+bruke Open MPI til å parallellisere koden vår. Det tok litt tid å få
+forståelsen for dette under huden, men gjennom å bruke mye tid på å
+videreutvikle (og ikke minst feilsøke) programmet føler vi oss mye mer
+komfortable med logikken i å skrive et parallellisert program. Vi har
+også fått erfare (igjen) viktigheten av grundig testing, da vi på tross av
+testingen som er omtalt her fant logikkfeil som ugyldiggjorde alle
+tidligere beregninger. Sistnevnte førte dessverre til at vi ikke fikk
+tid til å kjøre programmene med den presisjonen vi hadde likt (særlig
+i forbindelse med seksjon \ref{subsec:krit-temp}). Likevel har vi fått
+gode nok resultater til å se fysikken bak modellen, og dermed fått en
+forståelse for effektene som oppstår. 
+
+Det kan også nevnes at med mer tid skulle vi likt å visualisere
+spinnkonfigurasjonen gjennom et tidsforløp. Dette kunne vært gjort ved
+å tegne firkanter i et rutenett med en farge for $\uparrow$ og en for
+$\downarrow$. Når vi ser tilbake på prosjektet er dette noe vi trolig
+burde ha tatt oss bryet med å utvikle da det kunne vært svært nyttig
+ved testing av programmet (i tillegg til interessant å se på). 
 
 \clearpage
 \onecolumn
