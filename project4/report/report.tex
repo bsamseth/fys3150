@@ -256,7 +256,7 @@ i systemet, og grunntilstanden er mest sannsynlig. Det uordnede
 systemet bruker litt tid på å stabilisere seg, men vi ser fra
 figur \ref{fig:configurations} at også her går antall konfigurasjoner mot 0
 etter omtrent $3 \cdot 10^4$ sykluser. Det vil si at $w$ alltid er
-større $0\leq r\leq 1$ i steg \label{steg6} i Metropolis-algoritmen,
+større $0\leq r\leq 1$ i steg \ref{steg6} i Metropolis-algoritmen,
 og ingen spin-endringer blir gjort. Også systemet med høyere
 temperatur ($T=2.4$) bruker cirka $3 \cdot 10^4$ sykluser på å
 stabilisere seg.
@@ -326,9 +326,8 @@ sannsynlige tilstanden. Dette er likevel svært usannsynlig, så vi
 
 Ved litt testing fant vi at en grense som så ut til å fungere for alle relevante
 temperatur var ca. $5\%$. Vi regner altså system som termalisert
-dersom energien og magnetiseringen ikke endrer seg mer enn $5\%$ på $1000$ Monte Carlo-
-sykluser.\footnote{Programmet som inneholder termaliserings
-implementasjonen heter \texttt{MPIisingImproved.cpp} og er
+dersom det ikke endrer seg mer enn denne verdien i forhold til et
+tidligere tidspunkt.\footnote{Programmet som inneholder termaliserings-implementasjonen heter \texttt{MPIisingImproved.cpp} og er
 tilgjengelig på Github~\cite{github-repo}}
 
 En enda mer robust metode ville f.eks. vært å bruke autokorrelasjonsfunksjonen,
@@ -382,7 +381,27 @@ det vi så i figur \ref{fig:configurations}. Ved høyere temperatur ser vi derim
 at vi har mange tilgjengelige tilstander for systemet, og 
 sannsynlighetsfordelingen ser veldig ut som en gaussisk sannsynlighetsfordeling.
 
+Programmet som lager histogrammet, \texttt{probabilities.py}, skriver
+også ut varmekapasiteten ved hjelp av variansen til datasettet. Vi kan
+sammenlikne disse verdiene med forventningsverdien som blir
+beregnet. Tabell \ref{tab:var-vs-Cv} viser dette. Vi ser (slik vi
+burde) at disse to beregningene gir lignende svar. 
 
+\begin{table}
+\centering
+\caption{Tabellen viser varmekapasiteten beregnet fra variansen i
+  histogrammet i figur \ref{fig:probabilities} og verdien som beregnes
+av \texttt{MPIisingimproved.cpp}.}
+\label{tab:var-vs-Cv}
+\vspace{0.1cm}
+\begin{tabular}{c|cc}
+hei &\texttt{MPIisingimproved.cpp} & Varians i histogram\\
+\hline
+$T=1.0$ & 0.01033735  & 0.023351\\
+$T=1.7$ & 0.34147839  & 0.348439 \\
+$T=2.4$ & 1.4264178 & 1.40566
+\end{tabular}
+\end{table}
 
 \begin{figure}[ht]
   \centering
