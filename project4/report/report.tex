@@ -21,14 +21,16 @@
 \end{titlepage}
 \tableofcontents
 \begin{abstract}
-I denne rapporten skal vi se på Ising-modellen i to dimensjoner. Det vil si
-et rutenett av $n \times n $ partikler, der alle partiklene enten har
-spinn opp, $\uparrow$ eller spinn ned, $\downarrow$. Spesielt ser vi
-på de termodynamiske egenskapene til et slikt system, og hvordan disse
-oppfører seg rundt den kritiske temperaturen. Til slutt estimerer vi 
-den kritiske temperaturen for systemet. Vi bruker Metropolis-algoritmen med 
-'periodic boundary conditions'. Alt materiale som refereres er tilgjengelig 
-på~\cite{github-repo}. 
+I denne rapporten har vi sett på Ising-modellen i to dimensjoner. Spesielt ser vi
+på de termodynamiske egenskapene til et system under denne modellen, og hvordan disse
+oppfører seg rundt den kritiske temperaturen. Vi bruker Metropolis-algoritmen med 
+'periodic boundary conditions' for å gjøre simuleringene. Vi har også
+sett på effekten av termalisering på forventningsverdiene som regnes
+ut. Til slutt estimerer vi den kritiske temperaturen i den
+termodynamiske grensen. Vi ender opp med et akseptabelt estimat, men
+ser at vi gjerne skulle hatt tid til å gjøre mer nøyaktige
+(tidkrevende) beregninger. Alt materiale som har blitt referert er tilgjengelig 
+på Github~\cite{github-repo}. 
 \end{abstract}
 
 \section{Innledning}
@@ -487,8 +489,13 @@ figuren).
   \caption{\label{fig:critical-plot} Forventningsverdier som funksjon
     av temperatur. Vi observerer en faseovergang rundt en kritisk
     temperatur, og merker oss at toppene til $C_V(T)$ og
-    $\chi_\text{abs}(T)$ blir stadig høyere for større verdier av $L$.}
+    $\chi_\text{abs}(T)$ blir stadig høyere for større verdier av
+    $L$. Selv om det ikke er veldig tydelig ser vi også antydning til
+    vendepunkter ved kritisk temperatur for $\mean{E}$ og
+    $\mean{|\mathcal{M}|}$. Vi kan også merke oss at oppløsningen i
+    $T$ burde vært større dersom vi hadde ønsket et bedre estimat for $T_C(L=\infty)$.}
 \end{figure}
+
 Figuren minner oss om at $C_V \propto \pd{E}{T}$ og $\chi_\text{abs}
 \propto \pd{\abs{M}}{T}$ ettersom vi har maksima for disse størrelsene
 der vendepunktene er. Vi vet videre at $\mathcal{M}$ skal gå i
@@ -507,7 +514,29 @@ har kjørt for siden disse har tydeligst maksima) kan vi bruke likning
 \eqref{eq:Tc-inf-scale-expression} og finne et estimat for den
 kritiske temperaturen i den termodynamiske grensen. Programmet
 \texttt{critical.py} automatiserer denne beregningen og gir oss
-resultatet. Følgende kall på programmet gir utskriften:
+resultatet. Listing \ref{lst:critical-output} viser parameterene brukt
+og utskriften fra \texttt{critical.py}. 
+
+\begin{itemize}
+\item [] \lstinputlisting[label=lst:critical-output, caption=Kall og
+  utskrift fra \texttt{critical.py}]{../src/data/critical_output.txt}
+\end{itemize}
+
+Vi kan sammenlikne resultatet med Lars Onsagers analytiske resultat~\cite{oppgavetekst-prosjekt-4},
+\begin{align}
+  kT_C(L=\infty)/J = \frac{ 2 }{ \ln \left( 1+\sqrt{2} \right) }
+  \approx 2.269
+\end{align}
+
+Vi ser at vår tilnærming ikke er helt på mål, men likevel ikke veldig
+langt unna heller. Vi må bemerke at resultatene våre hadde hatt godt
+av en større oppløsning i $T$, og det kan godt hende at vi hadde
+oppnådd et mye mer presist resultat dersom vi hadde tid til å kjøre en
+større simulering. Vi hadde dessverre en programmeringsfeil som ikke
+ble oppdaget før samme dag som innleveringsfristen. Dette gjorde at
+alle tidligere datasett måtte regnes ut på nytt, og vi hadde dermed
+ikke mulighet til å la en maskin stå over natten (slik vi hadde gjort i
+forkant av oppdagelsen av feilen). 
 
 \section{Konklusjon}
 

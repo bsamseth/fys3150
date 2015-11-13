@@ -58,11 +58,15 @@ print 'Complete. Total time spent: %5.3f' % (t1-t0)
 
 index1 = argmax(chi[-1,:])
 index2 = argmax(chi[-2,:])
-
 a = (T_array[index1] - T_array[index2]) / float(1./L[-1] - 1./L[-2])
 T_crit = T_array[index1] - a / L[-1]
-print "Critical temperature Tc = %g" % T_crit
+print "Critical temperature (using chi) Tc = %g" % T_crit
 
+index1 = argmax(Cv[-1,:])
+index2 = argmax(Cv[-2,:])
+a = (T_array[index1] - T_array[index2]) / float(1./L[-1] - 1./L[-2])
+T_crit = T_array[index1] - a / L[-1]
+print "Critical temperature (using Cv) Tc = %g" % T_crit
 
 
 # make plots
