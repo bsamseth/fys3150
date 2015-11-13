@@ -46,6 +46,8 @@ Ising-modellen har mange praktiske applikasjoner. Den ble utviklet som en
 beskrivelse av magnetisme i krystaller, men kan også anvendes på så vidt
 forskjellige ting som frysning og fordampning av væsker, folding av 
 protein-molekyler og oppførselen av 'glassy substances'~\cite{nature-ising}.
+I denne rapporten skal vi i hovedsak se på dens generelle termodynamiske
+egenskaper.
 
 Modellen består av et system av $L \times L$ partikler ordnet i et rutenett. 
 Hver partikkel kan være i én av to tilstander, enten spinn opp, $\uparrow$,
@@ -114,7 +116,7 @@ i ligning \eqref{eq:partisjons-funk} - \eqref{eq:susceptibilitet} enhetsløst.
  Som inputparametre tar vi størrelsen på rutenettet, antall Monte Carlo-sykluser,
 initiell temperatur, sluttemperatur, temperatursteg og en parameter som bestemmer om den initielle
 spinkonfigurasjonen er tilfeldig eller ordnet med alle spinn pekende ned. Koden er parallellisert med Open MPI. \footnote{Vi har konsekvent kjørt med fire
-prosesser. Hver prosess kjører en uavhengig Ising-modell, med en fjerdedel av det totale antall Monte Carlo-sykluser. }
+prosesser. Hver prosess kjører en uavhengig Ising-modell, med en fjerdedel av det totale antall Monte Carlo-sykluser.}
 
 \subsection{Test med $2 \times 2$-tilfellet}
 For å få en intuisjon om hvordan et slikt system fungerer ser vi først på 
@@ -133,7 +135,7 @@ E &= -J ( s_1s_2 + s_1s_3 + s_2s_1 + s_2s_4 \\
 &= - J  ( 2s_1s_2 + 2s_1s_3 + 2s_2s_1 + 2s_2s_4 ) 
 \end{align*}
 
-Bruker vi spinn-konfigurasjonen
+Bruker vi spinn-konfigurasjonen f.eks.
 \begin{align*}
 \uparrow & \uparrow \\
 \uparrow & \uparrow
@@ -173,7 +175,8 @@ oppgitt i tabellen):
   Z &= \sum_E \Omega(E)e^{-\beta E}\\ &= 2e^{-\beta \cdot 8J} + 2e^{\beta
   \cdot 8J} + 12\label{eq:partisjons-funk-2x2}
 \end{align}
-Med partisjonsfunksjonen i boks kan vi finne alle forventningsverdier.
+Med partisjonsfunksjonen i boks kan vi finne alle de termodynamiske
+størrelsene \eqref{eq:spesifikk-varmekapasitet} - \eqref{eq:susceptibilitet}
 
 \begin{align}
 \begin{split}
@@ -512,8 +515,8 @@ figuren).
 
 Figuren minner oss om at $C_V \propto \pd{E}{T}$ og $\chi_\text{abs}
 \propto \pd{\abs{M}}{T}$ ettersom vi har maksima for disse størrelsene
-der vendepunktene er. Vi vet videre at $\mathcal{M}$ skal gå i
-en sirkel fra $\mathcal{M}(T=0)=1$ til $\mathcal{M}(T\geq T_C)=0$ i
+der vendepunktene er. Vi vet videre at $\mathcal{M}$ skal følge en
+ sirkelbane fra $\mathcal{M}(T=0)=1$ til $\mathcal{M}(T\geq T_C)=0$ i
 grensen $L\rightarrow\infty$~\cite{ising-model-texas-uni}. Desto
 større $L$, desto fortere vil verdien synke mot null ved den kritiske
 temperaturen. Vi ser antydning til denne tendensen, men er langt fra
