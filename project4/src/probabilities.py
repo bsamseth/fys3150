@@ -72,7 +72,7 @@ fig, ax = plt.subplots(T_N, sharex=False, sharey=False)
 for i in range(T_N):
     n, bins, patches = ax[i].hist(E[i],
                                   bins=range(int(min(E[i])), int(max(E[i]))+1),
-                                  rwidth=1, normed=0, label=r"$T=%g$" % T[i])
+                                  rwidth=1, normed=1, label=r"$T=%g$" % T[i])
     plt.setp(patches, 'facecolor', 'g', 'alpha', 0.75)
     ax[i].legend()
     ax[i].set_ylabel(r"$\mathcal{P}(E)$")
