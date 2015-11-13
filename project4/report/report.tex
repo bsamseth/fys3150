@@ -54,7 +54,7 @@ partiklene langs motsatte rand. For eksempel 'ser' en partikkel i posisjon
 (L,L) i rutenettet, både partikkelen i posisjon (1,L) og (L,1), og interakterer
 med disse som om de skulle vært naboer. Dette tilsvarer at vi har
 gitterstruktur, der systemet vi ser på gjentas videre i alle
-retninger. Vi bruker de termodynamiske størrelsene:
+retninger. Når vi har energien kan vi definere noen termodynamiske størrelser:
 
 \begin{align}
 Z &= \sum_i e^{-\beta E(i)} = \sum_E \Omega(E) e^{-\beta E}\label{eq:partisjons-funk} \\
@@ -73,23 +73,23 @@ størrelser på rutenettet og for mange forskjellige temperaturer.
 
 Vi har tatt utgangspunkt i eksempelprogrammet \texttt{MPIising.cpp}
 som finnes kursets Github-side~\cite{compphys-github}. Versjonen brukt
-i denne rapporten er tilgjengelig på Github~\cite{github-repo} under navnet \texttt{MPIisingImproved.cpp}. Kjernen av
+i denne rapporten er tilgjengelig på Github~\cite{github-repo} under samme navn. Kjernen av
 programmet er Metropolisalgoritmen, som i vårt tilfelle går som følger: 
 
 \begin{enumerate}
-\item Initialiser en starttilstand med energi $E_0$, dvs. bestemmer retningen på
-  alle spinn i systemet. Vi velger alle til å peke ned.
+\item Initialiser en vilkårlig starttilstand med energi $E_0$, dvs. 
+bestem retningen på alle spinn i systemet. 
 \item Velg en tilfeldig spinn og snu den.\label{steg2}
 \item Beregn endringen i energi, $\Delta E = E_1-E_0$, dette fører til.\label{steg3} 
 \item Dersom $\Delta E \leq 0$ godtar vi spinnendringen i håp om at vi
   er nærmere den minste mulige verdien av $E$. Gå til punkt (\ref{steg7}).
-\item Dersom $\Delta E > 0 $, beregn Boltzmannsannsynligheten $w = e^{-\beta\Delta E}$. 
+\item Dersom $\Delta E > 0 $, beregn Boltzmann-sannsynligheten $w = e^{-\beta\Delta E}$. 
 \item Sammenlikn $w$ med et tilfeldig tall $0\leq r\leq 1$ \label{steg6}
 \begin{enumerate}
   \item Hvis $r\leq w$, godta spinnendringen
   \item ellers, behold den originale spinntilstanden.
 \end{enumerate}
-\item Oppdater relevante forventningsverdier og gjenta prosessen.\label{steg7}
+\item Oppdater relevante forventningsverdier og gjenta prosessen\label{steg7}
   $N^2$ ganger, der $N^2$ er antall spinn.\footnote{Egentlig bare $N^2-1$ ganger fordi vi nå har gjort en
   allerede.}
 \item Gjenta så steg (\ref{steg2})-(\ref{steg7}) mange ganger, der hver gjennomgang teller som
@@ -104,7 +104,7 @@ behov. Dette gjør vi for å spare oss for mange gjentatte kall på \texttt{exp(
 i ligning \eqref{eq:partisjons-funk} - \eqref{eq:susceptibilitet} enhetsløst. 
  Som inputparametre tar vi størrelsen på rutenettet, antall Monte Carlo-sykluser,
 initiell temperatur, sluttemperatur, temperatursteg og en parameter som bestemmer om den initielle
-spinkonfigurasjonen er tilfeldig eller ordnet. Koden er parallellisert med Open MPI \footnote{Vi har konsekvent kjørt med fire
+spinkonfigurasjonen er tilfeldig eller ordnet med alle spinn pekende ned. Koden er parallellisert med Open MPI. \footnote{Vi har konsekvent kjørt med fire
 prosesser. Hver prosess kjører en uavhengig Ising-modell, med en fjerdedel av det totale antall Monte Carlo-sykluser. }
 
 \subsection{Test med $2 \times 2$-tilfellet}
@@ -249,12 +249,12 @@ plotte utviklingen av de ulike forventningsverdiene som funksjon av
 antallet Monte Carlo-sykluser som blir brukt. Vi velger å se på
 tilfellet med et $20\times 20$ system. 
 
-For lave temperaturer ($T = 1$) ser vi fra \ref{fig:configurations} at det ordnede systemet
+For lave temperaturer ($T = 1$) ser vi fra figur \ref{fig:configurations} at det ordnede systemet
 begynner stabilt, som vil si i at det begynner i grunntilstanden,
 tilstanden med lavest energi. For lave temperaturer er det lite energi
 i systemet, og grunntilstanden er mest sannsynlig. Det uordnede 
 systemet bruker litt tid på å stabilisere seg, men vi ser fra
-figur \ref{fig:configurations} at også her går antall konfigurasjoner mot 0
+figur \ref{fig:configurations} at også her går antall konfigurasjoner mot null
 etter omtrent $3 \cdot 10^4$ sykluser. Det vil si at $w$ alltid er
 større $0\leq r\leq 1$ i steg \ref{steg6} i Metropolis-algoritmen,
 og ingen spin-endringer blir gjort. Også systemet med høyere
@@ -312,7 +312,7 @@ systemet er termalisert og vi kan begynne å samle data. Dette gjør vi
 kun for den første temperaturen. For de resterende temperaturene lagrer
 vi spinkonfigurasjonen fra det foregående temperatursteget og antar at hvis
 modellen var termalisert for $T$, vil samme spinkonfigurasjon være tilnærmet
-termalisert for $T+dT$.
+termalisert for $T+ \Delta T$.
 
 Denne metoden er dessverre ikke idiotsikker. Først og fremst blir
 det opp til oss å finne en passende grense for prosentandelen vi
@@ -325,9 +325,8 @@ sannsynlige tilstanden. Dette er likevel svært usannsynlig, så vi
 ``krysser fingrene'' og håper på det beste.
 
 Ved litt testing fant vi at en grense som så ut til å fungere for alle relevante
-temperatur var ca. $5\%$. Vi regner altså system som termalisert
-dersom det ikke endrer seg mer enn denne verdien i forhold til et
-tidligere tidspunkt.\footnote{Programmet som inneholder termaliserings-implementasjonen heter \texttt{MPIisingImproved.cpp} og er
+temperaturer var ca. $5\%$. Vi regner altså systemet som termalisert når
+energien og magnetiseringen ikke endrer seg mer enn $5 \%$ på 1000 sykluser.\footnote{Programmet som inneholder termaliserings-implementasjonen heter \texttt{MPIisingImproved.cpp} og er
 tilgjengelig på Github~\cite{github-repo}}
 
 En enda mer robust metode ville f.eks. vært å bruke autokorrelasjonsfunksjonen,
@@ -367,8 +366,8 @@ Fra tabellen ser vi at vi har jevnt over en forbedring på ca. $20\%$ i
 den relative feilen. Vi kunne trolig forbedret dette ytterligere ved å
 finne en annen prosentgrense (fra seksjon
 \ref{subsec:implementering-av-termalisering}), men vi begrenser oss
-til å bruke en og samme verdi for alle temperaturer/verdier av
-$L$/antall Monte Carlo-sykluser. 
+til å bruke en og samme verdi for alle temperaturer, verdier av
+$L$ og/eller antall Monte Carlo-sykluser. 
 
 \section{Sannsynlighetsfordeling}
 Med programmet mer eller mindre ferdigkodet og testet kan vi begynne
@@ -376,10 +375,11 @@ Med programmet mer eller mindre ferdigkodet og testet kan vi begynne
 energier som forekommer for forskjellige temperaturer, og hvor mange ganger dette skjer.
 I figur \ref{fig:probabilities} ser vi et histogram av tilstandene
 for $L=20$ ved temperaturene $T=1$, $T=1.7$ og $T=2.4$. Vi ser at ved lav temperatur
-skjer det relativt lite i systemet, og vi har få hopp. Dette er tilsvarende
+skjer det relativt lite i systemet, og vi har få tilstandsendringer. 
+Dette er tilsvarende
 det vi så i figur \ref{fig:configurations}. Ved høyere temperatur ser vi derimot
 at vi har mange tilgjengelige tilstander for systemet, og 
-sannsynlighetsfordelingen ser veldig ut som en gaussisk sannsynlighetsfordeling.
+sannsynlighetsfordelingen ser veldig ut som en Boltzmann-fordeling.
 
 Programmet som lager histogrammet, \texttt{probabilities.py}, skriver
 også ut varmekapasiteten ved hjelp av variansen til datasettet. Vi kan
@@ -406,10 +406,10 @@ $T=2.4$ & 1.4264178 & 1.40566
 \begin{figure}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/prob_E.png}
-  \caption{Et histogram av tilstandene for $L=20$ ved to 
+  \caption{Et histogram av tilstandene for $L=20$ ved tre
 forskjellige temperaturer. Vi ser at ved lav temperatur
 skjer det relativt lite i systemet, og vi har få tilstands-hopp. Ved høyere temperatur ser vi derimot at vi har mange tilgjengelige tilstander for systemet, og 
-sannsynlighetsfordelingen ser veldig ut som en gaussisk sannsynlighetsfordeling.}
+sannsynlighetsfordelingen ser veldig ut som en Boltzmann-fordeling.}
 \label{fig:probabilities}
 \end{figure}
 
