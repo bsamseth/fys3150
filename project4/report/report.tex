@@ -22,6 +22,7 @@
 \twocolumn[
 \begin{@twocolumnfalse}
 \tableofcontents
+\vspace{\baselineskip}
 \begin{abstract}
 I denne rapporten har vi sett på Ising-modellen i to dimensjoner. Spesielt ser vi
 på de termodynamiske egenskapene til et system under denne modellen, og hvordan disse
@@ -34,6 +35,7 @@ ser at vi gjerne skulle hatt tid til å gjøre mer nøyaktige
 (tidkrevende) beregninger. Alt materiale som har blitt referert er tilgjengelig 
 på Github~\cite{github-repo}. 
 \end{abstract}
+\vspace{\baselineskip}
 \end{@twocolumnfalse}
 ]
 
@@ -79,7 +81,7 @@ størrelser på rutenettet og for mange forskjellige temperaturer.
 \section{Implementering og testing}
 
 Vi har tatt utgangspunkt i eksempelprogrammet \texttt{MPIising.cpp}
-som finnes kursets Github-side~\cite{compphys-github}. Versjonen brukt
+som finnes på kursets Github-side~\cite{compphys-github}. Versjonen brukt
 i denne rapporten er tilgjengelig på Github~\cite{github-repo} under samme navn. Kjernen av
 programmet er Metropolisalgoritmen, som i vårt tilfelle går som følger: 
 
@@ -376,9 +378,12 @@ finne en annen prosentgrense (fra seksjon
 til å bruke en og samme verdi for alle temperaturer, verdier av
 $L$ og/eller antall Monte Carlo-sykluser. 
 
-\section{Sannsynlighetsfordeling}
-Med programmet mer eller mindre ferdigkodet og testet kan vi begynne
-å se mer på egenskapene ved modellen. Det er interessant å se hvilke
+\pagebreak
+\section{Resultater}
+Med programmet mer eller mindre ferdigkodet og -testet kan vi begynne
+å se mer på egenskapene ved modellen.
+\subsection{Sannsynlighetsfordeling}
+Det er interessant å se hvilke
 energier som forekommer for forskjellige temperaturer, og hvor mange ganger dette skjer.
 I figur \ref{fig:probabilities} ser vi et histogram av tilstandene
 for $L=20$ ved temperaturene $T=1$, $T=1.7$ og $T=2.4$. Vi ser at ved lav temperatur
@@ -422,7 +427,7 @@ sannsynlighetsfordelingen ser veldig ut som en Boltzmann-fordeling.}
 
 
 
-\section{Beregning av kritisk temperatur}
+\subsection{Beregning av kritisk temperatur}
 En sentral størrelse for dette systemet er den kritiske temperaturen
 $T_C$. Rundt denne temperaturen kan vi beskrive mange fysiske
 størrelser ved hjelp av potenslover. Eksempelvis er
@@ -453,7 +458,7 @@ En andreordens faseovergang karakteriseres av en korrelasjonslengde
 som spenner hele systemet. I en slik overgang er derfor
 korrelasjonslengden proporsjonal med størrelsen på
 spinn-rutenettet. Vi vil alltid være begrenset til å se på et endelig
-rutenett, men ved såkalt ``finite size scaling ralation'' er det mulig
+rutenett, men ved såkalt ``finite size scaling relation'' er det mulig
 å knytte oppførselen til endelig-dimensjonale rutenett til den
 termodynamiske grensen der $L\rightarrow\infty$. For den kritiske
 temperaturen er denne skaleringen gitt som 
