@@ -19,15 +19,16 @@
   {\large \today}\\[3cm]
   \vfill
 \end{titlepage}
-
+\tableofcontents
 \begin{abstract}
 I denne rapporten skal vi se på Ising-modellen i to dimensjoner. Det vil si
 et rutenett av $n \times n $ partikler, der alle partiklene enten har
 spinn opp, $\uparrow$ eller spinn ned, $\downarrow$. Spesielt ser vi
 på de termodynamiske egenskapene til et slikt system, og hvordan disse
-oppfører seg rundt den kritiske temperaturen. Vi bruker
-Metropolis-algoritmen med 'periodic boundary conditions'. Alt materiale 
-som refereres er tilgjengelig på~\cite{github-repo}. 
+oppfører seg rundt den kritiske temperaturen. Til slutt estimerer vi 
+den kritiske temperaturen for systemet. Vi bruker Metropolis-algoritmen med 
+'periodic boundary conditions'. Alt materiale som refereres er tilgjengelig 
+på~\cite{github-repo}. 
 \end{abstract}
 
 \section{Innledning}
@@ -483,6 +484,8 @@ har kjørt for siden disse har tydeligst maksima) kan vi bruke likning
 kritiske temperaturen i den termodynamiske grensen. Programmet
 \texttt{critical.py} automatiserer denne beregningen og gir oss
 resultatet. Følgende kall på programmet gir utskriften:
+
+\section{Konklusjon}
 
 \clearpage
 \printbibliography
