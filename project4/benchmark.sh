@@ -14,6 +14,10 @@
 # These results should correspond to the data and figures referenced
 # in the report, aswell as the benchmarks/
 
+# should everything be recalculated?
+# if so, give --no-compute as argument
+NOCOMPUTE=$1
+
 # define name of folders
 PARENT=$(pwd)
 DIR=$PARENT/benchmarks
@@ -33,6 +37,7 @@ cp $DIRSRC/*.cpp $DIR/$SRC
 cp $DIRSRC/*.h $DIR/$SRC
 cp $DIRSRC/*.py $DIR/$SRC
 cp $DIRSRC/Makefile $DIR/$SRC
+cp $DIRDATA/* $DIR/$SRC/data
 # enter $DIR, needed because some programs write to relative path
 echo "Entering benchmark directory"
 cd $DIR/$SRC
@@ -57,13 +62,13 @@ mpirun -n 4 MPIisingImproved.x data/out 2 1000000 2.3 2.3 1 0
 # this will genereate all the figures shown in the report
 # you will need to close the figures in order to continue calculations. 
 echo "Running expectationValues.py for ordered initial config. (will take some time)"
-python expectationValues.py 20 1 2.4 1.4 1000 500000 35 0 
+python expectationValues.py 20 1 2.4 1.4 1000 500000 35 0 $NOCOMPUTE
 echo "Running expectationValues.py for random initial config. (will take some time)"
-python expectationValues.py 20 1 2.4 1.4 1000 500000 35 1 
+python expectationValues.py 20 1 2.4 1.4 1000 500000 35 1 $NOCOMPUTE
 echo "Running probabilities.py"
-python probabilities.py 20 1 2.4 0.7 1000000 0 
+python probabilities.py 20 1 2.4 0.7 1000000 0 $NOCOMPUTE
 echo "Running critical.py (will take a long time)"
-python critical.py [20,40,60,80,100] 2.2 2.35 0.01 1000000 0
+python critical.py [20,40,60,80,100] 2.2 2.35 0.01 1000000 0 $NOCOMPUTE
 
 echo "Cleaning up"
 cp data/* ../$DATA
