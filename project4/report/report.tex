@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[11pt, twocolumn]{article}
 \usepackage{../../latex/preamble}
 
 \newcommand{\abs}[1]{|#1|}
@@ -19,6 +19,8 @@
   {\large \today}\\[3cm]
   \vfill
 \end{titlepage}
+\twocolumn[
+\begin{@twocolumnfalse}
 \tableofcontents
 \begin{abstract}
 I denne rapporten har vi sett på Ising-modellen i to dimensjoner. Spesielt ser vi
@@ -32,6 +34,9 @@ ser at vi gjerne skulle hatt tid til å gjøre mer nøyaktige
 (tidkrevende) beregninger. Alt materiale som har blitt referert er tilgjengelig 
 på Github~\cite{github-repo}. 
 \end{abstract}
+\end{@twocolumnfalse}
+]
+
 
 \section{Innledning}
 \label{sec:innledning}
@@ -134,12 +139,12 @@ Bruker vi spinn-konfigurasjonen
 
 Får vi energien 
 \begin{align*}
-E = - J  ( 2s_1s_2 + 2s_1s_3 + 2s_2s_1 + 2s_2s_4 ) = -J ( 8 \cdot 1 \cdot 1) = -8J  
+E &= - J  ( 2s_1s_2 + 2s_1s_3 + 2s_2s_1 + 2s_2s_4 ) \\&= -J ( 8 \cdot 1 \cdot 1) = -8J  
 \end{align*}
 Gjør tilsvarende for alle mulige spinn-konfigurasjoner får vi tabell \ref{tab:spinn-energi-deg}:
 
 
-\begin{table}[ht]
+\begin{table*}[ht]
 \centering
 \caption{Tabell over energiene og degenerasjonene til de ulike
   spinn-konfigurasjonene til et $2\times 2$-rutenett av spinn.}
@@ -156,14 +161,14 @@ Antall spinn opp & Degenerasjon & Energi & Magnetisering \\
 0 & 1 & -8J & -4 \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 Vi ser av tabell \ref{tab:spinn-energi-deg} at energien kan ha tre
 mulige verdier, $E = -8J,0,8J$. Da er partisjonsfunksjonen gitt ved
 likning (\ref{eq:partisjons-funk}) (bruker også degenerasjonsgradene
 oppgitt i tabellen):
 \begin{align}
-  Z = \sum_E \Omega(E)e^{-\beta E} = 2e^{-\beta \cdot 8J} + 2e^{\beta
+  Z &= \sum_E \Omega(E)e^{-\beta E}\\ &= 2e^{-\beta \cdot 8J} + 2e^{\beta
   \cdot 8J} + 12\label{eq:partisjons-funk-2x2}
 \end{align}
 Med partisjonsfunksjonen i boks kan vi finne alle forventningsverdier.
@@ -218,7 +223,7 @@ bra verdier for \textit{alle} størrelser. F.eks. energien ser ut til å bli bra
 raskere enn f.eks. $C_V$).
 
 
-\begin{table}
+\begin{table*}
 \centering
 \caption{Tabell over eksakte og numeriske resultater for $2\times
   2$-tilfellet for $T=1$. Vi har brukt $10^6$ Monte Carlo-sykluser og
@@ -233,7 +238,7 @@ Eksakt & -1.9959821 & 0.99866073 & 0.032082332 & 3.9933038 & 0.0040107395 \\
 Numerisk & -1.9960480 & 0.99869100 & 0.031585527 & 3.9933824 & 0.0038971461 \\
 Rel. feil & $-3.3\e{-5}$ & $-3.0\e{-5}$ & $1.5\e{-2}$  & $-2.0\e{-5}$ & $2.8\e{-2}$ 
 \end{tabular}
-\end{table}
+\end{table*}
 
 
 
@@ -267,7 +272,7 @@ Ser vi derimot på antall konfigurasjoner i figur \ref{fig:configurations} ser v
 har mange flere tilgjengelige tilstander enn det med lav temperatur. Det høres fornuftig ut, siden det har mer
 'tilgjengelig' energi.
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/E_M_Mabs.png}
   \includegraphics[scale=0.7]{../fig/E_M_Mabs_random.png}
@@ -276,26 +281,26 @@ har mange flere tilgjengelige tilstander enn det med lav temperatur. Det høres 
     Øverst har vi det ordnede tilfellet der alle spins begynner med å peke ned. Det andre tilfellet er 
     med en tilfeldig startkonfigurasjon.}
 \label{fig:forventningsverdi}
-\end{figure}
+\end{figure*}
 
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/variances.png}
   \includegraphics[scale=0.7]{../fig/variances_random.png}
   \caption{\label{fig:varianser} Plot av variansen til energien og magnetiseringa som
 funksjon av antall Monte Carlo-sykluser. Variansen regner vi både med å bruke $\chi$ og $|\chi|$. Øverst
 er det ordnete tilfellet, nederst det uordnede.}
-\end{figure}
+\end{figure*}
 
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/configurations.png}
   \includegraphics[scale=0.7]{../fig/configurations_random.png}
   \caption{\label{fig:configurations} Et plot av antall configurations
 normalisert mot antall Monte Carlo-sykluser. Øverst er det ordnete tilfellet, nederst det uordnede.}
-\end{figure}
+\end{figure*}
 
 \subsubsection{Implementering av termalisering}
 \label{subsec:implementering-av-termalisering}
@@ -340,7 +345,7 @@ verdiene fra tabell \ref{tab:2x2-eksakt-num}. Denne gangen har vi satt
 temperaturen til $T=2.3$, $L=2$ og brukt $10^6$ Monte
 Carlo-sykluser. Det nye resultatet er vist i tabell \ref{tab:exact-numerical-improved}
 
-\begin{table}
+\begin{table*}
 \centering
 \caption{Tabell over eksakte og numeriske resultater for $2\times
   2$-tilfellet for $T=2.3$. Vi har brukt $10^6$ Monte Carlo-sykluser og
@@ -362,7 +367,7 @@ Rel. feil term. & $-3.17\e{-4}$ & $-2.62\e{-4}$ & $1.87\e{-3}$ &
                                                                  $-2.66\e{-4}$ & $2.75\e{-3}$\\
 Forbedring  & 27\% & 21\% & 21\% & 25\% & 15\%
 \end{tabular}
-\end{table}
+\end{table*}
 
 Fra tabellen ser vi at vi har jevnt over en forbedring på ca. $20\%$ i
 den relative feilen. Vi kunne trolig forbedret dette ytterligere ved å
@@ -389,7 +394,7 @@ sammenlikne disse verdiene med forventningsverdien som blir
 beregnet. Tabell \ref{tab:var-vs-Cv} viser dette. Vi ser (slik vi
 burde) at disse to beregningene gir lignende svar. 
 
-\begin{table}
+\begin{table*}
 \centering
 \caption{Tabellen viser varmekapasiteten beregnet fra variansen i
   histogrammet i figur \ref{fig:probabilities} og verdien som beregnes
@@ -403,9 +408,9 @@ $T=1.0$ & 0.01033735  & 0.023351\\
 $T=1.7$ & 0.34147839  & 0.348439 \\
 $T=2.4$ & 1.4264178 & 1.40566
 \end{tabular}
-\end{table}
+\end{table*}
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/prob_E.png}
   \caption{Et histogram av tilstandene for $L=20$ ved tre
@@ -413,7 +418,7 @@ forskjellige temperaturer. Vi ser at ved lav temperatur
 skjer det relativt lite i systemet, og vi har få tilstands-hopp. Ved høyere temperatur ser vi derimot at vi har mange tilgjengelige tilstander for systemet, og 
 sannsynlighetsfordelingen ser veldig ut som en Boltzmann-fordeling.}
 \label{fig:probabilities}
-\end{figure}
+\end{figure*}
 
 
 
@@ -471,8 +476,10 @@ får to likninger med to ukjente. Altså,
   &T_C(L_2) - T_C(L=\infty) = aL_2^{-1/\nu}\\
 \Rightarrow &a = \frac{ T_C(L_1) - T_C(L_2)} {L_1^{-1/\nu} -
   L_2^{-1/\nu}}\\
-\Rightarrow &T_C(L=\infty) = T_C(L_1) - \frac{ T_C(L_1) - T_C(L_2)} {L_1^{-1/\nu} -
+\begin{split}
+\Rightarrow &T_C(L=\infty) = \\ &T_C(L_1) - \frac{ T_C(L_1) - T_C(L_2)} {L_1^{-1/\nu} -
   L_2^{-1/\nu}}L_1^{-1/\nu}\label{eq:Tc-inf-scale-expression}.
+\end{split}
 \end{align}
 Det eneste som gjenstår nå er å bestemme $T_C(L)$ ut fra
 beregningene. Vi har laget et program som genererer plott for
@@ -483,7 +490,7 @@ Github~\cite{github-repo}. Resultatene er vist i figur \ref{fig:critical-plot} (
 parameterene brukt til å lage plottet er vist på undersiden av
 figuren). 
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
   \centering
   \includegraphics[scale=0.7]{../fig/critical.png}
   \caption{\label{fig:critical-plot} Forventningsverdier som funksjon
@@ -493,8 +500,9 @@ figuren).
     $L$. Selv om det ikke er veldig tydelig ser vi også antydning til
     vendepunkter ved kritisk temperatur for $\mean{E}$ og
     $\mean{|\mathcal{M}|}$. Vi kan også merke oss at oppløsningen i
-    $T$ burde vært større dersom vi hadde ønsket et bedre estimat for $T_C(L=\infty)$.}
-\end{figure}
+    $T$ burde vært større dersom vi hadde ønsket et bedre estimat for
+    $T_C(L=\infty)$.}
+\end{figure*}
 
 Figuren minner oss om at $C_V \propto \pd{E}{T}$ og $\chi_\text{abs}
 \propto \pd{\abs{M}}{T}$ ettersom vi har maksima for disse størrelsene
@@ -514,18 +522,18 @@ har kjørt for siden disse har tydeligst maksima) kan vi bruke likning
 \eqref{eq:Tc-inf-scale-expression} og finne et estimat for den
 kritiske temperaturen i den termodynamiske grensen. Programmet
 \texttt{critical.py} automatiserer denne beregningen og gir oss
-resultatet. Listing \ref{lst:critical-output} viser parameterene brukt
-og utskriften fra \texttt{critical.py}. 
-
-\begin{itemize}
-\item [] \lstinputlisting[label=lst:critical-output, caption=Kall og
-  utskrift fra \texttt{critical.py}]{../src/data/critical_output.txt}
-\end{itemize}
+resultatet. Med parametere som vist i figur \ref{fig:critical-plot}
+får vi et estimat
+\begin{align}
+  T_C(L=\infty)_\text{approx} = 2.28
+\end{align}
 
 Vi kan sammenlikne resultatet med Lars Onsagers analytiske resultat~\cite{oppgavetekst-prosjekt-4},
 \begin{align}
-  kT_C(L=\infty)/J = \frac{ 2 }{ \ln \left( 1+\sqrt{2} \right) }
-  \approx 2.269
+\begin{split}
+  kT_C(L=\infty)/J &= \frac{ 2 }{ \ln \left( 1+\sqrt{2} \right) }\\
+  &\approx 2.269
+\end{split}
 \end{align}
 
 Vi ser at vår tilnærming ikke er helt på mål, men likevel ikke veldig
@@ -542,6 +550,7 @@ forkant av oppdagelsen av feilen).
 
 
 \clearpage
+\onecolumn
 \printbibliography
 \end{document}
 %%% Local Variables:
