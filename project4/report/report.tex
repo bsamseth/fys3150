@@ -131,7 +131,7 @@ Bruker vi spinn-konfigurasjonen
 
 Får vi energien 
 \begin{align*}
-E = - J  ( 2s_1s_2 + 2s_1s_3 + 2s_2s_1 + 2s_2s_4 ) = -J ( 8 \cdot 1 \cdot 1) = -8J  
+E &= - J  ( 2s_1s_2 + 2s_1s_3 + 2s_2s_1 + 2s_2s_4 ) \\&= -J ( 8 \cdot 1 \cdot 1) = -8J  
 \end{align*}
 Gjør tilsvarende for alle mulige spinn-konfigurasjoner får vi tabell \ref{tab:spinn-energi-deg}:
 
@@ -174,7 +174,7 @@ mulige verdier, $E = -8J,0,8J$. Da er partisjonsfunksjonen gitt ved
 likning (\ref{eq:partisjons-funk}) (bruker også degenerasjonsgradene
 oppgitt i tabellen):
 \begin{align}
-  Z = \sum_E \Omega(E)e^{-\beta E} = 2e^{-\beta \cdot 8J} + 2e^{\beta
+  Z &= \sum_E \Omega(E)e^{-\beta E}\\ &= 2e^{-\beta \cdot 8J} + 2e^{\beta
   \cdot 8J} + 12\label{eq:partisjons-funk-2x2}
 \end{align}
 Med partisjonsfunksjonen i boks kan vi finne alle forventningsverdier.
@@ -462,8 +462,10 @@ får to likninger med to ukjente. Altså,
   &T_C(L_2) - T_C(L=\infty) = aL_2^{-1/\nu}\\
 \Rightarrow &a = \frac{ T_C(L_1) - T_C(L_2)} {L_1^{-1/\nu} -
   L_2^{-1/\nu}}\\
-\Rightarrow &T_C(L=\infty) = T_C(L_1) - \frac{ T_C(L_1) - T_C(L_2)} {L_1^{-1/\nu} -
+\begin{split}
+\Rightarrow &T_C(L=\infty) = \\ &T_C(L_1) - \frac{ T_C(L_1) - T_C(L_2)} {L_1^{-1/\nu} -
   L_2^{-1/\nu}}L_1^{-1/\nu}\label{eq:Tc-inf-scale-expression}.
+\end{split}
 \end{align}
 Det eneste som gjenstår nå er å bestemme $T_C(L)$ ut fra
 beregningene. Vi har laget et program som genererer plott for
