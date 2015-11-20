@@ -78,6 +78,42 @@ class ODESolver:
         return self.u[:k+2], self.t[:k+2]
 
 
+    def solve_3d(self, time_points, terminate=None):
+        """
+        Compute solution u for t values in the list/array
+        time_points, as long as terminate(u,t,step_no) is False.
+        terminate(u,t,step_no) is a user-given function
+        returning True or False. By default, a terminate
+        function which always returns False is used.
+        """
+        if terminate is None:
+            terminate = lambda u, t, step_no: False
+
+        if isinstance(time_points, (float,int)):
+            raise TypeError('solve: time_points is not a sequence')
+        if time_points.size <= 1:
+            raise ValueError('ODESolver.solve requires time_points array with at least 2 time points')
+
+        self.t = np.asarray(time_points)
+        n = self.t.size
+        if self.neq == 1:  # scalar ODEs
+            self.u = np.zeros(n)
+        else:              # systems of ODEs
+            shape = [n] + list(self.U0.shape)
+            self.u = np.zeros(shape)
+
+        # Assume that self.t[0] corresponds to self.U0
+        self.u[0] = self.U0
+
+        # Time loop
+        for k in range(n-1):
+            self.k = k
+            self.u[k+1] = self.advance()
+            if terminate(self.u, self.t, self.k+1):
+                break  # terminate loop over k
+        return self.u[:k+2], self.t[:k+2]
+
+
 class ForwardEuler(ODESolver):
     def advance(self):
         u, f, k, t = self.u, self.f, self.k, self.t
@@ -97,6 +133,14 @@ class RungeKutta4(ODESolver):
         u_new = u[k] + (1/6.0)*(K1 + 2*K2 + 2*K3 + K4)
         return u_new
 
+class VelocityVerlet(ODESolver):
+    def advance(self):
+        u, f, k, t = self.u, self.f, self.k, self.t
+        dt = t[k+1] - t[k]
+        x_new = u[k,0] + u[k,1] * dt + 0.5*f(u[k],t[k])[1] * dt**2
+        raise NotImplementedError("NOOOOOOO")
+        
+    
 class IteratedMidpointMethod(ODESolver):
     def __init__(self, f, N=2):
         ODESolver.__init__(self, f)
