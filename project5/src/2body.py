@@ -21,7 +21,7 @@ m1 = 1. # kg
 m2 = 1. # kg
 G  = 1. #6.67408e-11
 
-T = 30.
+T = 15.
 n = 700
 
 h = T/n
@@ -103,7 +103,9 @@ print "time spent per loop (RK4) = %e" % ((t1-t0) / n)
 
 r1 = u[:, 1,0,:]
 r2 = u[:, 1,1,:]
-    
+
+print "pos of r1 = ", r1[-1,:]
+
 fig, ax = plt.subplots()
 ax = fig.gca(projection='3d')
 plt.plot(r1[:,0], r1[:,1], r1[:,2], label='1')
