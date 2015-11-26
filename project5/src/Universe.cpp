@@ -2,6 +2,7 @@
 #include "Universe.h"
 #include <armadillo>
 #include <cstdio>
+#include <cassert>
 
 using namespace arma;
 using namespace std;
@@ -150,10 +151,9 @@ void Universe::initialize_system_matrix(mat &ma){
 double Universe::force(double x, double y, double z, double M_other){
   double force=0;
   double distance=0;
-
   distance = x*x + y*y + z*z;
 
-  force = G*M_other/pow(distance, 1.5);
+  force = G*M_other/pow(distance + eps, 1.5);
 
   return force;
 }
@@ -219,4 +219,29 @@ void Universe::print_position(std::ofstream& ofile) {
   }
   // std::cout << std::endl;
   ofile << endl;
+}
+
+
+double Universe::energy() {
+  Body me, you;
+  double E = 0;
+  int N = n_bodies;
+  for (int i = 0; i < N; i++) {
+    me = all_bodies[i];
+
+    E += 0.5*me.mass* (pow(me.velocity[0], 2) + pow(me.velocity[1], 2) + pow(me.velocity[2], 2));
+    
+    for (int j = i+1; j < N; j++) {
+      double distance = pow(me.position[0]-you.position[0],2) +
+	pow(me.position[1]-you.position[1],2) +
+	pow(me.position[2]-you.position[2],2) + eps;
+      you = all_bodies[j];
+
+      if (distance <= 0 ) 
+	cout << i << ", " << j << endl;
+      assert (distance > 0);
+      E += - G * you.mass * me.mass / sqrt(distance);
+    }
+  }
+  return E;
 }

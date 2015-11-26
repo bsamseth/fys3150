@@ -69,6 +69,5 @@ double ran0(long *);
 double ran1(long *);
 double ran2(long *);
 double ran3(long *);
-
-
-
+// random numbers with gaussian distribution
+double gaussian_deviate(long * idum);

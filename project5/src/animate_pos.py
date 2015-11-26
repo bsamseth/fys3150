@@ -67,16 +67,20 @@ def init():
 # animation function.  This will be called sequentially with the frame number
 def animate(i):
     # we'll step two time-steps per frame.  This leads to nice results.
-    i = (200 * i) % r.shape[1]
+    i = (2 * i) % r.shape[1]
 
     for line, pt, ri in zip(lines, pts, r):
-        x, y, z = ri[:i].T
+        # x, y, z = ri[:i].T
+        x, y, z = ri[i-1].T
         line.set_data(x, y)
         line.set_3d_properties(z)
 
-        pt.set_data(x[-1:], y[-1:])
-        pt.set_3d_properties(z[-1:])
+        pt.set_data(x, y)
+        # pt.set_data(x[-1:], y[-1:])
+        pt.set_3d_properties(z)
+        # pt.set_3d_properties(z[-1:])
 
+    ax.legend(['t = %g' % (i/float(n_timesteps))])
     ax.view_init(30, 0.01 *0.3 * i )
     fig.canvas.draw()
     return lines + pts

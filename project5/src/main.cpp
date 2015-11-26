@@ -1,49 +1,59 @@
 #include <iostream>
 #include <armadillo>
-
+#include <cmath>
+#include <vector>
 #include "Body.h"
 #include "Universe.h"
-
+#include "../../lib/lib.h"
 
 using namespace arma;
 using namespace std;
 
+int main() {
+  Universe mysystem;
 
-int main()
-{
-Universe mysystem;
+  long idum = -1;
+  
+  const int N = 100;
+  const double R0 = 20;
+  const double M0 = 1;
+  const double t_crunch = 1;
+  
+  for (int i = 0; i < N; i++) {
+    double mass = abs(10*M0 + M0 * gaussian_deviate(&idum));
+    
+    int vx, vy, vz;
+    vx = vy = vz = 0;
 
-// Body body1(1, 0,0,0, 0,-0.1,0 );
-// Body body2(1, 5,0,0, 0, 0.1,0 );
-Body Sun(1,0,0,0,0,0,0);
-Body Mercury(1.2e-7, 0.39, 0, 0,0,9.96,0);
-Body Venus(2.4e-6, 0.72, 0, 0,0,7.36,0);
-Body Earth(1.5e-6,1,0,0, 0, 6.26, 0);
-Body Mars(3.3e-7, 1.52, 0, 0,0,5.06,0);
-Body Jupiter(9.5e-4, 5.20, 0,0,0,2.75,0);
-Body Saturn(2.75e-4, 9.54, 0, 0,0,2.04,0);
-Body Uranus(4.4e-5, 19.19, 0, 0,0,1.43,0);
-Body Neptune(5.1e-5, 30.06, 0, 0,0,1.14,0);
-Body Pluto(5.6e-9, 39.53, 0, 0,0,0.99,0);
+    double phi   = 2*M_PI * ran2(&idum);
+    double r     = R0 * pow(ran2(&idum), 1/3.);
+    double theta = acos( 1 - 2*ran2(&idum) );
+
+    double x = r * sin(theta)*cos(phi);
+    double y = r * sin(theta)*sin(phi);
+    double z = r * cos(theta);
+    Body b = Body(mass, x, y, z, vx, vy, vz);
+    mysystem.add_body(b);
+  }
+
+  double totalmass = 0;
+  for (int i = 0; i < N; i++) {
+    totalmass += mysystem.all_bodies[i].mass;
+  }
+  double rho0 = totalmass / (4.0 * M_PI * pow(R0, 3) / 3);
+  
+  mysystem.G = 3*M_PI / (32 * t_crunch*t_crunch * rho0);
 
 
-// mysystem.add_body(body1);
-// mysystem.add_body(body2);
 
-mysystem.add_body(Sun);
-mysystem.add_body(Mercury);
-mysystem.add_body(Venus);
-mysystem.add_body(Earth);
-mysystem.add_body(Mars);
-mysystem.add_body(Jupiter);
-mysystem.add_body(Saturn);
-mysystem.add_body(Uranus);
-mysystem.add_body(Neptune);
-mysystem.add_body(Pluto);
+  double h = 0.0011;
+  double t_max = 0.9*t_crunch;
 
-int elements = mysystem.n_bodies;
-cout << "number of elements = " << elements<< endl;
+  
+  double E0 = mysystem.energy();
+  mysystem.solve_RK4(h, t_max);
+  double E1 = mysystem.energy();
 
-mysystem.solve_Verlet(0.001, 248);
-
+  cout << "E0 = " << E0 << ", Delta E = " << E1-E0 << ", rel. err. = " << (E1-E0)/E0 <<  endl;
+    
 }

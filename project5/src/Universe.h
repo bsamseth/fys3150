@@ -6,11 +6,12 @@
 #include <armadillo>
 #include "Body.h"
 
-const double G = 4*M_PI*M_PI; // universal constant
 
 class Universe {
   public:
 
+  double eps = 1e-3;
+  double G = 4*M_PI*M_PI; // universal constant
   int n_bodies = 0;
   std::vector<Body> all_bodies;
   
@@ -23,6 +24,7 @@ class Universe {
   void derivative(arma::mat &in_matrix_y, arma::mat &out_matrix_dy, int n);
   void sum_matrix(arma::mat &result, double coeff_one, arma::mat &first, double coeff_two, arma::mat &second, int n);
   void print_position(std::ofstream &ofile);
+  double energy();
 };
 
 
