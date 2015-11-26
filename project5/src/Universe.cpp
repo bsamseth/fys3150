@@ -13,6 +13,58 @@ void Universe::add_body(Body b) {
   all_bodies.push_back(b);
 }
 
+void Universe::solve_Verlet(double h, double t_max) {
+  mat y_i(n_bodies,7);
+  mat r_i_dt(n_bodies,7);
+  mat a_dt(n_bodies,7);
+  mat v_dt(n_bodies,7);
+  mat v_dt_2(n_bodies,7);
+
+  initialize_system_matrix(y_i);
+  
+  double t = 0;
+
+  //print file___________________
+  char *filename = new char[1000];
+  sprintf(filename, "Planet_position_Verlet_%f_%f.dat", h, t_max);
+  
+  ofstream output (filename);
+  output.precision(5);
+  
+  while(t < t_max){
+
+    derivative(y_i, a_dt, n_bodies);
+
+    for(int j=0; j<n_bodies; j++){
+
+      for(int i=0; i<3; i++){
+	y_i(j,i) = y_i(j,i) + h*y_i(j,i+3) + 0.5*h*h*a_dt(j,i+3);
+	v_dt_2(j,i+3) = y_i(j,i+3) + 0.5*h*a_dt(j,i+3);
+      }
+    }
+
+    derivative(y_i, a_dt, n_bodies);
+
+    for(int j=0; j<n_bodies; j++){
+
+      for(int i=3; i<6; i++){
+
+	y_i(j,i) = v_dt_2(j,i) + 0.5*h*a_dt(j,i);
+
+      }
+
+      for(int i=0; i<3; i++){
+	all_bodies[j].position[i] = y_i(j,i);
+	all_bodies[j].velocity[i] = y_i(j,i+3);
+      }
+    }
+    print_position(output);
+
+    t+=h;
+
+  }
+  output.close();
+}
 
 void Universe::solve_RK4(double h, double t_max) {
   mat y_i(n_bodies,7);

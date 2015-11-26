@@ -44,6 +44,6 @@ mysystem.add_body(Pluto);
 int elements = mysystem.n_bodies;
 cout << "number of elements = " << elements<< endl;
 
-mysystem.solve_RK4(0.001, 248);
+mysystem.solve_Verlet(0.001, 248);
 
 }

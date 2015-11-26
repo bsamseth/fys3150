@@ -17,7 +17,7 @@ class Universe {
   Universe();
   void add_body(Body b);
   void solve_RK4(double h, double t_max);
-  void solve_verlet();
+  void solve_Verlet(double h, double t_max);
   void initialize_system_matrix(arma::mat &ma);
   double force(double x, double y, double z, double M_other);
   void derivative(arma::mat &in_matrix_y, arma::mat &out_matrix_dy, int n);
