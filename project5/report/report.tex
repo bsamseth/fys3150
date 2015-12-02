@@ -1,0 +1,130 @@
+\documentclass[11pt, twocolumn]{article}
+\usepackage{../../latex/preamble}
+
+\newcommand{\abs}[1]{|#1|}
+\begin{document}
+  % make title page
+\begin{titlepage}
+  \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+  \center
+  \textsc{\LARGE Universitetet i Oslo}\\[1.5cm] % Name of your university/college
+  \textsc{\Large }\\[0.5cm] % Major heading such as course name
+  \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
+  \HRule \\[0.4cm]
+  { \huge \bfseries N-body simulering}\\[0.4cm]
+  \HRule \\[1.5cm]
+  \Large \emph{Skrevet av:}\\
+  Lyder \textsc{Rumohr Blingsmo} (k.nr. 2) og Bendik \textsc{Samseth} (k.nr. 27)\\[3cm]
+  {\large \today}\\[3cm]
+  \vfill
+\end{titlepage}
+\twocolumn[
+\begin{@twocolumnfalse}
+\tableofcontents
+\vspace{\baselineskip}
+\begin{abstract}
+I denne rapporten utvikler vi en N-body modell. Det vil si et system av
+$N$ masser som vekselvirker kun ved gravitasjon. Spesielt studerer vi kollaps
+av et slik system når alle partiklene begynner i ro. Vi sammenligner 
+stabiliteten til to forskjellige løsningsmetoder, RungeKutta4 og VelocityVerlet,
+ved å kikke på energibevaring i systemet. 
+Alt materiale som har blitt referert er tilgjengelig
+ på Github~\cite{github-repo}. 
+
+\end{abstract}
+\vspace{\baselineskip}
+\end{@twocolumnfalse}
+]
+
+\section{Innledning}
+Vi ser på en åpen galaksehop med $N$ partikler. I vårt system antar vi at 
+gravitasjon er den eneste kraften som virker
+
+\begin{align}
+ F = -\frac{GM_1M_2}{r^2}.\
+\end{align}
+
+Der $G$ er gravitasjonskonstanten, $M$ er massene og $r$ er avstanden mellom dem. 
+Denne antagelsen er god under forutsetningen av $r$ er relativt stor. Vi bruker
+Newtons andre lov, og får differensialligningene 
+
+\begin{align} \label{eq:a_i}
+a_i = \sum_{j \neq i} \frac{GM_j}{{|\vec{r_i} - \vec{r_j}|}^2} ,  i = 1,2, \cdots N 
+\end{align}
+
+Der $a_i$ er akselerasjonen til masse $i$. Dette er en ordinære differensialligning, og
+vi anvender RungeKutta4 og Velocity-Verlet.
+
+\subsection{Kort om RungeKutta4 }
+Gitt en funksjon på formen \cite{RK4}
+\begin{align*}
+\dot{y} = f(t, y), \quad y(t_0) = y_0
+\end{align*}
+
+I vårt tilfelle \eqref{eq:a_i} med 
+
+\begin{align*}
+\dot{v_i} = a_i  = \sum_{j \neq i} \frac{GM_j}{{|\vec{r_i} - \vec{r_j}|}^2} , i = 1,2, \cdots N \\
+\end{align*}
+med initialbetingelsene
+\begin{align*}
+r_i(t_0) = r_{i0}, v_i(t_0) = 0
+\end{align*}
+Velg en steglengde $h>0$ og definer 
+
+\begin{align*}
+y_{n+1} &= y_n + \tfrac{h}{6}\left(k_1 + 2k_2 + 2k_3 + k_4 \right)\\
+t_{n+1} &= t_n + h \\
+\end{align*}
+der vi har
+\begin{align*}
+k_1 &= f(t_n, y_n), \\
+k_2 &= f(t_n + \tfrac{h}{2}, y_n + \tfrac{h}{2} k_1), \\
+k_3 &= f(t_n + \tfrac{h}{2}, y_n + \tfrac{h}{2} k_2), \\
+k_4 &= f(t_n + h, y_n + hk_3).
+\end{align*}
+
+Vi gjentar så metoden en gang til for 
+
+\begin{align*}
+\dot{x_i} = v_i
+\end{align*}
+
+\subsection{Kort Velocity-Verlet}
+Vi anvender også Velocity-Verlet på \eqref{eq:a_i}. Den fungerer for tilfeller der 
+akselerasjonen ikke er en funksjon av hastigheten. 
+Metoden er gitt på \cite{Velocity-Verlet}.
+
+\begin{enumerate}
+\item Calculate: \begin{align*}
+\vec{v}\left(t + \tfrac12\,\Delta t\right) = \vec{v}(t) + \tfrac12\,\vec{a}(t)\,\Delta t\ 
+\end{align*}
+
+
+\item Calculate: \begin{align*} \vec{x}(t + \Delta t) = \vec{x}(t) + \vec{v}\left(t + \tfrac12\,\Delta t\right)\, \Delta t \end{align*}
+
+
+\item Derive \begin{align*} \vec{a}(t + \Delta t) 
+\end{align*} from the interaction potential using \begin{align*} \vec{x}(t + \Delta t) \end{align*}
+
+
+\item Calculate: \begin{align*} \vec{v}(t + \Delta t) = \vec{v}\left(t + \tfrac12\,\Delta t\right) + \tfrac12\,\vec{a}(t + \Delta t)\Delta t \end{align*}
+\end{enumerate}
+
+\subsection{Initialisering av systemet}
+Vi kan selv velge fritt starttilstanden til systemet vårt.
+
+
+\section{Implementering og testing}
+\subsection{Klassesystem}
+\subsection{solver}
+
+
+
+
+\printbibliography
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
