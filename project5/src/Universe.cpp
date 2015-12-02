@@ -27,7 +27,7 @@ void Universe::solve_Verlet(double h, double t_max) {
 
   //print file___________________
   char *filename = new char[1000];
-  sprintf(filename, "Planet_position_Verlet_%f_%f.dat", h, t_max);
+  sprintf(filename, "data/Planet_position_Verlet_%f_%f.dat", h, t_max);
   
   ofstream output (filename);
   output.precision(5);
@@ -81,7 +81,7 @@ void Universe::solve_RK4(double h, double t_max) {
 
   //for print file_________
   char *filename = new char[1000];
-  sprintf(filename, "Planet_position_RK4_%f_%f.dat", h, t_max);
+  sprintf(filename, "data/Planet_position_RK4_%f_%f.dat", h, t_max);
   ofstream ofile (filename);
   
   ofile.precision(5);
