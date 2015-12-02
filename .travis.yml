@@ -1,6 +1,7 @@
 language: cpp
 
 script:
+  - cd project5/src && make && cd -
   - cd project4/src && make && cd -
   - cd project3/src && make && cd - 
     

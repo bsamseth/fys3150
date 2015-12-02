@@ -9,12 +9,30 @@
 using namespace arma;
 using namespace std;
 
-int main() {
+int main(int argc, char *argv[]) {
+
+  bool useVerlet = true;
+  
+  if (argc < 4) {
+    cout << "Usage: ./main.x h tmax N [verlet/rk4]" << endl;
+    exit(1);
+  }
+
+  double h = atof(argv[1]);
+  double t_max = atof(argv[2]);
+  int N = atoi(argv[3]);
+  
+  if (argc > 4) {
+    string arg4 (argv[4]);
+    if (arg4 == "rk4")
+      useVerlet = false;
+  }
+
   Universe mysystem;
 
   long idum = -1;
   
-  const int N = 100;
+  
   const double R0 = 20;
   const double M0 = 1;
   const double t_crunch = 1;
@@ -46,14 +64,16 @@ int main() {
 
 
 
-  double h = 0.0011;
-  double t_max = 0.9*t_crunch;
-
+  t_max = t_max*t_crunch;
   
   double E0 = mysystem.energy();
-  mysystem.solve_RK4(h, t_max);
+  if (useVerlet)
+    mysystem.solve_Verlet(h, t_max);
+  else
+    mysystem.solve_RK4(h, t_max);
+  
   double E1 = mysystem.energy();
 
-  cout << "E0 = " << E0 << ", Delta E = " << E1-E0 << ", rel. err. = " << (E1-E0)/E0 <<  endl;
+  cout << "E0 = " << E0 << ", E1 = " << E1 << ", Delta E = " << E1-E0 << ", rel. err. = " << (E1-E0)/E0 <<  endl;
     
 }
