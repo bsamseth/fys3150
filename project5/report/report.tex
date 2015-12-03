@@ -112,7 +112,42 @@ Metoden er gitt på \cite{Velocity-Verlet}.
 \end{enumerate}
 
 \subsection{Initialisering av systemet}
-Vi kan selv velge fritt starttilstanden til systemet vårt.
+Vi kan selv velge fritt starttilstanden til systemet vårt. Vi velger å
+begynne med $N$ objekter fordelt uniformt innenfor en sfære med
+radius $R_0$. Objektene gir vi en tilfeldig masse ved å la massene
+følge en Gaussisk fordeling med snittverdi $10M_\odot$ og standardavik
+på $M_\odot$. Her er $M_\odot$ solmassen. Vi lar alle starte i ro. 
+
+Av disse startbetingelesene er det en del som trenger noe ekstra
+oppmerksomhet\footnote{Det som følger er i stor grad en oversettelse
+  av et skriv laget av H. T. Ihle.}. Det er ikke helt fullstendig trivielt å lage uniformt
+fordelte koordinater innenfor en sfære. Problemet er at hvis vi lar
+objektene være uniformt fordelt i $r$, så vil vi ende med en mye
+større tetthet rundt midten av sfæren. Og hvis vi fordeler objektene
+uniformt i $\theta$ vil tettheten blir mye større rundt polene. 
+
+Vi løser dette ved å bruke at volumelementet skal være det samme i
+alle koordinatsystemer. Vi innfører koordinatene $u, v, w \in [0,1]$
+og kobler disse koordinatene mot (i rekkefølge) $r,\theta$ og
+$\phi$. Vi kan da skrive 
+\begin{align*}
+  r^2\sin\theta dr d\theta d\phi = (abc)dudvdw
+\end{align*}
+der $A=abc$ er en konstant. Separerer vi likningen for hvert par av
+koordinater får vi likningene 
+\begin{align*}
+  r^2dr = adu,\ \ \sin\theta d\theta = bdv,\ \ d\phi = cdw
+\end{align*}
+Begynner vi med den siste og enkleste får vi 
+\begin{align}
+  d\phi = cdw\Rightarrow \phi = 2\pi w
+\end{align}
+der vi har brukt at $\phi=2\pi$ må svare til $w=1$. Samme
+fremgangsmåte for $r$ og $\theta$ gir
+\begin{align}
+  r &= R_0 \sqrt[3]{u}\\
+  \theta &= \arccos(1-2v).
+\end{align}
 
 
 \section{Implementering og testing}
