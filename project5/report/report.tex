@@ -116,11 +116,44 @@ Vi kan selv velge fritt starttilstanden til systemet vårt.
 
 
 \section{Implementering og testing}
+Hovedprogrammet er skrevet i C++, mens vi har gjort dataanalysen i Python.
+Alle programmer er tilgjengelig på Github~\cite{github-repo}. 
+
 \subsection{Klassesystem}
+Vi har to klasser. Én objektklasse 'body' som inneholder med posisjon, fart 
+og masse for et gitt legeme. Den andre klassen er 'Universe' og initialiseres
+med et gitt antall 'body'-objekter. Denne klassen inneholder mange metoder,
+som f.eks. 'Universe::energy' for å regne ut energien til systemet, og 
+'Universe::solve\_RK4' eller 'Universe::solve\_Verlet' for å løse systemet
+for en gitt tid.
 \subsection{solver}
 
+\subsection{Første test av programmet}
+Det er ikke alltid lett å sjekke om en løsning gir mening. Vi begynner med
+å animere systemet \footnote{Tilgjengelig på \cite{github-repo} under navnet
+animate\_pos.py}, og ser fort at det skjedde noe rart når massene kom veldig
+nærme hverandre. Som en korreksjon til dette la vi til et feilledd i kraften
 
+\begin{align}
+F_{mod} = -\frac{GM_1M_2}{r^2 + \epsilon}.
+\end{align}
 
+Der $\epsilon$ gjør at $F_{mod}$ ikke går i lufta når $r^2 \rightarrow \infty$.
+Vi setter $\epsilon = 10^{-3}$. 
+
+\subsection{Energibevaring}
+Selv om animasjoner alltid er flott, tenker vi det kan være lurt å ha en mer
+'matematisk' test på systemet vårt. I et slikt ideelt system med bare 
+gravitasjon(konservativ kraft) er det naturlig å se på energibevaring. Vi får
+energien
+
+\begin{align}
+E_{p} = - \sum_{i = 1}^{N} \sum_{j = i+1}^{N} \frac{GM_jM_i}{{||\vec{r_i} - \vec{r_j}||}} \\
+E_{k} = \sum_{i} \frac{1}{2}M_i|\vec{v_i}|^2 \\
+E_{tot} = E_{p} + E_{k}
+\end{align}
+
+I tabell ???
 
 \printbibliography
 \end{document}
