@@ -1,9 +1,9 @@
 language: cpp
 
 script:
-  - cd project5/src && make && cd -
   - cd project4/src && make && cd -
-  - cd project3/src && make && cd - 
+  - cd project3/src && make && cd -
+  #- cd project5/src && make && cd -
     
 before_install:
   - sudo apt-get install libopenmpi-dev
