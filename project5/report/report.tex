@@ -44,7 +44,7 @@ gravitasjon er den eneste kraften som virker
  F = -\frac{GM_1M_2}{r^2}.\
 \end{align}
 
-Der $G$ er gravitasjonskonstanten, $M$ er massene og $r$ er avstanden mellom dem. 
+Her er $G$ gravitasjonskonstanten, $M$ er massene og $r$ er avstanden mellom dem. 
 Denne antagelsen er god under forutsetningen av $r$ er relativt stor. Vi bruker
 Newtons andre lov, og får differensialligningene 
 
@@ -55,8 +55,8 @@ a_i = \sum_{j \neq i} \frac{GM_j}{{|\vec{r_i} - \vec{r_j}|}^2} ,  i = 1,2, \cdot
 Der $a_i$ er akselerasjonen til masse $i$. Dette er en ordinære differensialligning, og
 vi anvender RungeKutta4 og Velocity-Verlet.
 
-\subsection{Kort om RungeKutta4 }
-Gitt en funksjon på formen \cite{RK4}
+\subsection{Kort om RungeKutta4~\small{\cite{RK4}}}
+Gitt en funksjon på formen 
 \begin{align*}
 \dot{y} = f(t, y), \quad y(t_0) = y_0
 \end{align*}
@@ -64,11 +64,11 @@ Gitt en funksjon på formen \cite{RK4}
 I vårt tilfelle \eqref{eq:a_i} med 
 
 \begin{align*}
-\dot{v_i} = a_i  = \sum_{j \neq i} \frac{GM_j}{{|\vec{r_i} - \vec{r_j}|}^2} , i = 1,2, \cdots N \\
+\dot{v_i} = a_i 
 \end{align*}
 med initialbetingelsene
 \begin{align*}
-r_i(t_0) = r_{i0}, v_i(t_0) = 0
+r_i(t_0) = r_{i,0},\ \  v_i(t_0) = 0
 \end{align*}
 Velg en steglengde $h>0$ og definer 
 
@@ -90,25 +90,25 @@ Vi gjentar så metoden en gang til for
 \dot{x_i} = v_i
 \end{align*}
 
-\subsection{Kort Velocity-Verlet}
+\subsection{Kort Velocity-Verlet~\small{\cite{Velocity-Verlet}}}
 Vi anvender også Velocity-Verlet på \eqref{eq:a_i}. Den fungerer for tilfeller der 
 akselerasjonen ikke er en funksjon av hastigheten. 
-Metoden er gitt på \cite{Velocity-Verlet}.
+Metoden er gitt som
 
 \begin{enumerate}
-\item Calculate: \begin{align*}
+\item Regn ut: \begin{align*}
 \vec{v}\left(t + \tfrac12\,\Delta t\right) = \vec{v}(t) + \tfrac12\,\vec{a}(t)\,\Delta t\ 
 \end{align*}
 
 
-\item Calculate: \begin{align*} \vec{x}(t + \Delta t) = \vec{x}(t) + \vec{v}\left(t + \tfrac12\,\Delta t\right)\, \Delta t \end{align*}
+\item Finn så: \begin{align*} \vec{r}(t + \Delta t) = \vec{r}(t) + \vec{v}\left(t + \tfrac12\,\Delta t\right)\, \Delta t \end{align*}
 
 
-\item Derive \begin{align*} \vec{a}(t + \Delta t) 
-\end{align*} from the interaction potential using \begin{align*} \vec{x}(t + \Delta t) \end{align*}
+\item Regn ut: \begin{align*} \vec{a}(t + \Delta t) 
+\end{align*} fra \eqref{eq:a_i} med posisjonen $ \vec{r}(t + \Delta t) $
 
 
-\item Calculate: \begin{align*} \vec{v}(t + \Delta t) = \vec{v}\left(t + \tfrac12\,\Delta t\right) + \tfrac12\,\vec{a}(t + \Delta t)\Delta t \end{align*}
+\item Til slutt: \begin{align*} \vec{v}(t + \Delta t) = \vec{v}\left(t + \tfrac12\,\Delta t\right) + \tfrac12\,\vec{a}(t + \Delta t)\Delta t \end{align*}
 \end{enumerate}
 
 \subsection{Initialisering av systemet}
@@ -178,7 +178,9 @@ Vi setter $\epsilon = 10^{-3}$.
 
 \subsection{Energibevaring}
 Selv om animasjoner alltid er flott, tenker vi det kan være lurt å ha en mer
-'matematisk' test på systemet vårt. I et slikt ideelt system med bare 
+'matematisk' test på systemet vårt. Dette gjør oss også mer egnet til
+å gjøre en kvalitativ vurdering av hvilken av de løsningnsmetodene som er best
+I et slikt ideelt system med bare 
 gravitasjon(konservativ kraft) er det naturlig å se på energibevaring. Vi får
 energien
 
