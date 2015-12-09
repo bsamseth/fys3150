@@ -10,7 +10,7 @@
 class Universe {
   public:
 
-  double eps = 0*1e-3;
+  double eps = 1e-3;
   double G = 4*M_PI*M_PI; // universal constant
   double R0;
   int n_bodies = 0;
@@ -27,6 +27,8 @@ class Universe {
   void print_position(std::ofstream &ofile, bool do_print);
   void print_energy(std::ofstream &ofile, bool do_print);
   double energy();
+  double energy_potential_of(int j);
+  double energy_kinetic_of(int j);
   double energy_of(int j);
   bool check_ejected(int j);
 };

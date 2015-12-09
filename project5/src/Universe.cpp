@@ -248,15 +248,15 @@ void Universe::print_energy(std::ofstream& ofile, bool do_print) {
 }
 
 
-double Universe::energy_of(int j) {
-  Body me, you;
-  me = all_bodies[j];
-  double E = 0;
-  int N = n_bodies;
-  
-  E += 0.5*me.mass* (pow(me.velocity[0], 2) + pow(me.velocity[1], 2) + pow(me.velocity[2], 2));
+double Universe::energy_kinetic_of(int j) {
+  Body me = all_bodies[j];
+  return 0.5*me.mass* (pow(me.velocity[0], 2) + pow(me.velocity[1], 2) + pow(me.velocity[2], 2));
+}
 
-  for (int i = 0; i < N; i++) {
+double Universe::energy_potential_of(int j) {
+  Body you, me = all_bodies[j];
+  double E = 0;
+  for (int i = 0; i < n_bodies; i++) {
     if (i == j) continue;
     you = all_bodies[i];
     double distance = pow(me.position[0]-you.position[0],2) +
@@ -269,12 +269,27 @@ double Universe::energy_of(int j) {
   return E;
 }
 
+double Universe::energy_of(int j) {
+  return energy_kinetic_of(j) + energy_potential_of(j);
+}
 
 
 double Universe::energy() {
+  Body me, you;
   double E = 0;
   int N = n_bodies;
-  for (int i = 0; i < N; i++) 
-    E += energy_of(i);
+  for (int i = 0; i < N; i++) {
+    me = all_bodies[i];
+    E += energy_kinetic_of(i);
+    for (int j = i+1; j < N; j++) {
+      you = all_bodies[j];
+      double distance = pow(me.position[0]-you.position[0],2) +
+	pow(me.position[1]-you.position[1],2) +
+	pow(me.position[2]-you.position[2],2) + eps;
+      
+      assert (distance > 0);
+      E += - G * you.mass * me.mass / sqrt(distance);
+    }
+  }
   return E;
 }
