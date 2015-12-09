@@ -14,7 +14,7 @@ void Universe::add_body(Body b) {
   all_bodies.push_back(b);
 }
 
-void Universe::solve_Verlet(double h, double t_max) {
+void Universe::solve_Verlet(double h, double t_max, bool check_for_ejections) {
   mat y_i(n_bodies,7);
   mat r_i_dt(n_bodies,7);
   mat a_dt(n_bodies,7);
@@ -27,11 +27,19 @@ void Universe::solve_Verlet(double h, double t_max) {
 
   //print file___________________
   char *filename = new char[1000];
-  sprintf(filename, "data/Planet_position_Verlet_%f_%f.dat", h, t_max);
+  sprintf(filename, "data/Planet_position_Verlet_%f_%f_%d.dat", h, t_max, check_for_ejections);
+  char *filename2 = new char[1000];
+  sprintf(filename2, "data/Planet_energy_Verlet_%f_%f_%d.dat", h, t_max, check_for_ejections);
   
   ofstream output (filename);
   output.precision(5);
+  ofstream output2 (filename2);
+  output2.precision(5);
   
+  int number_of_points = t_max/h;
+  int divisor1 = number_of_points/1000;
+  int divisor2= number_of_points/1000;
+  int counter = 0;
   while(t < t_max){
 
     derivative(y_i, a_dt, n_bodies);
@@ -53,21 +61,24 @@ void Universe::solve_Verlet(double h, double t_max) {
 	y_i(j,i) = v_dt_2(j,i) + 0.5*h*a_dt(j,i);
 
       }
-
-      for(int i=0; i<3; i++){
-	all_bodies[j].position[i] = y_i(j,i);
-	all_bodies[j].velocity[i] = y_i(j,i+3);
+      if(!check_for_ejections or !check_ejected(j)){  //Hvis check_for_ejections er false, skjer ikke check_ejected()
+	for(int i=0; i<3; i++){
+	  all_bodies[j].position[i] = y_i(j,i);
+	  all_bodies[j].velocity[i] = y_i(j,i+3);
+	}
       }
     }
-    print_position(output);
+    
+    print_position(output, counter%divisor1 == 0);
+    print_energy(output2, counter%divisor2 == 0);
 
     t+=h;
-
+    counter++;
   }
   output.close();
 }
 
-void Universe::solve_RK4(double h, double t_max) {
+void Universe::solve_RK4(double h, double t_max, bool check_for_ejections) {
   mat y_i(n_bodies,7);
   mat y_i_temp(n_bodies,7);
   mat k1(n_bodies,7);
@@ -81,19 +92,13 @@ void Universe::solve_RK4(double h, double t_max) {
 
   //for print file_________
   char *filename = new char[1000];
-  sprintf(filename, "data/Planet_position_RK4_%f_%f.dat", h, t_max);
+  sprintf(filename, "data/Planet_position_RK4_%f_%f_%d.dat", h, t_max,check_for_ejections);
   ofstream ofile (filename);
   
   ofile.precision(5);
     
 
-  while(t<t_max){
-    // cout << "position of body1 = ";
-    // for (int i = 0; i < 3; i++) {
-    //   cout << all_bodies[0].position[i] << " ";
-    // }
-    // cout << endl;
-    
+  while(t<t_max){    
     derivative(y_i, k1, n_bodies);
 
     sum_matrix(y_i_temp, 1, y_i, 0.5*h, k1, n_bodies);
@@ -113,17 +118,17 @@ void Universe::solve_RK4(double h, double t_max) {
       
       //Syncronize position and velocity with the classes
       // Body body_tmp = all_bodies[j];
-      for(int i=0; i<3; i++){
-	all_bodies[j].position[i] = y_i(j,i);
-	all_bodies[j].velocity[i] = y_i(j,i+3);
+      if(!check_for_ejections or !check_ejected(j)){ //Hvis check_for_ejections er false, skjer ikke check_ejected()
+	for(int i=0; i<3; i++){
+	  all_bodies[j].position[i] = y_i(j,i);
+	  all_bodies[j].velocity[i] = y_i(j,i+3);
+	}
       }
-      
     }
-    
-    print_position(ofile);
+    print_position(ofile, true);
 
     t+=h;
-
+    
   }
 
   ofile.close();
@@ -144,9 +149,24 @@ void Universe::initialize_system_matrix(mat &ma){
     }
 }
 
-
-
-
+bool Universe::check_ejected(int j){
+  //  double radius = pow(all_bodies[j].position[0],2) +
+  //pow(all_bodies[j].position[1],2) +
+  //pow(all_bodies[j].position[2],2);
+  double my_energy = energy_of(j);
+  if(my_energy >= 0){
+    all_bodies[j].mass = 0;
+    all_bodies[j].velocity[0] = 0;
+    all_bodies[j].velocity[1] = 0;
+    all_bodies[j].velocity[2] = 0;
+    all_bodies[j].position[0] = 0;
+    all_bodies[j].position[1] = 0;
+    all_bodies[j].position[2] = -R0 -R0*(1e-3*(j+1));
+    
+    return true;
+  }
+  return false;
+}
 
 double Universe::force(double x, double y, double z, double M_other){
   double force=0;
@@ -205,7 +225,8 @@ void Universe::sum_matrix(mat &result, double coeff_one, mat &first,double coeff
 
 
 
-void Universe::print_position(std::ofstream& ofile) {
+void Universe::print_position(std::ofstream& ofile, bool do_print) {
+  if(!do_print) {return;}
   int n=3;
   for(unsigned i=0; i < all_bodies.size(); i++){
     Body &body_tmp = all_bodies[i];
@@ -222,26 +243,38 @@ void Universe::print_position(std::ofstream& ofile) {
 }
 
 
-double Universe::energy() {
+void Universe::print_energy(std::ofstream& ofile, bool do_print) {
+  if(do_print){ofile << std::scientific << energy() << endl;}
+}
+
+
+double Universe::energy_of(int j) {
   Body me, you;
+  me = all_bodies[j];
   double E = 0;
   int N = n_bodies;
+  
+  E += 0.5*me.mass* (pow(me.velocity[0], 2) + pow(me.velocity[1], 2) + pow(me.velocity[2], 2));
+
   for (int i = 0; i < N; i++) {
-    me = all_bodies[i];
-
-    E += 0.5*me.mass* (pow(me.velocity[0], 2) + pow(me.velocity[1], 2) + pow(me.velocity[2], 2));
+    if (i == j) continue;
+    you = all_bodies[i];
+    double distance = pow(me.position[0]-you.position[0],2) +
+      pow(me.position[1]-you.position[1],2) +
+      pow(me.position[2]-you.position[2],2) + eps;
     
-    for (int j = i+1; j < N; j++) {
-      double distance = pow(me.position[0]-you.position[0],2) +
-	pow(me.position[1]-you.position[1],2) +
-	pow(me.position[2]-you.position[2],2) + eps;
-      you = all_bodies[j];
-
-      if (distance <= 0 ) 
-	cout << i << ", " << j << endl;
-      assert (distance > 0);
-      E += - G * you.mass * me.mass / sqrt(distance);
-    }
+    assert (distance > 0);
+    E += - G * you.mass * me.mass / sqrt(distance);
   }
+  return E;
+}
+
+
+
+double Universe::energy() {
+  double E = 0;
+  int N = n_bodies;
+  for (int i = 0; i < N; i++) 
+    E += energy_of(i);
   return E;
 }

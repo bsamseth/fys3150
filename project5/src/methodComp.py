@@ -39,7 +39,7 @@ for t_max in t_max_list:
     print "| T=%.2f |" % t_max,
     for solver in ["verlet", "rk4"]:
         for h in [10**i for i in log_h_list]:
-            cmd = "./main.x %g %g %g %s" % (h, t_max, N, solver)
+            cmd = "./main.x %g %g %g %d %s" % (h, t_max, N, 0, solver)
             t0 = time.time()
             proc=subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, )
             output=proc.communicate()[0]
