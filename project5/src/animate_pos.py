@@ -1,6 +1,6 @@
 import sys, os
 import numpy as np
-from scipy import integrate
+#from scipy import integrate
 
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -67,7 +67,7 @@ def init():
 # animation function.  This will be called sequentially with the frame number
 def animate(i):
     # we'll step two time-steps per frame.  This leads to nice results.
-    i = (2 * i) % r.shape[1]
+    i = (5 * i) % r.shape[1]
 
     for line, pt, ri in zip(lines, pts, r):
         # x, y, z = ri[:i].T
@@ -81,16 +81,16 @@ def animate(i):
         # pt.set_3d_properties(z[-1:])
 
     ax.legend(['t = %g' % (i/float(n_timesteps))])
-    ax.view_init(30, 0.01 *0.3 * i )
+    #ax.view_init(30, 0.01 *0.3 * i )
     fig.canvas.draw()
     return lines + pts
 
 # instantiate the animator.
-mywriter = animation.FFMpegWriter()
+#mywriter = animation.FFMpegWriter()
 anim = animation.FuncAnimation(fig, animate, init_func=init,
                                frames=n_timesteps, interval=10, blit=True)
 
 # Save as mp4. This requires mplayer or ffmpeg to be installed
-# anim.save('solarsystem.mp4', fps=15, extra_args=['-vcodec', 'libx264'])
+anim.save('solarsystem.mp4', fps=15)#, extra_args=['-vcodec', 'libx264'])
 
 plt.show()

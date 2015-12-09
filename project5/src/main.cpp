@@ -13,18 +13,19 @@ int main(int argc, char *argv[]) {
 
   bool useVerlet = true;
   
-  if (argc < 4) {
-    cout << "Usage: ./main.x h tmax N [verlet/rk4]" << endl;
+  if (argc < 5) {
+    cout << "Usage: ./main.x h tmax N check_for_ejections [verlet/rk4]" << endl;
     exit(1);
   }
 
   double h = atof(argv[1]);
   double t_max = atof(argv[2]);
   int N = atoi(argv[3]);
+  bool check_for_ejections = (bool) atoi(argv[4]);
   
-  if (argc > 4) {
-    string arg4 (argv[4]);
-    if (arg4 == "rk4")
+  if (argc > 5) {
+    string arg5 (argv[5]);
+    if (arg5 == "rk4")
       useVerlet = false;
   }
 
@@ -61,16 +62,16 @@ int main(int argc, char *argv[]) {
   double rho0 = totalmass / (4.0 * M_PI * pow(R0, 3) / 3);
   
   mysystem.G = 3*M_PI / (32 * t_crunch*t_crunch * rho0);
-
+  mysystem.R0 = R0;
 
 
   t_max = t_max*t_crunch;
   
   double E0 = mysystem.energy();
   if (useVerlet)
-    mysystem.solve_Verlet(h, t_max);
+    mysystem.solve_Verlet(h, t_max, check_for_ejections);
   else
-    mysystem.solve_RK4(h, t_max);
+    mysystem.solve_RK4(h, t_max, check_for_ejections);
   
   double E1 = mysystem.energy();
 
