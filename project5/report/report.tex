@@ -155,13 +155,28 @@ Hovedprogrammet er skrevet i C++, mens vi har gjort dataanalysen i Python.
 Alle programmer er tilgjengelig på Github~\cite{github-repo}. 
 
 \subsection{Klassesystem}
-Vi har to klasser. Én objektklasse 'body' som inneholder med posisjon, fart 
+Vi har to klasser. Én objektklasse 'Body' som inneholder med posisjon, fart 
 og masse for et gitt legeme. Den andre klassen er 'Universe' og initialiseres
-med et gitt antall 'body'-objekter. Denne klassen inneholder mange metoder,
-som f.eks. 'Universe::energy' for å regne ut energien til systemet, og 
-'Universe::solve\_RK4' eller 'Universe::solve\_Verlet' for å løse systemet
+med et gitt antall 'Body'-objekter. Denne klassen inneholder mange metoder,
+som f.eks. \texttt{Universe::energy} for å regne ut energien til systemet, og 
+\texttt{Universe::solve\_RK4} eller \texttt{Universe::solve\_Verlet} for å løse systemet
 for en gitt tid.
-\subsection{solver}
+
+\subsection{Solver}
+Selve implementasjonen av løsningsmetodene er noe innviklet. Dette
+kommer av at vi har et system av to ordinære differensialligninger,
+hver med tre koordinater. Altså har vi egentlig seks diff.likninger
+som skal løses samtidig. Metodene som vi har skissert tidligere endrer
+ikke form, men det kan bli litt vanskelig å holde styr på alt
+sammen. Derfor skal vi gå nokså grundig i gjennom hvordan disse
+metodene er implementert. Dvs., vi gjør dette for Runge-Kutta;
+Velocity-Verlet er løst på en analog måte. RK4 er implementert i
+\texttt{Universe} slik som vist i vedlegg \ref{lst:solver-RK4}. 
+
+Vi begynner med å definere flere $N\times 7$ matriser. Dette svarer til
+en rad per legeme, der kolonnene er de tilhørende verdiene av (i rekkefølge) $x,y,z,v_x,v_y,v_z$
+og $M$. 
+
 
 \subsection{Første test av programmet}
 Det er ikke alltid lett å sjekke om en løsning gir mening. Vi begynner med
@@ -193,6 +208,13 @@ E_{tot} = E_{p} + E_{k}
 I tabell ???
 
 \printbibliography
+\onecolumn
+\section{Vedlegg}
+\begin{itemize}
+  \item[]\lstinputlisting[language=c++, caption={C++ metode som bruker Runge-Kutta 4 til å tidsutvikle
+  systemet.}, label={lst:solver-RK4}]{solversnippet.txt}
+\end{itemize}
+
 \end{document}
 %%% Local Variables:
 %%% mode: latex

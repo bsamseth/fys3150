@@ -38,22 +38,27 @@
 
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
 
-\definecolor{yellow}{rgb}{0.7,0.8,0}
+\definecolor{yellow}{rgb}{0.8,0.65,0.1}
 %\definecolor{blue}{rgb}{0,0,0.8}
 \definecolor{blue}{rgb}{0.3,0.3,0.9}
-\definecolor{green}{rgb}{0,0.3,0}
+\definecolor{green}{rgb}{0,0.7,0}
+\definecolor{magenta}{rgb}{0.9,0,0.9}
 \lstloadlanguages{Python} 
 \lstloadlanguages{MATLAB}
-\lstset{%frame=single, % Single frame around code
-		otherkeywords={self},
-        keywordstyle=\color{blue},
-        commentstyle=\color{green},
-        stringstyle=\color{green}, % Strings are green
-        showstringspaces=false, % Don't put marks in string spaces
-        tabsize=5, % 5 spaces per tab        
-        numbers=left, % Line numbers on left
-        %firstnumber=1, % Line numbers start with line 1
-        stepnumber=1 % Line numbers go in steps of 5
+\lstloadlanguages{C++}
+\lstset{language=C++,
+  showstringspaces=true,
+  frame=single,
+  basicstyle=\ttfamily,
+  keywordstyle=\color{yellow}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  commentstyle=\color{green}\ttfamily,
+  % morecomment=[l][\color{magenta}]{\#},
+  directivestyle=\color{magenta}\ttfamily,
+  emph={int,char,double,float,unsigned},
+  emphstyle=\color{blue},
+  firstnumber=1, % Line numbers start with line 1
+  stepnumber=5 % Line numbers go in steps of 5
 }
 
 
