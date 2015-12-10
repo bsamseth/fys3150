@@ -121,7 +121,7 @@ Algoritmen for metoden er gitt som følger:
 \subsection{Initialisering av systemet}
 Vi kan selv velge fritt starttilstanden til systemet vårt. Vi velger å
 begynne med $N$ objekter fordelt uniformt innenfor en sfære med
-radius $R_0$. Objektene gir vi en tilfeldig masse ved å la massene
+radius $R_0=20 ly$ (light years). Objektene gir vi en tilfeldig masse ved å la massene
 følge en Gaussisk fordeling med snittverdi $10M_\odot$ og standardavik
 på $M_\odot$. Her er $M_\odot$ solmassen. Vi lar alle starte i ro. 
 
@@ -170,7 +170,7 @@ Disse initialbetingelsene blir samlet kalt sfærisk
 kald-kollaps~\cite{cold-collapse}. I grensen der $N\rightarrow\infty$,
 med en konstant massetetthet $\rho_0$, vil vi se at legemene kollapser
 sammen i en singulæritet og danner et kontinuerlig fluid. Det kan
-vises at dete vil skje etter en tid~\cite{project5-exercise}
+vises at dette vil skje etter en tid~\cite{project5-exercise}
 \begin{align}
   \tau_\text{crunch} = \sqrt{\frac{ 3\pi }{ 32G\rho_0 }}\label{eq:t-crunch}.
 \end{align}
@@ -196,7 +196,7 @@ som f.eks. \texttt{Universe::energy} for å regne ut energien til systemet, og
 \texttt{Universe::solve\_RK4} eller \texttt{Universe::solve\_Verlet} for å løse systemet
 for en gitt tid.
 
-\subsection{Solver}
+\subsection{Løsningsmetoder}
 Selve implementasjonen av løsningsmetodene er noe innviklet. Dette
 kommer av at vi har et system av to ordinære differensialligninger,
 hver med tre koordinater. Altså har vi egentlig seks diff.likninger
@@ -240,27 +240,57 @@ er skissert i seksjon \ref{sec:om-VV}. Samme type tanke blir brukt for
 å implementere Rungekutta4.
 
 
+\subsection{Test av 2body-system}
+For å forsikre oss om at algoritmen fungerer begynner vi med å simulere
+et system med kun to legemer. I et slikt enkelt system er det lett å 
+sammenligne resultatene med ens egen intuisjon av systemet. Det finnes
+også en analytisk løsning. I figur \ref{fig:2body} kan vi se resultatet 
+av en kjøring. Vi ser at banene er ellipsoider, slik vi forventer for
+to-legeme-systemet. 
 
-\subsection{Første test av programmet}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.4]{../fig/2body.png}
+  \caption{\label{fig:2body} En figur som viser to legemer sin bane, når eneste
+    kraft som virker på dem er gravitasjon. Partikkel 0 starter i 
+    punktet $(0,0,0)$ og partikkel 1 i $(5,0,0)$. De har hastigheter 
+    henholdsvis $\vec{v} = (0, -0.1, 0) $ og $\vec{v} = (0, 0.1, 0)$  }
+\end{figure}
+
+
+
+
+
+\subsection{Første test av N-body}
 Det er ikke alltid lett å sjekke om en løsning gir mening. Vi begynner med
 å animere systemet \footnote{Tilgjengelig på \cite{github-repo} under navnet
-animate\_pos.py}, og ser fort at det skjedde noe rart når massene kom veldig
-nærme hverandre. Som en korreksjon til dette la vi til et feilledd i kraften
+animate\_pos.py}, og ser fort at det skjer noe rart når massene kommer veldig
+nærme hverandre. Noen legemer blir 'skutt' ut i stor fart. Dette kommer som
+vi ser fra uttrykket \eqref{eq:a_i} av at akselerasjonen,$a$, blir veldig
+stor når $r \rightarrow 0$.
+Som en korreksjon til dette legger vi til et feilledd i kraften
 
 \begin{align}
-F_{mod} = -\frac{GM_1M_2}{r^2 + \epsilon}.
+F_{mod} = -\frac{GM_1M_2}{r^2 + \epsilon},
 \end{align}
 
-Der $\epsilon$ gjør at $F_{mod}$ ikke går i lufta når $r^2 \rightarrow \infty$. 
-Dette kan vi tenke på som at legemene har en endelig størrelse. 
-Vi setter $\epsilon = 10^{-3}$. 
+der $\epsilon$ gjør at $F_{mod}$ ikke går i lufta når $r^2 \rightarrow 0$. Vi 
+rettferdiggjør denne korreksjonen ved at masser i den virklige
+verden aldri vil komme så nærme hverandre fordi de ikke er punktmasser.
+Til å begynne med setter vi $\epsilon = 10^{-3}$, som vi senere vil se gir
+gode resultater. Denne verdien er funnet etter prøving og feiling. 
+$\epsilon > 10^{-3}$ gir oss en uønsket stor dempning i kraften, og 
+$\epsilon < 10^{-3}$ gir fort samme problem som vi begynte med, deling på
+veldig små tall. Vi merker oss at $\epsilon = 10^{-3} {ly}^2$ er et veldig 
+stort tall, til sammenligning er $R_{solar}^2 \sim 10^{-15}$ 
 
 \subsection{Energibevaring}
 Selv om animasjoner alltid er flott, tenker vi det kan være lurt å ha en mer
 'matematisk' test på systemet vårt. Dette gjør oss også mer egnet til
-å gjøre en kvalitativ vurdering av hvilken av de løsningnsmetodene som er best
+å gjøre en kvalitativ vurdering av hvilken av de løsningsmetodene som er best.
 I et slikt ideelt system med bare 
-gravitasjon(konservativ kraft) er det naturlig å se på energibevaring. Vi får
+gravitasjon, en konservativ kraft, er det naturlig å se på energibevaring. Vi får
 energien
 
 \begin{align}
@@ -269,7 +299,11 @@ E_{k} = \sum_{i} \frac{1}{2}M_i|\vec{v_i}|^2 \\
 E_{tot} = E_{p} + E_{k}
 \end{align}
 
-I tabell \ref{tab:RKvsVV}
+I tabell \ref{tab:RKvsVV} ser vi en sammenligning av energibevaringen til 
+våre to metoder. Rungekutta bruker lengre tid uten betydelig bedre 
+energibevaring. For å spare kjøretid velger vi derfor å bruke 
+Velocity-Verlet. Tabellen viser oss også at vi trenger ganske små tidssteg,
+$h \leq 10 ^{-4}$ for å få god energibevaring.
 
 
 \begin{table*}[!ht]
@@ -277,7 +311,8 @@ I tabell \ref{tab:RKvsVV}
 \caption{En tabell som sammenligner relativ energiendring for de to metodene
 RungeKutta4 og VelocityVerlet. Energiendringen regnes ut fra systemet starter
 i ro ved $t_0 = 0$ til $T$ for to forskjellige steglengder
-$h$.  Kjøretiden, $T$, måles i enhet $\tau_{crunch}$. Ideelt sett vil vi ha $\Delta E = 0$.}
+$h$.  Kjøretiden, $T$, måles i enhet $\tau_{crunch}$. Ideelt sett vil vi ha $\Delta E = 0$. Vi ser Rungekutta bruker omtrent dobbelt så lang tid for en gitt h,
+uten å gi noe særlig bedre presisjon.}
 \label{tab:RKvsVV}
 \vspace{0.5cm}
 \begin{tabular}{ccccc}
@@ -289,8 +324,10 @@ Energiendring og tidsforbruk,$(E,\Delta t)$ VV & $(4.9E-01, 001.9)$ & $(2.9E-03,
 \end{tabular}
 \end{table*}
 
-
-
+\subsection{Utskytning av partikler}
+Rundt tidspunktet $\tau_{crunch}$ og i en stund etter vil partikler skytes ut
+av det opprinnelige kuleskallet. Hvordan kan vi identifisere en partikkel
+som er skutt ut? 
 
 \printbibliography
 \onecolumn
