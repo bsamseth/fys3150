@@ -326,8 +326,41 @@ Energiendring og tidsforbruk,$(E,\Delta t)$ VV & $(4.9E-01, 001.9)$ & $(2.9E-03,
 
 \subsection{Utskytning av partikler}
 Rundt tidspunktet $\tau_{crunch}$ og i en stund etter vil partikler skytes ut
-av det opprinnelige kuleskallet. Hvordan kan vi identifisere en partikkel
-som er skutt ut? 
+av det opprinnelige kuleskallet. Dette er partikler som ikke vil
+være en del av vår likevektstilstand, og vi ønsker derfor å ha muligheten
+til å se bort fra dem. Men hvordan kan vi identifisere en partikkel
+som er skutt ut? Vi vet at en partikkel med $E_i > 0$ har $E_K > |E_p|$, og
+vil derfor unnslippe galaksehopen. Dette viser seg derimot å være ustabilt. Se
+f.eks. figur \ref{fig:energivariasjon} der vi kan se at den gjennomsnittlige
+energien varierer lite, selv om den 'lokale' energien noen ganger gjør et hopp.
+ På grunn av denne lokale numeriske ustabiliteten ser vi oss nødt til å gjøre
+noe mer robust enn kun å se på energien. Vi observerer at en utskutt 
+partikkel alltid vil forsvinne mot 'det fjerne', og derfor at 
+$r_{utskutt} > R_0$. Vi bestemmer oss derfor for at i vårt program har ikke
+en utskutt partikkel \emph{bare} positiv energi, $E > 0$, men også posisjon
+utenfor kuleskallet vi begynte med. 
+
+I programmet vårt fjerner vi de utskutte
+partiklene ved å sette massen og hastighetene til null, og å gjemme dem bort i et 'hjørne'. 
+
+\subsection{Likevekt}
+En konsekvens av at vi fjerner partikler er at energien ikke lenger er bevart
+gjennom hele simuleringen. Til gjengjeld får vi en veldig fin måte å definere
+likevekt på. Det følger naturlig fra forrige avsnitt at likevektstilstanden
+er når ingen flere partikler fjernes, det vil si energien ikke forandrer seg
+betydelig lenger.
+
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.2]{../fig/energivariasjon.png}
+  \caption{\label{fig:energivariasjon} En figur som viser  }
+\end{figure}
+
+
+
+
 
 \printbibliography
 \onecolumn
