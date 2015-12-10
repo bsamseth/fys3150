@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < N; i++) {
     double mass = abs(10*M0 + M0 * gaussian_deviate(&idum));
     
-    int vx, vy, vz;
+    double vx, vy, vz;
     vx = vy = vz = 0;
 
     double phi   = 2*M_PI * ran2(&idum);

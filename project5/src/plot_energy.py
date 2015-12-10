@@ -13,6 +13,6 @@ except Exception:
     sys.exit(1)
 
 data = loadtxt(datafile)
-plt.plot(data)
+plt.plot(data[:,0])
 plt.show()
 

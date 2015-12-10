@@ -28,10 +28,10 @@ for i in range(n_bodies):
 fig, ax = plt.subplots()
 ax = fig.gca(projection='3d')
 for i in range(n_bodies):
-    ax.scatter(r[i,-1,0], r[i,-1,1], r[i,-1,2], label=i)
-#    ax.plot(r[i,:,0], r[i,:,1], r[i,:,2], label=i)
+    #    ax.scatter(r[i,-1,0], r[i,-1,1], r[i,-1,2], label=i)
+    ax.plot(r[i,:,0], r[i,:,1], r[i,:,2], label=i)
 
-#plt.legend()
+plt.legend()
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel('z')

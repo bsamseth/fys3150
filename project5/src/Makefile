@@ -4,7 +4,7 @@ LFLAGS =
 
 OBJS = Body.o Universe.o
 LIBS = ../../lib/lib.o
-TARGETS = main
+TARGETS = main 2body
 
 all: $(TARGETS)
 
@@ -16,6 +16,9 @@ Universe.o: Body.o Universe.cpp Universe.h
 
 Body.o: Body.cpp Body.h
 	$(CC) $(CFLAGS) -c Body.cpp
+
+2body: $(OBJS) 2body.cpp
+	$(CC) $(CFLAGS) -Wno-unused-variable $(OBJS) $(LIBS) -o 2body.x 2body.cpp
 
 clean :
 	rm -f *~ \#*# *.o *.x

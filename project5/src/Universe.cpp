@@ -27,14 +27,14 @@ void Universe::solve_Verlet(double h, double t_max, bool check_for_ejections) {
 
   //print file___________________
   char *filename = new char[1000];
-  sprintf(filename, "data/Planet_position_Verlet_%f_%f_%d.dat", h, t_max, check_for_ejections);
+  sprintf(filename, "data/Nbody_position_Verlet_%f_%f_%d_%d.dat", log(h), t_max, n_bodies, check_for_ejections);
   char *filename2 = new char[1000];
-  sprintf(filename2, "data/Planet_energy_Verlet_%f_%f_%d.dat", h, t_max, check_for_ejections);
+  sprintf(filename2, "data/Nbody_energy_Verlet_%f_%f_%d_%d.dat", log(h), t_max, n_bodies, check_for_ejections);
   
   ofstream output (filename);
-  output.precision(5);
+  output.precision(6);
   ofstream output2 (filename2);
-  output2.precision(5);
+  output2.precision(6);
   
   int number_of_points = t_max/h;
   int divisor1 = number_of_points/1000;
@@ -150,11 +150,11 @@ void Universe::initialize_system_matrix(mat &ma){
 }
 
 bool Universe::check_ejected(int j){
-  //  double radius = pow(all_bodies[j].position[0],2) +
-  //pow(all_bodies[j].position[1],2) +
-  //pow(all_bodies[j].position[2],2);
+  double radius = pow(all_bodies[j].position[0],2) +
+  pow(all_bodies[j].position[1],2) +
+  pow(all_bodies[j].position[2],2);
   double my_energy = energy_of(j);
-  if(my_energy >= 0){
+  if(my_energy >= 0 && radius > R0*R0){
     all_bodies[j].mass = 0;
     all_bodies[j].velocity[0] = 0;
     all_bodies[j].velocity[1] = 0;
@@ -244,7 +244,14 @@ void Universe::print_position(std::ofstream& ofile, bool do_print) {
 
 
 void Universe::print_energy(std::ofstream& ofile, bool do_print) {
-  if(do_print){ofile << std::scientific << energy() << endl;}
+ if(do_print){
+   double Ek = 0;
+   for(int j = 0; j < n_bodies; j++){
+     Ek += energy_kinetic_of(j);
+   }
+   ofile << std::scientific << energy()<< " ";
+   ofile << std::scientific << Ek << endl;
+ }
 }
 
 
