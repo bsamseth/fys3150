@@ -37,40 +37,44 @@ Alt materiale som har blitt referert er tilgjengelig
 ]
 
 \section{Innledning}
-Vi ser på en åpen galaksehop med $N$ partikler. I vårt system antar vi at 
-gravitasjon er den eneste kraften som virker
+Vi skal se på et stjernekluster med $N$ partikler. I vår modell tenker
+vi oss at hver partikkel representerer en eller noen få stjerner. Vi
+skal også anta at gravitasjon er den eneste kraften som virker:
 
 \begin{align}
- F = -\frac{GM_1M_2}{r^2}.\
+ \vec F = -\frac{GM_1M_2}{r^3}\vec r.\
 \end{align}
 
-Her er $G$ gravitasjonskonstanten, $M$ er massene og $r$ er avstanden mellom dem. 
-Denne antagelsen er god under forutsetningen av $r$ er relativt stor. Vi bruker
+Her er $G$ gravitasjonskonstanten, $M_i$ er massene og $r$ er avstanden mellom dem. 
+Denne antagelsen er god under forutsetningen av at $r$ er relativt
+stor slik at  ingen kontaktkrefter gjør seg gjeldene. Vi bruker
 Newtons andre lov, og får differensialligningene 
 
 \begin{align} \label{eq:a_i}
-a_i = \sum_{j \neq i} \frac{GM_j}{{|\vec{r_i} - \vec{r_j}|}^2} ,  i = 1,2, \cdots N 
+a_i = \sum_{j \neq i} \frac{GM_j}{{|\vec{r_i} - \vec{r_j}|}^2} , \ \ \
+  i = 1,2, \cdots N 
 \end{align}
 
-Der $a_i$ er akselerasjonen til masse $i$. Dette er en ordinære differensialligning, og
-vi anvender RungeKutta4 og Velocity-Verlet.
+der $a_i$ er akselerasjonen til masse $i$. Dette er et system av
+ordinære differensialligninger, noe vi kan løse ved å anvende
+numeriske metoder. I denne rapporten ser vi på RungeKutta4 og Velocity-Verlet.
 
 \subsection{Kort om RungeKutta4~\small{\cite{RK4}}}
-Gitt en funksjon på formen 
+Metoden antar en funksjon på formen 
 \begin{align*}
-\dot{y} = f(t, y), \quad y(t_0) = y_0
+\dot{y} = f(t, y), \quad y(t_0) = y_0,
 \end{align*}
 
-I vårt tilfelle \eqref{eq:a_i} med 
+som i vårt tilfelle er gitt ved \eqref{eq:a_i} med 
 
 \begin{align*}
-\dot{v_i} = a_i 
+\dot y = \dot{v_i} = a_i 
 \end{align*}
-med initialbetingelsene
+Vi trenger initialbetingelser for hastighet,
 \begin{align*}
-r_i(t_0) = r_{i,0},\ \  v_i(t_0) = 0
+ v_i(t_0) = v_{i,0}.
 \end{align*}
-Velg en steglengde $h>0$ og definer 
+Vi velger en steglengde $h>0$ og definer 
 
 \begin{align*}
 y_{n+1} &= y_n + \tfrac{h}{6}\left(k_1 + 2k_2 + 2k_3 + k_4 \right)\\
@@ -87,14 +91,16 @@ k_4 &= f(t_n + h, y_n + hk_3).
 Vi gjentar så metoden en gang til for 
 
 \begin{align*}
-\dot{x_i} = v_i
+\dot{x_i} = v_i.
 \end{align*}
+I realiteten er det mulig å vektorisere prosessen slik at vi løser
+både hastigheten og posisjonen til alle partiklene samtidig.
 
-\subsection{Kort Velocity-Verlet~\small{\cite{Velocity-Verlet}}}
+\subsection{Kort om Velocity-Verlet~\small{\cite{Velocity-Verlet}}}
 \label{sec:om-VV}
-Vi anvender også Velocity-Verlet på \eqref{eq:a_i}. Den fungerer for tilfeller der 
+Vi anvender også Velocity-Verlet på \eqref{eq:a_i}. Denne metoden fungerer for tilfeller der 
 akselerasjonen ikke er en funksjon av hastigheten. 
-Metoden er gitt som
+Algoritmen for metoden er gitt som følger:
 
 \begin{enumerate}
 \item Regn ut: \begin{align*}
@@ -121,7 +127,8 @@ på $M_\odot$. Her er $M_\odot$ solmassen. Vi lar alle starte i ro.
 
 Av disse startbetingelesene er det en del som trenger noe ekstra
 oppmerksomhet\footnote{Det som følger er i stor grad en oversettelse
-  av et skriv laget av H. T. Ihle.}. Det er ikke helt fullstendig trivielt å lage uniformt
+  av et skriv laget av H. T. Ihle som ble sendt ut via epost (ikke
+  listet som en referanse fordi den ikke kan vises til noe sted).}. Det er ikke helt fullstendig trivielt å lage uniformt
 fordelte koordinater innenfor en sfære. Problemet er at hvis vi lar
 objektene være uniformt fordelt i $r$, så vil vi ende med en mye
 større tetthet rundt midten av sfæren. Og hvis vi fordeler objektene
@@ -149,7 +156,33 @@ fremgangsmåte for $r$ og $\theta$ gir
   r &= R_0 \sqrt[3]{u}\\
   \theta &= \arccos(1-2v).
 \end{align}
+Vi får de kartesiske koordinatene ved vanlig overgang fra sfæriske
+koordinater:
+\begin{align*}
+  x = r\sin\theta\sin\phi\\
+y = r\sin\theta\sin\phi\\
+z = r\cos\theta.
+\end{align*}
 
+
+\subsubsection{Forventninger}
+Disse initialbetingelsene blir samlet kalt sfærisk
+kald-kollaps~\cite{cold-collapse}. I grensen der $N\rightarrow\infty$,
+med en konstant massetetthet $\rho_0$, vil vi se at legemene kollapser
+sammen i en singulæritet og danner et kontinuerlig fluid. Det kan
+vises at dete vil skje etter en tid~\cite{project5-exercise}
+\begin{align}
+  \tau_\text{crunch} = \sqrt{\frac{ 3\pi }{ 32G\rho_0 }}\label{eq:t-crunch}.
+\end{align}
+Dette blir dermed en veldig naturlig tidsenhet, og vi måler alle tider
+i antall $\tau_\text{crunch}$. 
+
+Vi vil derimot ikke forvente å se en singulæritet i vår
+simulering. Dette er fordi vi ser på punktmasser som kun vekselvirker
+gjennom gravitasjon, i tillegg til at vi selvsagt må begrense oss til
+en endelig verdi for $N$. Hva vi derimot vil forvente å se er at noen
+partikler blir slynget ut av systemet (unnslipper), mens resten blir
+værende i en eller annen form for bane rundt et felles massesenter. 
 
 \section{Implementering og testing}
 Hovedprogrammet er skrevet i C++, mens vi har gjort dataanalysen i Python.
