@@ -91,6 +91,7 @@ Vi gjentar så metoden en gang til for
 \end{align*}
 
 \subsection{Kort Velocity-Verlet~\small{\cite{Velocity-Verlet}}}
+\label{sec:om-VV}
 Vi anvender også Velocity-Verlet på \eqref{eq:a_i}. Den fungerer for tilfeller der 
 akselerasjonen ikke er en funksjon av hastigheten. 
 Metoden er gitt som
@@ -175,7 +176,36 @@ Velocity-Verlet er løst på en analog måte. RK4 er implementert i
 
 Vi begynner med å definere flere $N\times 7$ matriser. Dette svarer til
 en rad per legeme, der kolonnene er de tilhørende verdiene av (i rekkefølge) $x,y,z,v_x,v_y,v_z$
-og $M$. 
+og $M$. For eksempel matrisen $y_i$ er på formen
+\begin{align*}
+  y_i = \begin{pmatrix}
+    x_1&y_1&z_1&v_{x_1}&v_{y_1} &v_{z_1} & m_1\\
+    x_2&y_2&z_2&v_{x_2}&v_{y_2} &v_{z_2} & m_2\\
+    \vdots&&\ddots&&&&\vdots\\
+    x_N&y_N&z_N&v_{x_N}&v_{y_N} &v_{z_N} & m_N\\
+  \end{pmatrix}
+\end{align*}
+
+Til å begynne med fyller vi $y_i$ med data fra den initielle tilstanden til systemet.
+Vi går så inn i tidsløkken. Her brukes en funksjon
+\texttt{derivative(y\_i, a\_i, n\_bodies)} som gjør at matrisen $a_i$ fylles med de
+deriverte verdiene av matrise $y_i$. Det vil si at posisjonen i $y_i$
+får tilsvarende element i $a_i$ satt som hastigheten, og hastigheten i
+$y_i$ blir tilsvarende satt til akselerasjonen i $a_i$. 
+
+\begin{align*}
+  a_i = \begin{pmatrix}
+    v_{x_1}&v_{y_1} &v_{z_1}&a_{x_1}&a_{y_1} &a_{z_1} & m_1\\
+    v_{x_2}&v_{y_2} &v_{z_2}&a_{x_2}&a_{y_2} &a_{z_2} & m_2\\
+    \vdots&&\ddots&&&&\vdots\\
+    v_{x_N}&v_{y_N} &v_{z_N}&a_{x_N}&a_{y_N} &a_{z_N} & m_N\\
+  \end{pmatrix}
+\end{align*}
+
+Med denne fremgangsmåten følges så algoritmen for Velocity-Verlet som
+er skissert i seksjon \ref{sec:om-VV}. Samme type tanke blir brukt for
+å implementere Rungekutta4.
+
 
 
 \subsection{Første test av programmet}
