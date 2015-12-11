@@ -92,6 +92,6 @@ anim = animation.FuncAnimation(fig, animate, init_func=init,
 
 # Save as mp4. This requires mplayer or ffmpeg to be installed
 #anim.save('solarsystem.mp4', fps=15)#, extra_args=['-vcodec', 'libx264'])
-anim.save('../fig/animation.mp4', writer = 'mencoder', fps=15)
-print 'done!'
+#anim.save('../fig/animation.mp4', writer = 'mencoder', fps=15)
+#print 'done!'
 plt.show()
