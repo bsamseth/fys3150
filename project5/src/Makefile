@@ -4,7 +4,7 @@ LFLAGS =
 
 OBJS = Body.o Universe.o
 LIBS = ../../lib/lib.o
-TARGETS = main 2body
+TARGETS = main 2body probabilityDensity
 
 all: $(TARGETS)
 
@@ -19,6 +19,9 @@ Body.o: Body.cpp Body.h
 
 2body: $(OBJS) 2body.cpp
 	$(CC) $(CFLAGS) -Wno-unused-variable $(OBJS) $(LIBS) -o 2body.x 2body.cpp
+
+probabilityDensity: $(OBJS) probabilityDensity.cpp
+	$(CC) $(CFLAGS) -Wno-unused-variable $(OBJS) $(LIBS) -o probabilityDensity.x probabilityDensity.cpp
 
 clean :
 	rm -f *~ \#*# *.o *.x

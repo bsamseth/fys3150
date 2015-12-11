@@ -41,12 +41,34 @@ for body_i in xrange(n_bodies):
 print len(average_r_array)
 
 fig, ax = plt.subplots()
-rho = average_r_array
-n, bins, patches = ax.hist(rho,
-                           bins=arange(int(min(rho)), 
-                                       int(max(rho))+1,0.5),
-                           rwidth=1)
+r = average_r_array
+n, bins, patches = ax.hist(r,
+                           bins=arange(int(min(r)), 
+                                       int(max(r))+1,0.25),
+                           rwidth=1)# normed=True)
 plt.setp(patches, 'facecolor', 'g', 'alpha', 0.75)
+
+r = sort(r)
+ax.plot(r, max(n)/(1+(r/(r[argmax(n)]))**4), 'b')
+ax.set_xlabel('r')
+ax.set_ylabel('P(r)')
+
+
+rho = []
+rmaxrange = arange(0.01, 30, 0.5)
+for Rmax in rmaxrange:
+    number_inside = sum(r<Rmax)
+    Volume = 4*pi*Rmax**3/3 
+    rho.append(number_inside/Volume)
+
+
+fig, ax = plt.subplots()
+ax.plot(rmaxrange, rho)
+r0 = r[argmax(rho)]
+rho0 = max(rho)
+ax.plot(rmaxrange, rho0/((rmaxrange/r0)*(1+rmaxrange/r0)**2))
 ax.set_xlabel('r')
 ax.set_ylabel('rho')
 plt.show()
+
+#0.025/(1+(rmaxrange/8.0)**4)
