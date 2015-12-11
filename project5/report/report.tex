@@ -336,27 +336,6 @@ energibevaring.\footnote{Merk at tabellen i vedlegg
   krasjer programmet). Vi mener i alle tilfeller at konklusjonen i
   forhold til metode er gyldig.}
 
-\end{multicols}
-
-\begin{table*}[h]
-\centering
-\caption{En tabell som sammenligner relativ energiendring for de to metodene
-RungeKutta4 og VelocityVerlet. Energiendringen regnes ut fra systemet starter
-i ro ved $t_0 = 0$ til $T$ for to forskjellige steglengder
-$h$.  Kjøretiden, $T$, måles i enhet $\tau_{crunch}$. Ideelt sett vil vi ha $\Delta E = 0$. Vi ser Rungekutta bruker omtrent dobbelt så lang tid for en gitt h,
-uten å gi noe særlig bedre presisjon.}
-\label{tab:RKvsVV}
-\vspace{0.5cm}
-\begin{tabular}{ccccc}
-Kjøreparametre $(T, log(h))$ & $(0.79,-3)$ & $(0.79,-4)$ & $(2.5,-3)$ & $(2.5,-4)$ \\
-\hline 
-Energiendring og tidsforbruk,$(E,\Delta t)$ RK4 & $(2.4E-01, 006.6)$ & $(2.8E-03, 046.7)$ & $(6.6E-01, 011.1)$ & $(2.2E-02, 120.8)$ \\
-Energiendring og tidsforbruk,$(E,\Delta t)$ VV & $(4.9E-01, 001.9)$ & $(2.9E-03, 027.5)$ & $(9.1E-01, 005.7)$ & $(5.1E-03, 058.6)$ \\
-\hline
-\end{tabular}
-\end{table*}
-
-\begin{multicols}{2}
 \subsection{Utskytning av partikler}
 Rundt tidspunktet $\tau_{crunch}$ og i en stund etter vil partikler skytes ut
 av det opprinnelige kuleskallet. Dette er partikler som ikke vil
@@ -585,9 +564,11 @@ men allikevel har vi fått gode nok resultater til å se fysikken bak mange-lege
       Velocity Verlet til å tidsutvikle systemet.},
     label={lst:solver-RK4}]{solversnippet.txt}
 \pagebreak
-  \item[]\lstinputlisting[basicstyle=\small,caption={Tabell som viser
-      presisjon og kjøretid (format (presisjon, tid brukt)) for både
-      Runge-Kutta 4 og Velocity-Verlet for flere tidsperioder og steglengder.},
+  \item[]\lstinputlisting[basicstyle=\small,caption={En tabell som sammenligner relativ energiendring for de to metodene
+RungeKutta4 og VelocityVerlet. Energiendringen regnes ut fra systemet starter
+i ro ved $t_0 = 0$ til $T$ for to forskjellige steglengder
+$h$.  Kjøretiden, $T$, måles i enhet $\tau_{crunch}$. Ideelt sett vil vi ha $\Delta E = 0$. Vi ser Rungekutta bruker omtrent dobbelt så lang tid for en gitt h,
+uten å gi noe særlig bedre presisjon.},
     label={lst:methodcomptable}]{../src/data/methodCompTable.txt}
 \end{itemize}
 
