@@ -11,6 +11,9 @@ all: $(TARGETS)
 main: $(OBJS) main.cpp
 	$(CC) $(CFLAGS) -Wno-unused-variable $(OBJS) $(LIBS) -o main.x main.cpp
 
+2body: $(OBJS) 2body.cpp
+	$(CC) $(CFLAGS) -Wno-unused-variable $(OBJS) $(LIBS) -o 2body.x 2body.cpp
+
 Universe.o: Body.o Universe.cpp Universe.h
 	$(CC) $(CFLAGS) -c Universe.cpp
 
