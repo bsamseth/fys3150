@@ -14,7 +14,8 @@ from mpl_toolkits.mplot3d import Axes3D
 
 fig_dummy, dummy = plt.subplots()
 fig, ax = plt.subplots()
-for N_index, N in enumerate(range(300,401,80)):
+fig, dax = plt.subplots()
+for N_index, N in enumerate(range(300,501,100)):
     datafile = 'data/Nbody_position_Verlet_-9.210340_5.000000_%d_1.dat' %N
     data = loadtxt(datafile)
 
@@ -62,16 +63,17 @@ for N_index, N in enumerate(range(300,401,80)):
     N_ = len(average_r_array)
     average_r_array = asarray(average_r_array)
     r = average_r_array#*N_**(1/3.0)
+
     n, bins, patches = dummy.hist(r,
                            bins=arange(int(min(r)), 
                                        int(max(r))+1,0.5),
                                rwidth=1, #weights = ones(N_)/N_**2,
-                               label= 'N = %d' %N)
-    plt.setp(patches, 'alpha', 0.75)
+                                  label= 'N = %d' %N,normed=True)
+    plt.setp(patches, 'alpha', 1-N_index*0.33)
 
-
-    ax.loglog(bins[:-1]*(N**(1/3.0)), n/float(N)**2, 'o')
-
+    binvolums = 4*pi/3 * bins**3
+    dax.plot(bins[1:], n/binvolums[1:])
+    ax.loglog(bins[1:]*(N**(1/3.0)), n/binvolums[1:], '+')
 
 
     r = sort(r)
@@ -85,10 +87,21 @@ for N_index, N in enumerate(range(300,401,80)):
 
 plot_r = linspace(0.1,25*500**(1/3.0),1001)
 n0 =  1
-r0 =  3.0
-ax.plot(plot_r, n0/(1+(plot_r/(r0))**4))
-ax.set_xlabel('r')
-ax.set_ylabel('P(r)')
+r0 =  3.5
+ax.plot(plot_r, n0/(1+(plot_r/(r0))**4),label=r'$%g/(1+(r/%g)^4)$' % (n0,r0))
+plot_r = linspace(0.1,25,1001)
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex = True)
+#dummy.plot(plot_r, n0/(1+(plot_r/(r0))**4))
+dummy.set_xlabel(r'Avstand fra massesenter, [$R_0$]',size=23)
+dummy.set_ylabel(r'Nummertetthet, $n(r)$',size=23)
+dummy.legend(prop={'size':16})
+ax.legend(prop={'size':16})
+ax.set_xlabel(r'Avstand fra massesenter, [$R_0$]',size=23)
+ax.set_ylabel(r'Partikkeltetthet, $\rho(r)$',size=23)
+#box = dummy.get_position()
+#dummy.set_position([box.x0, box.y0*1.25, box.width, box.height])
+
 
 
 

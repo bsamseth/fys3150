@@ -14,7 +14,8 @@
   \textsc{\Large }\\[0.5cm] % Major heading such as course name
   \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
   \HRule \\[0.4cm]
-  { \huge \bfseries N-body simulering}\\[0.4cm]
+  { \huge \bfseries En titt på fysiske egenskaper
+  i en $N$-legeme kaldkollaps}\\[0.4cm]
   \HRule \\[1.5cm]
   \Large \emph{Skrevet av:}\\
   Lyder \textsc{Rumohr Blingsmo} (k.nr. 2) og Bendik \textsc{Samseth} (k.nr. 27)\\[3cm]
@@ -28,7 +29,7 @@ I denne rapporten utvikler vi en N-body modell. Det vil si et system av
 $N$ masser som vekselvirker kun ved gravitasjon. Spesielt studerer vi kollaps
 av et slik system når alle partiklene begynner i ro. Vi sammenligner 
 stabiliteten til to forskjellige løsningsmetoder, RungeKutta4 og VelocityVerlet,
-ved å kikke på energibevaring i systemet. 
+ved å kikke på energibevaring i systemet. Et gjennomgående resultat er ...
 Alt materiale som har blitt referert er tilgjengelig
  på Github~\cite{github-repo}. 
 \end{abstract}
@@ -401,9 +402,24 @@ ser vi følgende:
   \item Alle partiklene blir most sammen i sentrum av systemet.
   \item Partiklene spretter tilbake igjen, noen helt ut av systemet,
     andre i mindre grad.
+  \item Massenteret beveger seg vekk fra origo med tilnærmet konstant
+    hastighet slik vi ser i figur \ref{fig:massesenter}
   \item Vi står til slutt igjen med et redusert antall partikler som
     ser ut til å bevege seg noen lunde stabilt rundt i massesenteret.
 \end{enumerate}
+
+
+\end{multicols}
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{../fig/massesenter.png}
+  \caption{\label{fig:massesenter} En figur som viser massesenterets
+  avstand fra origo som funksjon av tid etter likevekt er nådd. Vi ser 
+  at massesenteret beveger seg vekk med tilnærmet konstant fart.}
+\end{figure}
+\begin{multicols}{2}
+
+
 
 \subsection{Likevekt}
 Det ser altså ut som om systemet en stund etter $\tau_\text{crunch}$
@@ -437,21 +453,6 @@ Grunnen til at totalenergien blir mer negativ når vi tar ut partiklene
 følger logisk av at vi bare tar ut partikler som har netto positiv
 energi. Tar vi vekk disse blir totalen åpenbart mer negativ. 
 
-I figur
-\ref{fig:prosentandel-utskutte} kan vi se hvordan prosentandelen
-av partiklene som blir skutt ut endrer seg som funksjon av N. 
-
-\end{multicols}
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[width=\textwidth]{../fig/prosentandel.png}
-  \caption{\label{fig:prosentandel-utskutte} Systemets
-    totalenergi som funksjon av tid med masseutskytelse. Vi legger
-    særlig merke til at en liten tid etter $\tau_\text{crunch}$ får vi
-  en voldsom reduksjon i energien til systemet. Vi ser så at etter en
-  tid ser energien ut til å stabilisere seg på et lavere nivå.}
-\end{figure}
-\begin{multicols}{2}
 
 \subsubsection{$N$-avhengighet}
 Vi kan lure på hvordan dette endrer seg med $N$. I figur
@@ -469,6 +470,21 @@ tid på å nå et nytt stabilt energinivå.
     for flere verdier av $N$. Vertikal akse er normalisert mot
     initialenergien for hver $N$. Vi ser at likevekten etableres mer eller
   mindre like fort uavhengig av hvor mange partikler som er med.}
+\end{figure}
+\begin{multicols}{2}
+
+I figur \ref{fig:prosentandel-utskutte} kan vi se hvordan prosentandelen
+av partiklene som blir skutt ut endrer seg som funksjon av N. Vi ser
+store variasjoner i punktene, men en klar trend som viser at en større
+prosentandel av partiklene vi begynner med blir skutt ut for større N. 
+
+\end{multicols}
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{../fig/prosentandel.png}
+  \caption{\label{fig:prosentandel-utskutte} En figur som viser andel av partikler
+  som blir skutt ut som funksjon av $N$. Vi ser store variasjoner i punktene, men en klar
+  trend at større $N$ gir større andel utskutte partikler.}
 \end{figure}
 \begin{multicols}{2}
 
@@ -525,7 +541,12 @@ også en mye bedre forståelse av disse to algoritmene.
 
 Prosjektet har vært lærerikt ved at vi har blitt kjent med
 klasseprogrammering i C++ og også mer komfortable med databehandling
-i python. Nok en gang har vi fått oppleve viktigheten av grundig testing
+i python. Mange-legeme-systemet har også vist oss at
+tilsynelatende 'usammenhengdende' resultater, ofte kan tilnærmes
+med en overraskende enkel funksjon. I dette tilfellet spesielt
+\ref{eq:prosentandel-utskutte}
+
+Nok en gang har vi fått oppleve viktigheten av grundig testing
 av programmet, kanskje spesielt i start-fasen av et nytt prosjekt. Da 
 kaster man ikke bort tiden ved å jobbe videre på noe som er feil. Senest
 dagen før frist oppdaget vi nye bugs i programmet. Som vanlig er vi
