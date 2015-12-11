@@ -38,9 +38,10 @@ ax.plot(t_array, -Potential_energy[eq:]/Kinetic_energy[eq:],
 ax.plot(t_array, ones_like(Potential_energy[eq:])*2,label='Theorem')
 ax.set_xlabel(r'Tid  [$\tau_{crunch}$] \\ \\' \
            + r'Parametre: $h = %g, T_{max} = %.1f, N = %d$ \\' \
-           %(exp(logh), Tmax, N) + s, fontsize='large')
-ax.set_ylabel(r'$-\langle V\rangle / \langle K\rangle$')
-ax.legend()
+              %(exp(logh), Tmax, N) + s, size=23)
+ax.set_ylabel(r'$-\langle V\rangle / \langle K\rangle$', size=23)
+ax.set_title(r'En test av viralteoremet', size = 23)
+ax.legend(prop={'size':16})
 box = ax.get_position()
 ax.set_position([box.x0, box.y0*1.25, box.width, box.height])
 

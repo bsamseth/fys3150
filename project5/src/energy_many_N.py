@@ -29,12 +29,12 @@ for N in Nlist:
     ax.plot(t_array, (-data[:,0]/N)/max(data[:,0]/N), label=r"$N=%d$" % N)
 
 
-ax.set_title(r'Energi som funksjon av tiden', fontsize='large')
+ax.set_title(r'Energi som funksjon av tiden', size=23)
 ax.set_xlabel(r'Tid  [$\tau_{crunch}$] \\ \\' \
            + r'Parametre: $h = %g, T_{max} = %.1f, N = %d$ \\' \
-           %(exp(logh), Tmax, N) + s, fontsize='large')
-ax.set_ylabel(r'Energi per partikkel', fontsize='large')
-ax.legend()
+              %(exp(logh), Tmax, N) + s, size=23)
+ax.set_ylabel(r'Energi per partikkel', size=23)
+ax.legend(prop={'size':16})
 box = ax.get_position()
 ax.set_position([box.x0, box.y0*1.25, box.width, box.height])
 plt.show()

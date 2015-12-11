@@ -29,7 +29,9 @@ I denne rapporten utvikler vi en N-body modell. Det vil si et system av
 $N$ masser som vekselvirker kun ved gravitasjon. Spesielt studerer vi kollaps
 av et slik system når alle partiklene begynner i ro. Vi sammenligner 
 stabiliteten til to forskjellige løsningsmetoder, RungeKutta4 og VelocityVerlet,
-ved å kikke på energibevaring i systemet. Et gjennomgående resultat er ...
+ved å kikke på energibevaring i systemet. Resultatene viser blant annet
+god overensstemmelse med viralteoremet, at andel partikler som skytes ut av systemet
+øker med antall partikler, $N$  og at gjennomsnittlig avstand til massesenteret minker med N.
 Alt materiale som har blitt referert er tilgjengelig
  på Github~\cite{github-repo}. 
 \end{abstract}
@@ -587,7 +589,7 @@ klasseprogrammering i C++ og også mer komfortable med databehandling
 i Python. Mange-legeme-systemet har også vist oss at
 tilsynelatende 'kaotiske' resultater, ofte kan tilnærmes
 med en overraskende enkel funksjon. I dette tilfellet eksempelvis figur
-\ref{fig:viral} og \ref{fig:??}.
+\ref{fig:viral} og \ref{fig:nummertetthet}.
 
 Nok en gang har vi fått oppleve viktigheten av grundig testing
 av programmet, kanskje spesielt i start-fasen av et nytt prosjekt. Da 
