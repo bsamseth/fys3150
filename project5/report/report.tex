@@ -15,7 +15,7 @@
   \textsc{\large FYS3150}\\[0.5cm] % Minor heading such as course title
   \HRule \\[0.4cm]
   { \huge \bfseries En titt på fysiske egenskaper
-  i en $N$-legeme kaldkollaps}\\[0.4cm]
+  i en N-legeme kaldkollaps}\\[0.4cm]
   \HRule \\[1.5cm]
   \Large \emph{Skrevet av:}\\
   Lyder \textsc{Rumohr Blingsmo} (k.nr. 2) og Bendik \textsc{Samseth} (k.nr. 27)\\[3cm]
@@ -39,8 +39,15 @@ Alt materiale som har blitt referert er tilgjengelig
 
 
 \section{Innledning}
-Vi skal se på et stjernekluster med $N$ partikler. I vår modell tenker
-vi oss at hver partikkel representerer en eller noen få stjerner. Vi
+I denne oppgaven skal vi se på et stjernekluster med $N$ partikler. 
+I vår modell tenker
+vi oss at hver partikkel representerer en eller noen få stjerner. 
+Videre i rapporten kommer vi til å bruke ordene partikkel, masse, 
+legeme og kropp om hverandre, men det er til stadighet egentlig
+en stjerne eller samling av stjerner vi tenker oss.
+
+\subsection{Krefter}
+Vi
 skal også anta at gravitasjon er den eneste kraften som virker:
 
 \begin{align}
@@ -124,14 +131,15 @@ Algoritmen for metoden er gitt som følger:
 \label{sec:init-av-system}
 Vi kan selv velge fritt starttilstanden til systemet vårt. Vi velger å
 begynne med $N$ objekter fordelt uniformt innenfor en sfære med
-radius $R_0=20 ly$ (light years). Objektene gir vi en tilfeldig masse ved å la massene
-følge en Gaussisk fordeling med snittverdi $10M_\odot$ og standardavik
-på $M_\odot$. Her er $M_\odot$ solmassen. Vi lar alle starte i ro. 
+radius $R_0=20 ly$ (light years). Objektene gir vi en tilfeldig masse med
+en Gaussisk fordeling rundt snittverdien $10M_\odot$ og et standardavvik
+på $M_\odot$. Her er $M_\odot$ solmassen. Vi lar alle starte i ro; 
+dette er det samme som en kaldkollaps. 
 
 Av disse startbetingelesene er det en del som trenger noe ekstra
 oppmerksomhet\footnote{Det som følger er i stor grad en oversettelse
   av et skriv laget av H. T. Ihle som ble sendt ut via epost (ikke
-  listet som en referanse fordi den ikke kan vises til noe sted).}. Det er ikke helt fullstendig trivielt å lage uniformt
+  listet som en referanse fordi det ikke kan vises til noe sted).}. Det er ikke helt fullstendig trivielt å lage uniformt
 fordelte koordinater innenfor en sfære. Problemet er at hvis vi lar
 objektene være uniformt fordelt i $r$, så vil vi ende med en mye
 større tetthet rundt midten av sfæren. Og hvis vi fordeler objektene
@@ -192,7 +200,7 @@ Hovedprogrammet er skrevet i C++, mens vi har gjort dataanalysen i Python.
 Alle programmer er tilgjengelig på Github~\cite{github-repo}. 
 
 \subsection{Klassesystem}
-Vi har to klasser. Én objektklasse 'Body' som inneholder med posisjon, fart 
+Vi har to klasser. En objektklasse 'Body' som inneholder posisjon, fart 
 og masse for et gitt legeme. Den andre klassen er 'Universe' og initialiseres
 med et gitt antall 'Body'-objekter. Denne klassen inneholder mange metoder,
 som f.eks. \texttt{Universe::energy} for å regne ut energien til systemet, og 
@@ -205,9 +213,9 @@ kommer av at vi har et system av to ordinære differensialligninger,
 hver med tre koordinater. Altså har vi egentlig seks diff.likninger
 som skal løses samtidig. Metodene som vi har skissert tidligere endrer
 ikke form, men det kan bli litt vanskelig å holde styr på alt
-sammen. Derfor skal vi gå nokså grundig i gjennom hvordan disse
-metodene er implementert. Dvs., vi gjør dette for Runge-Kutta;
-Velocity-Verlet er løst på en analog måte. RK4 er implementert i
+sammen. Derfor skal vi vi se litt nærmere på noen sider ved denne løsningsmetoden.
+ Dvs., vi gjør dette for Velocity-Verlet;
+RungeKutta4 er løst på en analog måte. Velocity-Verlet er implementert i
 \texttt{Universe} slik som vist i vedlegg \ref{lst:solver-RK4}. 
 
 Vi begynner med å definere flere $N\times 7$ matriser. Dette svarer til
@@ -238,7 +246,7 @@ $y_i$ blir tilsvarende satt til akselerasjonen i $a_i$.
   \end{pmatrix}
 \end{align*}
 
-Med denne fremgangsmåten følges så algoritmen for Velocity-Verlet som
+Med disse elementene følger vi så algoritmen for Velocity-Verlet som
 er skissert i seksjon \ref{sec:om-VV}. Samme type tanke blir brukt for
 å implementere Rungekutta4.
 
@@ -249,7 +257,8 @@ et system med kun to legemer. I et slikt enkelt system er det lett å
 sammenligne resultatene med ens egen intuisjon av systemet. Det finnes
 også en analytisk løsning. I figur \ref{fig:2body} kan vi se resultatet 
 av en kjøring. Vi ser at banene er ellipsoider, slik vi forventer for
-to-legeme-systemet. 
+to-legeme-systemet. Dette gir oss selvtillit til å jobbe videre
+med et større system.
 
 \end{multicols}
 
@@ -265,14 +274,16 @@ to-legeme-systemet.
 
 \begin{multicols}{2}
 
-\subsection{Første test av N-body}
+\subsection{Første test av $N$-body}
 \label{sec:forste-test-epsilon}
-Det er ikke alltid lett å sjekke om en løsning gir mening. Vi begynner med
-å animere systemet \footnote{Tilgjengelig på \cite{github-repo} under navnet
+Et N-body-system er dessverre ikke like lett å se for seg som
+2-body-systemet. Derfor er vi nødt til å finne på noe lurere enn
+bare et stillbilde av partikkelbanene. Vi begynner med å animere systemet 
+\footnote{Tilgjengelig på \cite{github-repo} under navnet
 animate\_pos.py}, og ser fort at det skjer noe rart når massene kommer veldig
-nærme hverandre. Noen legemer blir 'skutt' ut i stor fart. Dette kommer som
-vi ser fra uttrykket \eqref{eq:a_i} av at akselerasjonen,$a$, blir veldig
-stor når $r \rightarrow 0$.
+nærme hverandre. Noen legemer blir 'skutt' ut i stor fart. Dette kommer fra 
+likning \eqref{eq:a_i}. Akselerasjonen, $a$, blir veldig
+stor når $|\vec{r_i} - \vec{r_j}| \rightarrow 0$.
 Som en korreksjon til dette legger vi til et feilledd i kraften
 
 \begin{align}
@@ -282,12 +293,13 @@ F_{mod} = -\frac{GM_1M_2}{r^2 + \epsilon},
 der $\epsilon$ gjør at $F_{mod}$ ikke går i lufta når $r^2 \rightarrow 0$. Vi 
 rettferdiggjør denne korreksjonen ved at masser i den virklige
 verden aldri vil komme så nærme hverandre fordi de ikke er punktmasser.
-Til å begynne med setter vi $\epsilon = 10^{-3}$, som vi senere vil se gir
+Vi setter $\epsilon = 10^{-3}$, som vi senere vil se gir
 gode resultater. Denne verdien er funnet etter prøving og feiling. 
 $\epsilon > 10^{-3}$ gir oss en uønsket stor dempning i kraften, og 
 $\epsilon < 10^{-3}$ gir fort samme problem som vi begynte med, deling på
 veldig små tall. Vi merker oss at $\epsilon = 10^{-3} {ly}^2$ (light years) er et veldig 
-stort tall, til sammenligning er $R_{solar}^2 \sim 10^{-15} {ly}^2$. 
+stort tall, til sammenligning er $R_{solar}^2 \sim 10^{-15} {ly}^2$. Dette høres kanskje katastrofalt
+ut, men vi ser at det er en nødvendighet for å få god presisjon i beregningene våre.
 
 \subsection{Energibevaring}
 Selv om animasjoner alltid er flott, tenker vi det kan være lurt å ha en mer
@@ -300,19 +312,19 @@ energien
 \begin{align}
 E_{p} = - \sum_{i = 1}^{N} \sum_{j = i+1}^{N} \frac{GM_jM_i}{{||\vec{r_i} - \vec{r_j}||}} \\
 E_{k} = \sum_{i} \frac{1}{2}M_i|\vec{v_i}|^2 \\
-E_{tot} = E_{p} + E_{k}
+E_{tot} = E_{p} + E_{k} = \text{konstant}
 \end{align}
 
 I vedlegg \ref{lst:methodcomptable} ser vi en sammenligning av energibevaringen til 
 våre to metoder. Tabellen viser den relative feilen i energibevaring,
 samt tiden som ble brukt, for begge metoder og for flere tider og
-steglengder. RK4 bruker jevnt over omtrent dobbelt så lang tid
-som Verlet. Vi ser også at Verlet oppnår akseptabel presisjon på denne
-kortere tiden. For å spare kjøretid velger vi derfor å bruke 
+steglengder.  Vi ser begge metodene oppnår god presisjon med for tilstrekkelig
+liten steglengde. RK4 bruker jevnt over omtrent dobbelt så lang tid
+som Verlet. For å spare kjøretid velger vi derfor å bruke 
 Velocity-Verlet. Det kan hende vi mister noe presisjon sammenliknet med
 å bruke RK4, men vi ønsker å kunne kjøre beregninger for lange tider
 og store systemer. Det betyr at så lenge metoden er stabil med tiden,
-så er hastighet mer viktig enn kortsiktig presisjon. Tabellen viser
+så er kjøretid mer viktig enn kortsiktig presisjon. Tabellen viser
 oss også at vi trenger ganske små tidssteg for å få god
 energibevaring.\footnote{Merk at tabellen i vedlegg
   \ref{lst:methodcomptable} er laget med data generert med en
@@ -329,7 +341,7 @@ Rundt tidspunktet $\tau_{crunch}$ og i en stund etter vil partikler skytes ut
 av det opprinnelige kuleskallet. Dette er partikler som ikke vil
 være en del av vår likevektstilstand, og vi ønsker derfor å ha muligheten
 til å se bort fra dem. Men hvordan kan vi identifisere en partikkel
-som er skutt ut? Vi vet at en partikkel med $E_i > 0$ har $E_K > |E_p|$, og
+som er skutt ut? Vi vet at en partikkel med $E_{tot} > 0$ har $E_K > |E_p|$, og
 vil derfor unnslippe galaksehopen. Dette viser seg derimot å være ustabilt. Se
 f.eks. figur \ref{fig:energivariasjon} der vi kan se at den gjennomsnittlige
 energien varierer lite, selv om den 'lokale' energien noen ganger gjør et hopp.
@@ -341,7 +353,7 @@ en utskutt partikkel ikke \emph{bare} positiv energi, $E > 0$, men befinner seg 
 utenfor kuleskallet vi begynte med. 
 
 I programmet vårt fjerner vi de utskutte
-partiklene ved å sette massen og hastighetene til null, og å gjemme dem bort i et 'hjørne'. 
+partiklene ved å sette massen og hastighetene til null, og å 'gjemme' dem bort i et hjørne. 
 
 
 \subsection{Definisjon av likevekt}
@@ -382,7 +394,7 @@ ser vi følgende:
   \item Partiklene spretter tilbake igjen, noen helt ut av systemet,
     andre i mindre grad.
   \item Massenteret beveger seg vekk fra origo med tilnærmet konstant
-    hastighet slik vi ser i figur \ref{fig:massesenter}
+    hastighet slik vi ser i figur \ref{fig:massesenter}.
   \item Vi står til slutt igjen med et redusert antall partikler som
     ser ut til å bevege seg noen lunde stabilt rundt i massesenteret.
 \end{enumerate}
@@ -401,9 +413,9 @@ ser vi følgende:
 
 
 \subsection{Likevekt}
-Det ser altså ut som om systemet en stund etter $\tau_\text{crunch}$
-stabiliserer seg i en slags likvekt. For å se litt mer kvantitativt på
-dette kan vi se på energien til systemet som en funksjon av tid. Figure
+Fra animasjonen ser vi at en stund etter $\tau_\text{crunch}$
+stabiliserer systemet seg i en slags likevekt. For å se litt mer kvantitativt på
+dette kan vi se på energien til systemet som en funksjon av tid. Figur
 \ref{fig:energi-vs-tid-med-utskytning} viser dette. 
 
 \end{multicols}
@@ -422,7 +434,7 @@ $\tau_\text{crunch}$. Deretter ser vi en veldig bratt, og stykkvis
 nedgang i energien. Dette er fordi alle partiklene har blitt most
 sammen ved tiden $\tau_\text{crunch}$, hvor noen har fått positiv
 totalenergi og beveger seg ut fra systemet. Grunnen til at nedgangen
-ser ut til å komme forsinket på figuren er på grunn av at vi også
+ser ut til å komme forsinket på figuren er på grunn av at vi
 krever at partikkelen også er utenfor radiusen $R_0$, noe som selvsagt
 tar en viss tid. Deretter bruker systemet litt tid på å stabilisere
 og etter omtrent $t = 2.5\,\tau_\text{crunch}$ ligger energien igjen
@@ -476,8 +488,10 @@ potensiell energi. Viralteoremet sier noe om akkurat dette~\cite{viralteoremet-w
 \begin{viralthm}
   For et gravitasjonelt bundet system i likevekt har vi 
 \begin{align}
-  2\mean{K} = -\mean{V}
+  2\mean{K} = -\mean{V},
 \end{align}
+der $\mean{K}$ og $\mean{V}$ er tidsmidled av henholdsvis
+kinetisk- og potensiell energi.
 \end{viralthm} 
 
 \end{multicols}
@@ -505,7 +519,7 @@ den ergodiske hypotesen. Tidsmidlet av disse
 verdiene (tidsmidlet av partikkelmidlet) er det som er vist i høyre
 hjørne på figuren.
 
-Dette er oppløftende resultater, fordi det tyder på at systemet vårt følger
+Dette er gode nyheter, og tyder på at systemet vårt følger
 naturens lover på tross av de forenklingene som har blir
 gjort. F.eks. styrker dette begrunnelsen for vårt valg av $\epsilon$
 (seksjon \ref{sec:forste-test-epsilon}) ikke har gitt urealistiske
@@ -520,10 +534,10 @@ også en mye bedre forståelse av disse to algoritmene.
 
 Prosjektet har vært lærerikt ved at vi har blitt kjent med
 klasseprogrammering i C++ og også mer komfortable med databehandling
-i python. Mange-legeme-systemet har også vist oss at
-tilsynelatende 'usammenhengdende' resultater, ofte kan tilnærmes
-med en overraskende enkel funksjon. I dette tilfellet spesielt
-\ref{eq:prosentandel-utskutte}
+i Python. Mange-legeme-systemet har også vist oss at
+tilsynelatende 'kaotiske' resultater, ofte kan tilnærmes
+med en overraskende enkel funksjon. I dette tilfellet eksempelvis figur
+\ref{fig:viral} og \ref{fig:??}.
 
 Nok en gang har vi fått oppleve viktigheten av grundig testing
 av programmet, kanskje spesielt i start-fasen av et nytt prosjekt. Da 
@@ -532,8 +546,7 @@ dagen før frist oppdaget vi nye bugs i programmet. Som vanlig er vi
 selvfølgelig begrenset av både tid og maskinkraft, og skulle ønske vi 
 levde i en perfekt verden der vi kunne simulert for et stort antall partikler,
 i lange tider, med små tidssteg. Slik er det dessverre ikke, 
-men allikevel er vi i god tro om at man kan lære mye om mange-legeme-systemer
-i denne rapporten.
+men allikevel har vi fått gode nok resultater til å se fysikken bak mange-legeme-problemet.
 
 
 
