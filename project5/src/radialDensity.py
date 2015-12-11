@@ -15,7 +15,7 @@ from mpl_toolkits.mplot3d import Axes3D
 fig_dummy, dummy = plt.subplots()
 fig, ax = plt.subplots()
 fig, dax = plt.subplots()
-for N_index, N in enumerate(range(300,501,100)):
+for N_index, N in enumerate(range(300,501,10)):
     datafile = 'data/Nbody_position_Verlet_-9.210340_5.000000_%d_1.dat' %N
     data = loadtxt(datafile)
 
@@ -69,7 +69,7 @@ for N_index, N in enumerate(range(300,501,100)):
                                        int(max(r))+1,0.5),
                                rwidth=1, #weights = ones(N_)/N_**2,
                                   label= 'N = %d' %N,normed=True)
-    plt.setp(patches, 'alpha', 1-N_index*0.33)
+#    plt.setp(patches, 'alpha', 1-N_index*0.33)
 
     binvolums = 4*pi/3 * bins**3
     dax.plot(bins[1:], n/binvolums[1:])
@@ -98,7 +98,7 @@ dummy.set_ylabel(r'Nummertetthet, $n(r)$',size=23)
 dummy.legend(prop={'size':16})
 ax.legend(prop={'size':16})
 ax.set_xlabel(r'Avstand fra massesenter, [$R_0/N^{-\frac{1}{3}}$]',size=23)
-ax.set_ylabel(r'Partikkeltetthet, $\Xi(r)/N^2$',size=23)
+ax.set_ylabel(r'Partikkeltetthet, $\rho(r)/N^2$',size=23)
 #box = dummy.get_position()
 #dummy.set_position([box.x0, box.y0*1.25, box.width, box.height])
 

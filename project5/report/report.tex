@@ -134,7 +134,7 @@ Algoritmen for metoden er gitt som følger:
 
 \subsection{Initialisering av systemet}
 \label{sec:init-av-system}
-Vi kan selv velge fritt starttilstanden til systemet vårt. Vi velger å
+ Vi velger å
 begynne med $N$ objekter fordelt uniformt innenfor en sfære med
 radius $R_0=20 ly$ (light years). Objektene gir vi en tilfeldig masse med
 en Gaussisk fordeling rundt snittverdien $10M_\odot$ og et standardavvik
@@ -309,7 +309,7 @@ ut, men vi ser at det er en nødvendighet for å få god presisjon i beregningen
 \subsection{Energibevaring}
 Selv om animasjoner alltid er flott, tenker vi det kan være lurt å ha en mer
 'matematisk' test på systemet vårt. Dette gjør oss også mer egnet til
-å gjøre en kvalitativ vurdering av hvilken av de løsningsmetodene som er best.
+å gjøre en vurdering av hvilken av de løsningsmetodene som er best.
 I et slikt ideelt system med bare 
 gravitasjon, en konservativ kraft, er det naturlig å se på energibevaring. Vi får
 energien
@@ -323,14 +323,14 @@ E_{tot} = E_{p} + E_{k} = \text{konstant}
 I vedlegg \ref{lst:methodcomptable} ser vi en sammenligning av energibevaringen til 
 våre to metoder. Tabellen viser den relative feilen i energibevaring,
 samt tiden som ble brukt, for begge metoder og for flere tider og
-steglengder.  Vi ser begge metodene oppnår god presisjon med for tilstrekkelig
+steglengder.  Vi ser begge metodene oppnår god presisjon med tilstrekkelig
 liten steglengde. RK4 bruker jevnt over omtrent dobbelt så lang tid
 som Verlet. For å spare kjøretid velger vi derfor å bruke 
 Velocity-Verlet. Det kan hende vi mister noe presisjon sammenliknet med
 å bruke RK4, men vi ønsker å kunne kjøre beregninger for lange tider
 og store systemer. Det betyr at så lenge metoden er stabil med tiden,
-så er kjøretid mer viktig enn kortsiktig presisjon. Tabellen viser
-oss også at vi trenger ganske små tidssteg for å få god
+så er kjøretid mer viktig enn kortsiktig presisjon. Tabellen i vedlegg \ref{lst:methodcomptable}
+ viser oss også at vi trenger ganske små tidssteg for å få god
 energibevaring.\footnote{Merk at tabellen i vedlegg
   \ref{lst:methodcomptable} er laget med data generert med en
   tidligere versjon av hovedprogrammet. Vi mener at de endringene som
@@ -347,7 +347,8 @@ av det opprinnelige kuleskallet. Dette er partikler som ikke vil
 være en del av vår likevektstilstand, og vi ønsker derfor å ha muligheten
 til å se bort fra dem. Men hvordan kan vi identifisere en partikkel
 som er skutt ut? Vi vet at en partikkel med $E_{tot} > 0$ har $E_K > |E_p|$, og
-vil derfor unnslippe galaksehopen. Dette viser seg derimot å være ustabilt. Se
+vil derfor unnslippe galaksehopen. Å ha dette kriteriet for utskutte partikler
+viser seg derimot å være ustabilt. Se
 f.eks. figur \ref{fig:energivariasjon} der vi kan se at den gjennomsnittlige
 energien varierer lite, selv om den 'lokale' energien noen ganger gjør et hopp.
  På grunn av denne lokale numeriske ustabiliteten ser vi oss nødt til å gjøre
@@ -396,8 +397,7 @@ ser vi følgende:
   \item Alle partiklene begynner i ro, og beveger seg sakte inn mot
     origo.
   \item Alle partiklene blir most sammen i sentrum av systemet.
-  \item Partiklene spretter tilbake igjen, noen helt ut av systemet,
-    andre i mindre grad.
+  \item Partiklene spretter tilbake igjen, noen helt ut av systemet.
   \item Massenteret beveger seg vekk fra origo med tilnærmet konstant
     hastighet slik vi ser i figur \ref{fig:massesenter}.
   \item Vi står til slutt igjen med et redusert antall partikler som
@@ -443,7 +443,7 @@ ser ut til å komme forsinket på figuren er på grunn av at vi
 krever at partikkelen også er utenfor radiusen $R_0$, noe som selvsagt
 tar en viss tid. Deretter bruker systemet litt tid på å stabilisere
 og etter omtrent $t = 2.5\,\tau_\text{crunch}$ ligger energien igjen
-flatt. 
+flatt. Dette er likevekt. 
 
 Grunnen til at totalenergien blir mer negativ når vi tar ut partiklene
 følger logisk av at vi bare tar ut partikler som har netto positiv
@@ -472,7 +472,9 @@ tid på å nå et nytt stabilt energinivå.
 I figur \ref{fig:prosentandel-utskutte} kan vi se hvordan prosentandelen
 av partiklene som blir skutt ut endrer seg som funksjon av N. Vi ser
 store variasjoner i punktene, men en klar trend som viser at en større
-prosentandel av partiklene vi begynner med blir skutt ut for større N. 
+prosentandel av partiklene vi begynner med blir skutt ut for større N. Som en
+konsekvens av dette følger det også at en større prosentandel av energien vil forsvinne
+for større $N$.
 
 \end{multicols}
 \begin{figure}[ht!]
@@ -480,7 +482,8 @@ prosentandel av partiklene vi begynner med blir skutt ut for større N.
   \includegraphics[width=\textwidth]{../fig/prosentandel.png}
   \caption{\label{fig:prosentandel-utskutte} En figur som viser andel av partikler
   som blir skutt ut som funksjon av $N$. Vi ser store variasjoner i punktene, men en klar
-  trend at større $N$ gir større andel utskutte partikler.}
+  trend at større $N$ gir større andel utskutte partikler. Slik ser vi også at en større
+  andel av energien vil forsvinne når $N$ øker.}
 \end{figure}
 \begin{multicols}{2}
 
@@ -552,11 +555,37 @@ modell:
 \begin{align}
   \Xi(r) = \frac{n_0}{1+\left(\frac{ r }{ r_0 }\right)^4}
 \end{align}
-Vi har ikke dratt denne modellen opp av hatten. Modellen og
+ Modellen og
 skaleringen er tatt fra artikkelen i referanse~\cite{cold-collapse}. Selv om vi ikke har fått
 datapunkter langs hele modellkurven slik det står i artikkelen, så er
 vi overrasket over hvor tilsynelatende godt vi har fått modellkurven
-til å passe med datasettet. 
+til å passe med datasettet.
+
+\subsubsection{Gjennomsnittlig avstand til massesenter}
+I figur \ref{fig:gjennomsnittlig} ser vi at den gjennomsnittlige avstanden til 
+massesenteret minker som funksjon av $N$. Dette kan vi forklare med at kjernen
+blir mer massiv ved større $N$, og derfor også trekker partiklene tetter på seg.
+Det er stor spredning i dataene, men det kan godt være at trenden ikke er fullt
+så tydelig for små $N$, slik vi har her. Til sammenligning kan vi se på 
+~\cite[figur 1]{cold-collapse} der et lignende plot er laget, men med et mye større
+system. 
+
+
+\end{multicols}. 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{../fig/gjennomsnittligavstand.png}
+  \caption{\label{fig:gjennomsnittlig} Plot av gjennomsnittlig avstand
+    til massesenter etter likevekt, som funksjon av $N$. Vi ser en nedadgående
+  trend. Det kan vi forklare ved at kjernen blir mer massiv og trekker sterkere
+  på legemene når $N$ blir større.}
+\end{figure}
+
+
+\begin{multicols}{2}
+
+
 
 
 \end{multicols}. 
@@ -592,7 +621,8 @@ klasseprogrammering i C++ og også mer komfortable med databehandling
 i Python. Mange-legeme-systemet har også vist oss at
 tilsynelatende 'kaotiske' resultater, ofte kan tilnærmes
 med en overraskende enkel funksjon. I dette tilfellet eksempelvis figur
-\ref{fig:viral} og \ref{fig:nummertetthet}.
+\ref{fig:viral} og \ref{fig:nummertetthet} som vi har tilpasset en 
+forventet kurve med gode resultater.
 
 Nok en gang har vi fått oppleve viktigheten av grundig testing
 av programmet, kanskje spesielt i start-fasen av et nytt prosjekt. Da 

@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 average_distance = []
 
-Nlist = range(500,501,10)
+Nlist = range(50,501,50)
 for N in Nlist:
     datafile = 'data/Nbody_position_Verlet_-9.210340_5.000000_%d_1.dat' %N
     data = loadtxt(datafile)
@@ -72,7 +72,7 @@ ax.set_xlabel(r'Antall partikler N \\' \
 ax.set_ylabel('Gjennomsnittlig avstand fra massesenter, R',  size=23)
 ax.set_title(r'Gjennomsnittlig avstant fra massesenter som funksjon av N', size=23)
 plt.legend(prop={'size':16})
-plt.show()
+
 
 fig2, ax2 = plt.subplots()
 plt.plot(sqrt(rc[:,0]**2 + rc[:,1]**2 + rc[:,2]**2))
@@ -81,6 +81,8 @@ ax2.set_xlabel(r'Tidssteg etter likevekt \\' \
                %(exp(logh), Tmax, N), size=23)
 ax2.set_ylabel('Massesenterets avstand fra origo',  size=23)
 ax2.set_title(r'Massesenterets avstand fra origo som funksjon av tid', size=23)
+
+
 plt.show()
 
 

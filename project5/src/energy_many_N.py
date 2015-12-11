@@ -11,7 +11,7 @@ plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex = True)
 fig, ax = plt.subplots()
 ax.hold(True)
-Nlist = range(50,301,30)
+Nlist = range(50,501,50)
 for N in Nlist:
     datafile = "data/Nbody_energy_Verlet_-9.210340_5.000000_%d_1.dat" % N
     logh, Tmax, N, check_ =  [float(datafile[:-4].split('_')[i+3]) for i in range(0,4)]
