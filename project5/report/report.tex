@@ -302,11 +302,26 @@ E_{k} = \sum_{i} \frac{1}{2}M_i|\vec{v_i}|^2 \\
 E_{tot} = E_{p} + E_{k}
 \end{align}
 
-I tabell \ref{tab:RKvsVV} ser vi en sammenligning av energibevaringen til 
-våre to metoder. Rungekutta bruker lengre tid uten betydelig bedre 
-energibevaring. For å spare kjøretid velger vi derfor å bruke 
-Velocity-Verlet. Tabellen viser oss også at vi trenger ganske små tidssteg,
-$h \leq 10 ^{-4}$ for å få god energibevaring.
+I vedlegg \ref{lst:methodcomptable} ser vi en sammenligning av energibevaringen til 
+våre to metoder. Tabellen viser den relative feilen i energibevaring,
+samt tiden som ble brukt, for begge metoder og for flere tider og
+steglengder. RK4 bruker jevnt over omtrent dobbelt så lang tid
+som Verlet. Vi ser også at Verlet oppnår akseptabel presisjon på denne
+kortere tiden. For å spare kjøretid velger vi derfor å bruke 
+Velocity-Verlet. Det kan hende vi mister noe presisjon sammenliknet med
+å bruke RK4, men vi ønsker å kunne kjøre beregninger for lange tider
+og store systemer. Det betyr at så lenge metoden er stabil med tiden,
+så er hastighet mer viktig enn kortsiktig presisjon. Tabellen viser
+oss også at vi trenger ganske små tidssteg for å få god
+energibevaring.\footnote{Merk at tabellen i vedlegg
+  \ref{lst:methodcomptable} er laget med data generert med en
+  tidligere versjon av hovedprogrammet. Vi mener at de endringene som
+  har blitt gjort siden den gang ikke påvirker resultatene, men det
+  kan hende vi nå ville oppnådd litt forskjellige verdier. Vi fikk
+  tekniske problemer med programmet som laget tabellen og har ikke
+  fått laget en ny utgave (mystisk ``Floating point exception''
+  krasjer programmet). Vi mener i alle tilfeller at konklusjonen i
+  forhold til metode er gyldig.}
 
 \end{multicols}
 
@@ -491,7 +506,7 @@ regnet ut, og som vi ser får vi en verdi svært nære 2.
 
 Vi har beregnet resultatene i figur \ref{fig:viral} ved å ta midlet av
 alle partiklenes energi på et gitt tidspunkt. Dette kan vi gjøre ved
-den ergodiske hypotesen~\cite{ergodisk-hypotese}. Tidsmidlet av disse
+den ergodiske hypotesen. Tidsmidlet av disse
 verdiene (tidsmidlet av partikkelmidlet) er det som er vist i høyre
 hjørne på figuren.
 
@@ -532,7 +547,14 @@ i denne rapporten.
 \clearpage
 \section{Vedlegg}
 \begin{itemize}
-  \item[]\lstinputlisting[language=c++, caption={C++ metode som bruker Velocity Verlet til å tidsutvikle systemet.}, label={lst:solver-RK4}]{solversnippet.txt}
+  \item[]\lstinputlisting[language=c++, caption={C++ metode som bruker
+      Velocity Verlet til å tidsutvikle systemet.},
+    label={lst:solver-RK4}]{solversnippet.txt}
+\pagebreak
+  \item[]\lstinputlisting[basicstyle=\small,caption={Tabell som viser
+      presisjon og kjøretid (format (presisjon, tid brukt)) for både
+      Runge-Kutta 4 og Velocity-Verlet for flere tidsperioder og steglengder.},
+    label={lst:methodcomptable}]{../src/data/methodCompTable.txt}
 \end{itemize}
 
 \end{document}
