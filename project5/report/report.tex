@@ -525,6 +525,56 @@ gjort. F.eks. styrker dette begrunnelsen for vårt valg av $\epsilon$
 (seksjon \ref{sec:forste-test-epsilon}) ikke har gitt urealistiske
 resultater. 
 
+\subsection{Partikkeldistribusjon}
+En svært interessant ting å se på er hvordan partiklene er fordelt. I
+denne sammenheng skal vi se på partikkeldistribusjonen $n(r)$ (antall legemer ved
+radius $r$) og partikkeltettheten $\rho(r)$ (antall legemer innenfor
+et volum $V=\frac{4}{3}\pi r^3$). 
+
+Figur \ref{fig:nummertetthet} viser partikkeldistribusjonen som
+funksjon av avstanden til massesenteret. Vi ser at de aller fleste
+partiklene ligger nære massesenteret, og at fordelingen faller raskt
+når $r$ øker. Dette betyr at partiklene i stor grad er hopet tett
+sammen rundt massesenteret, mens vi har noen få partikler som befinner
+seg lenger ut. 
+
+Figur \ref{fig:partikkeltetthet} viser partikkeltettheten, igjen som
+en funksjon av avstanden til massesenteret. Denne er regnet ut som
+$N(R)/\frac{4}{3}\pi r^3$, der $N(r)$ er alle partiklene innefor en
+sfære med radius $r$. Her har vi normalisert x-aksen med $N^{-1/3}$ og
+y-aksen med $N^{2}$. Dette gjør vi for å få frem likheten med følgende
+modell:
+\begin{align}
+  \Xi(r) = \frac{n_0}{1+\left(\frac{ r }{ r_0 }\right)^4}
+\end{align}
+Vi har ikke dratt denne modellen opp av hatten. Modellen og
+skaleringen er tatt fra artikkelen i referanse~\cite{cold-collapse}. Selv om vi ikke har fått
+datapunkter langs hele modellkurven slik det står i artikkelen, så er
+vi overrasket over hvor tilsynelatende godt vi har fått modellkurven
+til å passe med datasettet. 
+
+
+\end{multicols}. 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{../fig/nummertetthet.png}
+  \caption{\label{fig:nummertetthet} Histogram som viser fordelingen
+    av partikler som funksjon av avstanden til massesenteret. Vi ser
+    at de aller fleste partiklene ligger nære massesenteret, og
+    fordelingen faller raskt av for større $r$.}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{../fig/partikkeltetthet.png}
+  \caption{\label{fig:partikkeltetthet} Graf som viser
+    partikkeltettheten $\rho(r)$ for mange forskjellige verdier av
+    $N$. Over er det tegnet inn modellkurven som ser ut til å passe
+    med datasettet (se tekst for forklaring).}
+\end{figure}
+
+\begin{multicols}{2}
 
 \section{Konklusjon}
 Vi har fått en grundig innføring i N-body-systemet, fysikken bak denne
