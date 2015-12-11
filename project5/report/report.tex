@@ -285,8 +285,8 @@ Til å begynne med setter vi $\epsilon = 10^{-3}$, som vi senere vil se gir
 gode resultater. Denne verdien er funnet etter prøving og feiling. 
 $\epsilon > 10^{-3}$ gir oss en uønsket stor dempning i kraften, og 
 $\epsilon < 10^{-3}$ gir fort samme problem som vi begynte med, deling på
-veldig små tall. Vi merker oss at $\epsilon = 10^{-3} {ly}^2$ er et veldig 
-stort tall, til sammenligning er $R_{solar}^2 \sim 10^{-15}$ 
+veldig små tall. Vi merker oss at $\epsilon = 10^{-3} {ly}^2$ (light years) er et veldig 
+stort tall, til sammenligning er $R_{solar}^2 \sim 10^{-15} {ly}^2$. 
 
 \subsection{Energibevaring}
 Selv om animasjoner alltid er flott, tenker vi det kan være lurt å ha en mer
@@ -336,13 +336,13 @@ være en del av vår likevektstilstand, og vi ønsker derfor å ha muligheten
 til å se bort fra dem. Men hvordan kan vi identifisere en partikkel
 som er skutt ut? Vi vet at en partikkel med $E_i > 0$ har $E_K > |E_p|$, og
 vil derfor unnslippe galaksehopen. Dette viser seg derimot å være ustabilt. Se
-f.eks. figure \ref{fig:energivariasjon} der vi kan se at den gjennomsnittlige
+f.eks. figur \ref{fig:energivariasjon} der vi kan se at den gjennomsnittlige
 energien varierer lite, selv om den 'lokale' energien noen ganger gjør et hopp.
  På grunn av denne lokale numeriske ustabiliteten ser vi oss nødt til å gjøre
 noe mer robust enn kun å se på energien. Vi observerer at en utskutt 
 partikkel alltid vil forsvinne mot 'det fjerne', og derfor at 
-$r_{utskutt} > R_0$. Vi bestemmer oss derfor for at i vårt program har ikke
-en utskutt partikkel \emph{bare} positiv energi, $E > 0$, men også posisjon
+$r_{utskutt} > R_0$. Vi bestemmer oss derfor for at i vårt program har
+en utskutt partikkel ikke \emph{bare} positiv energi, $E > 0$, men befinner seg også
 utenfor kuleskallet vi begynte med. 
 
 I programmet vårt fjerner vi de utskutte
@@ -421,6 +421,22 @@ flatt.
 Grunnen til at totalenergien blir mer negativ når vi tar ut partiklene
 følger logisk av at vi bare tar ut partikler som har netto positiv
 energi. Tar vi vekk disse blir totalen åpenbart mer negativ. 
+
+I figur
+\ref{fig:prosentandel-utskutte} kan vi se hvordan prosentandelen
+av partiklene som blir skutt ut endrer seg som funksjon av N. 
+
+\end{multicols}
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{../fig/prosentandel.png}
+  \caption{\label{fig:prosentandel-utskutte} Systemets
+    totalenergi som funksjon av tid med masseutskytelse. Vi legger
+    særlig merke til at en liten tid etter $\tau_\text{crunch}$ får vi
+  en voldsom reduksjon i energien til systemet. Vi ser så at etter en
+  tid ser energien ut til å stabilisere seg på et lavere nivå.}
+\end{figure}
+\begin{multicols}{2}
 
 \subsubsection{$N$-avhengighet}
 Vi kan lure på hvordan dette endrer seg med $N$. I figur

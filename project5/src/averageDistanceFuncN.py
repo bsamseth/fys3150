@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 average_distance = []
 
-Nlist = range(50,261,10)
+Nlist = range(50,391,10)
 for N in Nlist:
     datafile = 'data/Nbody_position_Verlet_-9.210340_5.000000_%d_1.dat' %N
     data = loadtxt(datafile)
@@ -40,10 +40,27 @@ for N in Nlist:
     average_distance.append(average_average_r)
 
 
+logh, Tmax, N, check_ =  [float(datafile[:-4].split('_')[i+3]) for i in range(0,4)]
+
+
+
+
 fig, ax = plt.subplots()
-ax.semilogx(Nlist, average_distance)
-ax.set_xlabel('N')
-ax.set_ylabel('[R]')
+
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex = True)
+
+
+ax.semilogx(Nlist, average_distance, 'o', label='Data')
+fittedcurve = poly1d(polyfit(log10(Nlist), average_distance, 1))
+c0, c1 = polyfit(log10(Nlist), average_distance, 1)
+ax.semilogx(Nlist,fittedcurve(log10(Nlist)), label=r'y = %f log(N) + %f' %(c0,c1))
+ax.set_xlabel(r'Antall partikler N \\' \
+              + r'Parametre: $h = %g, T_{max} = %.1f$ \\' \
+              %(exp(logh), Tmax), size=23)
+ax.set_ylabel('Gjennomsnittlig avstand fra origo, R',  size=23)
+ax.set_title(r'Gjennomsnittlig avstant fra origo som funksjon av N', size=23)
+plt.legend(prop={'size':16})
 plt.show()
 
 #0.025/(1+(rmaxrange/8.0)**4)

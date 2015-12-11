@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 ejected_percentage = []
 
-Nlist = range(50,301,10)
+Nlist = range(50,401,10)
 for N in Nlist:
     datafile = 'data/Nbody_position_Verlet_-9.210340_5.000000_%d_1.dat' %N
     data = loadtxt(datafile)
@@ -49,7 +49,7 @@ ax.set_xlabel(r'Antall partikler N \\' \
               %(exp(logh), Tmax), size=23)
 ax.set_ylabel('Prosentandel utskutte partikler',  size=23)
 ax.set_title(r'Prosentandel av partikler skutt ut som funksjon av N', size=23)
-plt.legend()
+plt.legend(prop={'size':16})
 plt.show()
 
 #0.025/(1+(rmaxrange/8.0)**4)
