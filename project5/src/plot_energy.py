@@ -26,11 +26,14 @@ data = loadtxt(datafile)
 t_array = [Tmax*i/1000.0 for i in range(len(data[:,0]))]
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex = True)
-plt.plot(t_array, data[:,0]/N)
-plt.title(r'Energi som funksjon av tiden', fontsize='large')
-plt.xlabel(r'Tid  [$\tau_{crunch}$] \\ \\' \
+fig, ax = plt.subplots()
+ax.plot(t_array, data[:,0]/N)
+ax.set_title(r'Energi som funksjon av tiden', fontsize='large')
+ax.set_xlabel(r'Tid  [$\tau_{crunch}$] \\ \\' \
            + r'Parametre: $h = %g, T_{max} = %.1f, N = %d$ \\' \
            %(exp(logh), Tmax, N) + s, fontsize='large')
-plt.ylabel(r'Energi per partikkel', fontsize='large')
+ax.set_ylabel(r'Energi per partikkel', fontsize='large')
+box = ax.get_position()
+ax.set_position([box.x0, box.y0*1.25, box.width, box.height])
 plt.show()
 

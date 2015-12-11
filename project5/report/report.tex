@@ -1,6 +1,9 @@
-\documentclass[11pt, twocolumn]{article}
+\documentclass[11pt]{article}
 \usepackage{../../latex/preamble}
 
+\usepackage{multicol}
+\usepackage{media9}
+\newtheorem*{viralthm}{Viralteoremet}
 \newcommand{\abs}[1]{|#1|}
 \begin{document}
   % make title page
@@ -18,10 +21,8 @@
   {\large \today}\\[3cm]
   \vfill
 \end{titlepage}
-\twocolumn[
-\begin{@twocolumnfalse}
+
 \tableofcontents
-\vspace{\baselineskip}
 \begin{abstract}
 I denne rapporten utvikler vi en N-body modell. Det vil si et system av
 $N$ masser som vekselvirker kun ved gravitasjon. Spesielt studerer vi kollaps
@@ -30,11 +31,11 @@ stabiliteten til to forskjellige løsningsmetoder, RungeKutta4 og VelocityVerlet
 ved å kikke på energibevaring i systemet. 
 Alt materiale som har blitt referert er tilgjengelig
  på Github~\cite{github-repo}. 
-
 \end{abstract}
-\vspace{\baselineskip}
-\end{@twocolumnfalse}
-]
+
+\begin{multicols}{2}
+
+
 
 \section{Innledning}
 Vi skal se på et stjernekluster med $N$ partikler. I vår modell tenker
@@ -119,6 +120,7 @@ Algoritmen for metoden er gitt som følger:
 \end{enumerate}
 
 \subsection{Initialisering av systemet}
+\label{sec:init-av-system}
 Vi kan selv velge fritt starttilstanden til systemet vårt. Vi velger å
 begynne med $N$ objekter fordelt uniformt innenfor en sfære med
 radius $R_0=20 ly$ (light years). Objektene gir vi en tilfeldig masse ved å la massene
@@ -248,8 +250,9 @@ også en analytisk løsning. I figur \ref{fig:2body} kan vi se resultatet
 av en kjøring. Vi ser at banene er ellipsoider, slik vi forventer for
 to-legeme-systemet. 
 
+\end{multicols}
 
-\begin{figure}[ht]
+\begin{figure}[!h]
   \centering
   \includegraphics[scale=0.4]{../fig/2body.png}
   \caption{\label{fig:2body} En figur som viser to legemer sin bane, når eneste
@@ -259,10 +262,10 @@ to-legeme-systemet.
 \end{figure}
 
 
-
-
+\begin{multicols}{2}
 
 \subsection{Første test av N-body}
+\label{sec:forste-test-epsilon}
 Det er ikke alltid lett å sjekke om en løsning gir mening. Vi begynner med
 å animere systemet \footnote{Tilgjengelig på \cite{github-repo} under navnet
 animate\_pos.py}, og ser fort at det skjer noe rart når massene kommer veldig
@@ -305,8 +308,9 @@ energibevaring. For å spare kjøretid velger vi derfor å bruke
 Velocity-Verlet. Tabellen viser oss også at vi trenger ganske små tidssteg,
 $h \leq 10 ^{-4}$ for å få god energibevaring.
 
+\end{multicols}
 
-\begin{table*}[!ht]
+\begin{table*}[h]
 \centering
 \caption{En tabell som sammenligner relativ energiendring for de to metodene
 RungeKutta4 og VelocityVerlet. Energiendringen regnes ut fra systemet starter
@@ -324,6 +328,7 @@ Energiendring og tidsforbruk,$(E,\Delta t)$ VV & $(4.9E-01, 001.9)$ & $(2.9E-03,
 \end{tabular}
 \end{table*}
 
+\begin{multicols}{2}
 \subsection{Utskytning av partikler}
 Rundt tidspunktet $\tau_{crunch}$ og i en stund etter vil partikler skytes ut
 av det opprinnelige kuleskallet. Dette er partikler som ikke vil
@@ -331,7 +336,7 @@ være en del av vår likevektstilstand, og vi ønsker derfor å ha muligheten
 til å se bort fra dem. Men hvordan kan vi identifisere en partikkel
 som er skutt ut? Vi vet at en partikkel med $E_i > 0$ har $E_K > |E_p|$, og
 vil derfor unnslippe galaksehopen. Dette viser seg derimot å være ustabilt. Se
-f.eks. figur \ref{fig:energivariasjon} der vi kan se at den gjennomsnittlige
+f.eks. figure \ref{fig:energivariasjon} der vi kan se at den gjennomsnittlige
 energien varierer lite, selv om den 'lokale' energien noen ganger gjør et hopp.
  På grunn av denne lokale numeriske ustabiliteten ser vi oss nødt til å gjøre
 noe mer robust enn kun å se på energien. Vi observerer at en utskutt 
@@ -350,24 +355,125 @@ likevekt på. Det følger naturlig fra forrige avsnitt at likevektstilstanden
 er når ingen flere partikler fjernes, det vil si energien ikke forandrer seg
 betydelig lenger.
 
-
-
-\begin{figure}[ht]
+\end{multicols}
+\begin{figure}[!ht]
   \centering
-  \includegraphics[scale=0.2]{../fig/energivariasjon.png}
-  \caption{\label{fig:energivariasjon} En figur som viser  }
+  \includegraphics[width=\textwidth]{../fig/energivariasjon.png}
+  \caption{\label{fig:energivariasjon} En figure som viser  }
 \end{figure}
 
+% \includemedia[
+%   width=0.4\linewidth,
+%   height=0.3\linewidth,
+%   activate=pageopen,
+%   addresource=../fig/animation.mp4,
+%   flashvars={source=../fig/animation.mp4}
+% ]{}{VPlayer.swf}
+
+\cleardoublepage
+\begin{multicols}{2}
+
+\section{Resultater}
+Vi har som nevnt i seksjon \ref{sec:init-av-system} simulert et system
+av $N$ partikler uniformt fordelt i en sfære med radius $R0$. Vi har
+laget noe animasjoner som viser tidsforløpet til
+systemet~\cite[\texttt{project5/fig/}]{github-repo}. Fra animasjonene
+ser vi følgende:
+\begin{enumerate}
+  \item Alle partiklene begynner i ro, og beveger seg sakte inn mot
+    origo.
+  \item Alle partiklene blir most sammen i sentrum av systemet.
+  \item Partiklene spretter tilbake igjen, noen helt ut av systemet,
+    andre i mindre grad.
+  \item Vi står til slutt igjen med et redusert antall partikler som
+    ser ut til å bevege seg noen lunde stabilt rundt i massesenteret.
+\end{enumerate}
+
+\subsection{Likevekt}
+Det ser altså ut som om systemet en stund etter $\tau_\text{crunch}$
+stabiliserer seg i en slags likvekt. For å se litt mer kvantitativt på
+dette kan vi se på energien til systemet som en funksjon av tid. Figure
+\ref{fig:energi-vs-tid-med-utskytning} viser dette. 
+
+\end{multicols}
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{../fig/energy_plot_with_ejection.png}
+  \caption{\label{fig:energi-vs-tid-med-utskytning} Systemets
+    totalenergi som funksjon av tid med masseutskytelse. Vi legger
+    særlig merke til at en liten tid etter $\tau_\text{crunch}$ får vi
+  en voldsom reduksjon i energien til systemet. Vi ser så at etter en
+  tid ser energien ut til å stabilisere seg på et lavere nivå.}
+\end{figure}
+\begin{multicols}{2}
+Vi ser fra figuren at energien er konstant i en tid litt større enn
+$\tau_\text{crunch}$. Deretter ser vi en veldig bratt, og stykkvis
+nedgang i energien. Dette er fordi alle partiklene har blitt most
+sammen ved tiden $\tau_\text{crunch}$, hvor noen har fått positiv
+totalenergi og beveger seg ut fra systemet. Grunnen til at nedgangen
+ser ut til å komme forsinket på figuren er på grunn av at vi også
+krever at partikkelen også er utenfor radiusen $R_0$, noe som selvsagt
+tar en viss tid. Deretter bruker systemet litt tid på å stabilisere
+og etter omtrent $t = 2.5\,\tau_\text{crunch}$ ligger energien igjen
+flatt. 
+
+Grunnen til at totalenergien blir mer negativ når vi tar ut partiklene
+følger logisk av at vi bare tar ut partikler som har netto positiv
+energi. Tar vi vekk disse blir totalen åpenbart mer negativ. 
+
+
+\subsection{Viralteoremet}
+En interessant ting å se på er distribusjonen av kinetisk- og
+potensiell energi. Viralteoremet sier noe om akkurat dette~\cite{viralteoremet-wiki}:
+
+\begin{viralthm}
+  For et gravitasjonelt bundet system i likevekt har vi 
+\begin{align}
+  2\mean{K} = -\mean{V}
+\end{align}
+\end{viralthm} 
+
+\end{multicols}
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,height=300px]{../fig/viral.png}
+  \caption{\label{fig:viral} Forholdet mellom potensiell- og kinetisk
+ energi etter at vi har nådd likevekt. Figuren viser både tidsforløpet
+til fordelingen og tidsmidlet. Vi ser at vi får en verdi som ligger
+svært nære den verdien vi forventer fra Viralteoremet.}
+\end{figure}
+\begin{multicols*}{2}
+
+Figur \ref{fig:viral} viser en graf av forholdet mellom potensiell- og
+kinetisk energi etter at vi har nådd likevekt.\footnote{Plottet er
+  laget med et program kalt
+  \texttt{viralTheorem.py}~\cite{github-repo}} Det ser ut som om
+forholdet i simuleringen oscillerer rundt den ideelle verdien fra
+Viralteoremet. I høyre hjørne i figuren er tidsmidlet av forholdet
+regnet ut, og som vi ser får vi en verdi svært nære 2. 
+
+Vi har beregnet resultatene i figur \ref{fig:viral} ved å ta midlet av
+alle partiklenes energi på et gitt tidspunkt. Dette kan vi gjøre ved
+den ergodiske hypotesen~\cite{ergodisk-hypotese}. Tidsmidlet av disse
+verdiene (tidsmidlet av partikkelmidlet) er det som er vist i høyre
+hjørne på figuren.
+
+Dette er oppløftende resultater, fordi det tyder på at systemet vårt følger
+naturens lover på tross av de forenklingene som har blir
+gjort. F.eks. styrker dette begrunnelsen for vårt valg av $\epsilon$
+(seksjon \ref{sec:forste-test-epsilon}) ikke har gitt urealistiske
+resultater. 
 
 
 
 
+\end{multicols*}
+\clearpage
 \printbibliography
-\onecolumn
+\clearpage
 \section{Vedlegg}
 \begin{itemize}
-  \item[]\lstinputlisting[language=c++, caption={C++ metode som bruker Runge-Kutta 4 til å tidsutvikle
-  systemet.}, label={lst:solver-RK4}]{solversnippet.txt}
+  \item[]\lstinputlisting[language=c++, caption={C++ metode som bruker Velocity Verlet til å tidsutvikle systemet.}, label={lst:solver-RK4}]{solversnippet.txt}
 \end{itemize}
 
 \end{document}
